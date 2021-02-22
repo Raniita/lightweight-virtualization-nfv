@@ -43,7 +43,24 @@
     
     
     
-    \subsection{¿Qué son las Huge Page?}
+    \subsection{¿Qué son las \emph{huge pages}?}
+    \noindent Para entender correctamente lo que son las \emph{huge pages}, primero tenemos que profundizar en el concepto de \emph{pages}. Cuando un proceso utiliza algo de memoria, la CPU marca la RAM como que está siendo utilizada por dicho proceso. Para aumentar la eficiencia, la CPU asigna la RAM en "porciones" (\emph{chunks}) de 4K bytes (valor \emph{default} en la mayoría de plataformas). Estas porciones se les llama \emph{pages}.\\
+    
+    \noindent Como el espacio de direccionamiento del proceso es virtual, la CPU y el SO tienen que recordar que páginas pertenecen a que procesos, y además, donde se almacenan. Por consecuencia, cuantas más páginas tengas, más tiempo tardarás en encontrar donde está la memoria alojada. En comparativa, si un proceso utiliza 1GB de memoria, haciendo la cuenta, serían 262144 entradas a comprobar (1GB/4K). Sin embargo, si una \emph{Page Table Entry} utiliza 8 \emph{bytes}, serían 262144 * 8 entradas a comprobar.\\
+    
+    \noindent La mayoría de CPU actuales soportan páginas de mayor tamaño (por lo que la CPU tiene muchas menos entradas para comprobar), estas pueden recibir el nombre de \emph{Huge pages} (en Linux), \emph{Super pages} (en BSD) o \emph{Larger pages} (en Windows), aunque todas son lo mismo.\\
+    
+    \subsubsection{Cómo configuramos las \emph{huge pages} para DPDK.}
+    \noindent Según la documentación oficial de \hyperref[bib:link4]{\emph{DPDK: Quick Start}}, tenemos que realizar una intervención manual en la instalación de DPDK, en relación a las \emph{huge pages}. Necesitamos "reservar" las \emph{huge pages}, lo haríamos tal que: 
+    
+    \begin{verbatim}
+    	mkdir -p /dev/hugepages
+    	mountpoint -q /dev/hugepages || mount -t hugetlbfs nodev /dev/hugepages
+    	echo 64 > /sys/devices/system/node/node0/hugepages/hugepages-2048kB/nr_hugepages
+    \end{verbatim}
+    
+    
+    
     
     
     
@@ -63,5 +80,9 @@
         
         %4
         \item \label{bib:link3}\href{https://wiki.debian.org/Hugepages}{Hugepages}
+        
+        %5
+        \item
+        \label{bib:link4}\href{https://core.dpdk.org/doc/quick-start/}{DPDK: Quick Start}
     \end{enumerate}
 \end{document}
