@@ -5,14 +5,17 @@
 \usepackage{amsmath, amssymb}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{listings}
 
 \begin{document}
 	\selectlanguage{spanish}
-	\title{Técnicas para la virtualización de redes virtuales en linux. \\ \large Trabajo Final de Estudios \\ \large Ingeniería Telemática}
-	\author{Enrique Fernández Sánchez}
+	\title{Aplicación de técnicas de virtualización ligera para la evaluación de redes de comunicaciones \\ 
+		\addvspace{10px} \large Trabajo Final de Estudios \\
+		\large Ingeniería Telemática}
+	\author{Enrique Fernández Sánchez \\ Universidad Politécnica de Cartagena}
 	
 	%% EDITAR PARA SEGUIMIENTO DE VERSIONES
-	\date{Revisión 1 Abril 2021}
+	\date{Revisión 28 Abril 2021}
 	
 	\maketitle
 	\tableofcontents
@@ -24,10 +27,199 @@
 	
 	\pagebreak
 	
-	\section{Namespaces}
+	\section{\textit{Espacio de nombres} en \textit{Linux}}
+	\subsection{¿Qué es un \textit{espacio de nombres}?}
+	\noindent Los \textit{espacios de nombres}, o también llamados, \textit{namespaces}, son una característica del kernel de Linux que permite gestionar los recursos del kernel, pudiendo limitarlos a un proceso o grupo de procesos. Suponen una base de tecnología que aparece en las técnicas de virtualización más modernas (como puede ser Docker, Kubernetes, etc). A un nivel alto, permiten aislar procesos respecto al resto del kernel. \\
+	
+	\par \noindent El objetivo de cada \textit{namespaces} es adquirir una característica global del sistema como una abstracción que haga parecer a los procesos de dentro del \textit{namespace} que tienen su propia instancia aislada del recurso global.
+	
+	\subsection{¿Cúantos \textit{namespaces} hay?}
+	\par\noindent El kernel ha estado en contaste evolución desde que 1991, cuando Linus Torvalds comenzó el proyecto, actualmente sigue muy activo y se siguen añadiendo nuevas características. El origen de los namespaces se remonta a la versión del kernel 2.4.19, lanzada en 2002. Conforme fueron pasando los años, más tipos diferentes de namespaces se fueron añadiendo a Linux. El concepto de \textit{User namespaces}, se consideró terminado con la versión 3.9.\\
+	\par \noindent Actualmente, tenemos 8 tipos diferentes de namespaces, siendo el último añadido en la versión 5.8 (lanzada el 2 de Agosto de 2020). 
+	
+	\begin{enumerate}
+		\item UTS (hostname)
+		\item Mount (mnt)
+		\item Process ID (pid)
+		\item Network (net)
+		\item Interprocess Communication (ipc)
+		\item User ID (user)
+		\item Control group (cgroup)
+		\item Time
+	\end{enumerate}
+	
+	\pagebreak
+	
+	\subsubsection{UTS namespace}
+	\par \noindent El tipo más sencillo de todos los namespaces. La funcionalidad consiste en controlar el hostname asociado del ordenador, en este caso, del proceso o procesos asignados al namespace. Existen tres diferentes rutinas que nos permiten obtener y modifcar el hostname: 
+	\begin{itemize}
+		\item \textit{sethostname()}
+		\item \textit{setdomainname()}
+		\item \textit{uname()}
+	\end{itemize}
+	En una situación normal sin namespaces, se modificaría una String global, sin embargo, si estamos dentro de un namespace, los procesos asociados tienen su propia variable global asignada.\\
+	
+	% example uts: https://medium.com/@teddyking/linux-namespaces-850489d3ccf
+	% https://www.cloudsavvyit.com/742/what-are-linux-namespaces-and-what-are-they-used-for/
+	\par \noindent Un ejemplo muy basico de uso de este namespaces podría ser el siguiente:\\
+	\begin{lstlisting}[language=bash, caption=Example usage UTS namespace]
+$ sudo su			# super user
+$ hostname			# current hostname
+> arch-linux					
+$ unshare -u /bin/sh		# shell with UTS namespace
+$ hostname new-hostname		# set hostname
+$ hostname			# check hostname of the shell
+> new-hostname
+$ exit				# exit shell and namespace
+$ hostname			# original hostname
+> arch-linux
+	\end{lstlisting}
+
+	\addvspace{10px}
+
+	\par \noindent En el ejemplo planteado, vemos que utilizamos el comando \texttt{unshare}. Utilizando la documentación de dicho comando, \texttt{man unshare}. Podemos deducir los siguiente:
+	\begin{itemize}
+		\item Ejecuta un programa con algunos namespaces diferentes del host.
+		\item En los parametros podemos especificar cual o cuales namespaces queremos desvincular.
+		\item Tenemos que especificar la ruta del ejecutable que queremos aislar
+		\item La sintaxis sería tal que: \texttt{unshare [options] <program> [<argument>...]}
+	\end{itemize}
+	
+	\pagebreak
+	
+	\subsubsection{Mount namespace}
+	\par \noindent Un \textit{mount namespace (mnt)} supone otro tipo de espacio de nombres, en este caso relacionado con los \textit{mounts} de nuestro sistema. Lo primero es entender a que nos referimos cuando hablamos de \textit{mount}. \textit{Mount}, o montaje, hace referencia a conectar un sistema de archivos adicional que sea accesible para el sistema de archivos actual de un ordenador. Un \text{mount}, tiene asignado lo que se llama \textit{mount point}, que corresponde con el directorio en el que está accesible el sistema de archivo que previamente hemos montado.\\
+	
+	\par \noindent Por lo tanto, un namespace de tipo \textit{mount} nos permite modificar un sistema de archivos en concreto, sin que el host pueda ver y/o acceder a dicho sistema de archivos. Un ejemplo básico de esta funcionalidad podría ser la siguiente:
+	
+	\addvspace{10px}
+	
+	\begin{lstlisting}[language=bash, caption=Example of usage mount namespace]
+$ sudo su		# run a shell in a new mount namespace
+$ unshare -m /bin/sh
+$ mount --bind /usr/bin/ /mnt/
+$ ls /mnt/cp
+> /mnt/cp
+$ exit			# exit the shell and close namespace
+$ ls /mnt/cp
+> ls: cannot access '/mnt/cp': No such file or directory
+	\end{lstlisting}
+
+	\addvspace{10px}
+	
+	\par \noindent Como vemos en el ejemplo, dentro del namespaces lo que hacemos es crear un \textit{mount} de tipo \textit{bind}, que tiene por función que un archivo de la máquina host se monte en un directorio en específico, en este caso, un directorio unicamente del programa que hemos asignado al namespace. Otro ejemplo de uso de estos namespaces es crear un sistema de archivos temporal que solo sea visible para ese proceso.
+	
+	\pagebreak
+	
+	\subsubsection{Process ID namespace}
+	\par \noindent Para entender en que consiste este namespace, primero tenemos que conocer la definición de \textit{process id} dentro del Kernel. En este caso, \textit{process id} hace referencia a un número entero que utiliza el Kernel para identificar los procesos de manera unívoca.\\
+	
+	\par \noindent Concretando, aísla el namespace de la ID del proceso asignado, dando lugar a que, por ejemplo, otros namespaces puedan tener el mismo PID. Esto nos lleva a la situación de que un proceso dentro de un \textit{PID namespace} piense que tiene asignado el ID "1", mientras que en la realidad (en la máquina host) tiene otro ID asignado.
+	
+	\addvspace{10px}
+	
+	\begin{lstlisting}[language=bash, caption=Example of usage process id namespace]
+$ echo $$		# PID de la shell
+$ ls -l /proc/$$/ns	# ID espacios de nombres 
+$ sudo unshare -f --mount-proc -p /bin/sh
+$ echo $$		# PID de la shell dentro del ns
+$ ls -l /proc/$$/ns	# nuevos ID espacio de nombres
+$ ps
+
+$ ps -ef 		# ejecutar en una shell fuera del ns. Comparar PID
+$ exit
+	\end{lstlisting}
+
+	\addvspace{10px}
+	
+	\par \noindent Si ejecutamos el ejemplo, lo que podemos comprobar es que el ID del proceso que está dentro del namespaces (\texttt{echo \$\$}), no coincide con el proceso que podemos ver de la máquina host (\texttt{ps -ef | grep /bin/sh})). Más concretamente, el primer proceso creado en un PID namespace recibirá el pid número 1, y además de un tratamiento especial ya que supone  un \texttt{init process} dentro de ese namespace.
+	
+	% revisar: https://www.redhat.com/sysadmin/linux-pid-namespaces
+	% https://man7.org/linux/man-pages/man7/pid_namespaces.7.html
+	
+	\pagebreak
+	
+	\subsubsection{Network namespace}
+	
+	\pagebreak
+	
+	% Imagen namespaces: https://twitter.com/b0rk/status/1240364585766576128/photo/1
+	
+	\pagebreak
+	
 	\section{Containers LXC}
 	\section{Docker}
 	\section{Evaluación de prestaciones}
 	\section{Interconexión física de diferentes red virtuales}
 	\section{Openflow OKO}
+	
+	%%% Glosario
+	\pagebreak
+	\section{Glosario de términos}
+	\begin{itemize}
+		\item Namespaces. \textit{Espacio de nombres}
+		\item Linux. \textit{Sistema operativo tipo UNIX, de codigo abierto, multiplataforma, multiusuario y multitarea.}
+		\item Kernel de linux. \textit{Núcleo del sistema operativo Linux.}
+		\item PID. \textit{Process Identifier}
+	\end{itemize}
+
+	%%% Bibliography
+	\pagebreak
+	\section{Bibliografía}
+	\subsection{Enlaces y referencias}
+	%%\hyperref[bib:link1]{\emph{Reference of bibliography}}
+	\begin{enumerate}
+		%1
+		\item 
+		\label{bib:link1} \href{https://lwn.net/Articles/531114/}{\textit{Namespaces}}
+		
+		%2
+		\item 
+		\label{bib:link2} \href{https://laurel.datsi.fi.upm.es/~ssoo/SOA/namespaces.html}{Tutorial: Espacio de nombres en Linux}
+		
+		%3
+		\item 
+		\label{bib:link3} \href{https://www.phoronix.com/scan.php?page=news_item&px=Linux-Time-Namespace-Coming}{\textit{Time namespaces coming to linux}}
+		
+		%4
+		\item 
+		\label{bib:link4} \href{https://platform.sh/blog/2020/the-container-is-a-lie/}{\textit{Container is a lie. Namespaces}}
+		
+		%5
+		\item 
+		\label{bib:link5} \href{https://locurastecnicas.blogspot.com/2020/09/linux-namespaces-y-cgroups.html}{\textit{Namespaces.} Uso de \textit{cgroups}.}
+		
+		%6
+		\item 
+		\label{bib:link6} \href{https://www.youtube.com/watch?v=_WgUwUf1d34}{\textit{Introduction to Network Namespaces}}
+		
+		
+		%7
+		\item
+		\label{bib:link7} \href{https://www.redhat.com/sysadmin/mount-namespaces}{\textit{Build a container by hand: the mount namespace}}
+		
+		
+		%8
+		\item
+		\label{bib:link8}
+		\href{https://en.wikipedia.org/wiki/Process_identifier}{Indentificador de procesos (\textit{process id})}
+		
+		
+		%9
+		\item
+		\label{bib:link9}
+		\href{https://www.redhat.com/sysadmin/linux-pid-namespaces}{\textit{Linux PID namespaces work with containers}}
+		
+		
+		
+		% X
+		\item
+		\label{bib:link20}
+		\href{https://jsitech1.gitbooks.io/meet-docker/content/fundamentos_de_docker.html}{Fundamentos de Docker}
+		
+		
+		
+		
+		
+	\end{enumerate}
 \end{document}
