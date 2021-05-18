@@ -7,6 +7,8 @@
 \usepackage{hyperref}
 \usepackage{listings}
 
+\renewcommand{\lstlistingname}{Listado}
+
 \begin{document}
 	\selectlanguage{spanish}
 	\title{Aplicación de técnicas de virtualización ligera para la evaluación de redes de comunicaciones \\ 
@@ -140,6 +142,34 @@ $ exit
 	\pagebreak
 	
 	\subsubsection{Network namespace}
+	\par \noindent Este namespaces nos permite aislar la parte red de una aplicación o proceso que nosotros elijamos. Con esto conseguimos que el \textit{stack} de red de la máquina host sea diferente al que tenemos en nuestro namespace. Debido a esto, el namespace crea una interfaz virtual, conjunto con el resto de necesidades para conformar un stack de red completo (tabla de enrutamiento, tabla ARP, etc...).\\
+	
+	\par \noindent Para crear un \textit{namespace} de tipo \textit{network}, y que este sea persistente, utilizamos la \textit{tool} ip (del \textit{package} iproute2).
+	\begin{lstlisting}[language=bash, caption=Creation persistent network namespace]
+$ ip netns add ns1
+	\end{lstlisting}
+
+	\par \noindent Este comando creará un network namespace llamado ns1. Cuando se crea dicho namespace, el comando ip realiza un montaje tipo bind en la ruta /var/run/netns, permitiendo que el namespace sea persistente aún sin tener un proceso asociado.
+	\begin{lstlisting}[language=bash, caption=Comprobar network namespaces existentes]
+$ ls /var/run/netns
+or
+$ ip netns
+	\end{lstlisting}
+	
+	\addvspace{30px}
+
+	\par \noindent Como ejemplo, podemos proceder a añadir una interfaz de \textit{loopback} al namespace que previamente hemos creado:
+	\begin{lstlisting}[language=bash, caption=Asignar interfaz loopback a un namespace]
+$ ip netns exec ns1 ip link dev lo up
+$ ip netns exec ns1 ping 127.0.0.1
+> PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data. 
+> 64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.115 ms
+	\end{lstlisting}
+
+	\par \noindent La primera línea de este ejemplo, corresponde con la directiva que le dice al namespace que "levante" la interfaz de loopback. La segunda línea, vemos como el namespace ns1 ejecuta el ping a la interfaz de loopback (el loopback de ese namespace).
+	
+
+	% https://blogs.igalia.com/dpino/2016/04/10/network-namespaces/
 	
 	\pagebreak
 	
@@ -209,6 +239,11 @@ $ exit
 		\item
 		\label{bib:link9}
 		\href{https://www.redhat.com/sysadmin/linux-pid-namespaces}{\textit{Linux PID namespaces work with containers}}
+		
+		%10
+		\item
+		\label{bib:link10}
+		\href{https://blogs.igalia.com/dpino/2016/04/10/network-namespaces/}{\textit{Network Namespaces}}
 		
 		
 		
