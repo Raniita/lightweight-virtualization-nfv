@@ -7,7 +7,14 @@
 \usepackage{hyperref}
 \usepackage{listings}
 
+\usepackage[dvipsnames]{xcolor}
+
 \renewcommand{\lstlistingname}{Listado}
+
+% https://tex.stackexchange.com/questions/60209/how-to-add-an-extra-level-of-sections-with-headings-below-subsubsection
+\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
 
 \begin{document}
 	\selectlanguage{spanish}
@@ -134,7 +141,7 @@ $ exit
 
 	\addvspace{10px}
 	
-	\par \noindent Si ejecutamos el ejemplo, lo que podemos comprobar es que el ID del proceso que está dentro del namespaces (\texttt{echo \$\$}), no coincide con el proceso que podemos ver de la máquina host (\texttt{ps -ef | grep /bin/sh})). Más concretamente, el primer proceso creado en un PID namespace recibirá el pid número 1, y además de un tratamiento especial ya que supone  un \texttt{init process} dentro de ese namespace.
+	\par \noindent Si ejecutamos el ejemplo, lo que podemos comprobar es que el ID del proceso que está dentro del namespaces (\texttt{echo \$\$}), no coincide con el proceso que podemos ver de la máquina host (\texttt{ps -ef | grep /bin/sh}). Más concretamente, el primer proceso creado en un PID namespace recibirá el pid número 1, y además de un tratamiento especial ya que supone  un \texttt{init process} dentro de ese namespace.
 	
 	% revisar: https://www.redhat.com/sysadmin/linux-pid-namespaces
 	% https://man7.org/linux/man-pages/man7/pid_namespaces.7.html
@@ -156,7 +163,7 @@ or
 $ ip netns
 	\end{lstlisting}
 	
-	\addvspace{30px}
+	\addvspace{10px}
 
 	\par \noindent Como ejemplo, podemos proceder a añadir una interfaz de \textit{loopback} al namespace que previamente hemos creado:
 	\begin{lstlisting}[language=bash, caption=Asignar interfaz loopback a un namespace]
@@ -168,6 +175,101 @@ $ ip netns exec ns1 ping 127.0.0.1
 
 	\par \noindent La primera línea de este ejemplo, corresponde con la directiva que le dice al namespace que "levante" la interfaz de loopback. La segunda línea, vemos como el namespace ns1 ejecuta el ping a la interfaz de loopback (el loopback de ese namespace).
 	
+	\addvspace{10px}
+	
+	\par \noindent Es importante mencionar, que aunque existen más comandos para gestionar las redes dentro de linux (como pueden ser ifconfig, route, etc), el comando ip es el considerado sucesor de todos estos, y los anteriores mencionados, dejarán de formar parte de Linux en versiones posteriores. Un detalle a tener en cuenta con el comando ip, es que es necesario tener privilegios de administrador para poder usarlo, por lo que deberemos ser root o utilizar sudo.
+	
+	\addvspace{10px}
+	
+	\par \noindent Por lo tanto, utilizando el comando ip, podemos recapitular que si utilizamos la siguiente directiva, podemos ejecutar el comando que nosotros indiquemos, pero dentro del network namespace que previamente hemos creado.
+	\begin{lstlisting}[language=bash, caption=Ejecutar cualquier programa con un network namespace]
+$ ip netns exec <network-namespace> <command>
+	\end{lstlisting}
+
+	\pagebreak
+	
+	\subsubsubsection{Ejemplo práctico}
+	\par \noindent Una de las problemáticas que supone el uso de los network namespaces, es que solo podemos asignar \textbf{una interfaz} a \textbf{un namespace}. Suponiendo el caso en el que el usuario root tenga asignada la interfaz eth0 (identificador de una interfaz de red física), significaría que solo los programas en el namespace de root podrán acceder a dicha interfaz. En el caso de que eth0 sea la salida a Internet de nuestro sistema, pues eso conllevaría que no podríamos tener conexión a Internet en nuestros namespaces. La solución para esto reside en los \textbf{veth-pair}.
+	
+	\addvspace{10px}
+	
+	\par \noindent Un veth-pair funciona como si fuera un cable físico, es decir, interconecta dos dispositivos, en este caso, interfaces virtuales. Consiste en dos interfaces virtuales, una de ellas asignada al root namespace, y la otra asignada a otro network namespace diferente. Si a esta arquitectura le añadimos una configuración de IP válida y activamos la opción de hacer NAT en el eth0 del host, podemos dar conectividad de Internet al network namespace que hayamos conectado.
+	
+	\addvspace{10px}
+	
+	\begin{lstlisting}[language=bash, caption=Ejemplo configuración de NAT entre eth0 y veth]
+# Remove namespace if exists
+$ ip netns del ns1 &>/dev/null
+
+# Create namespace
+$ ip netns add ns1
+
+# Create veth link
+$ ip link add v-eth1 type veth peer name v-peer1
+
+# Add peer-1 to namespace.
+$ ip link set v-peer1 netns ns1
+
+# Setup IP address of v-eth1
+$ ip addr add 10.200.1.1/24 dev v-eth1
+$ ip link set v-eth1 up
+
+# Setup IP address of v-peer1
+$ ip netns exec ns1 ip addr add 10.200.1.2/24 dev v-peer1
+$ ip netns exec ns1 ip link set v-peer1 up
+# Enabling loopback inside ns1
+$ ip netns exec ns1 ip link set lo up
+
+# All traffic leaving ns1 go through v-eth1
+$ ip netns exec ns1 ip route add default via 10.200.1.1
+	\end{lstlisting}
+
+	\addvspace{10px}
+
+	\par \noindent Siguiendo el ejemplo propuesto, llegamos hasta el punto en el que el tráfico saliente del namespace ns1, será redirigido a v-eth1. Sin embargo, esto no es suficiente para tener conexión a Internet. Tenemos que configurar el NAT en el eth0.
+	
+	\pagebreak
+	
+	\begin{lstlisting}[language=bash, caption=Configuración de NAT para dar Internet a un network namespace]
+# Share internet access between host and NS
+
+# Enable IP-forwarding
+$ echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# Flush forward rules, policy DROP by default
+$ iptables -P FORWARD DROP
+$ iptables -F FORWARD
+
+# Flush nat rules.
+$ iptables -t nat -F
+
+# Enable masquerading of 10.200.1.0 (ip of namespaces)
+$ iptables -t nat -A POSTROUTING -s 10.200.1.0/255.255.255.0 -o eth0 
+	-j MASQUERADE
+
+# Allow forwarding between eth0 and v-eth1
+$ iptables -A FORWARD -i eth0 -o v-eth1 -j ACCEPT
+$ iptables -A FORWARD -o eth0 -i v-eth1 -j ACCEPT
+	\end{lstlisting}
+	
+	\addvspace{10px}
+	
+	\par \noindent Si todo lo hemos configurado correctamente, ahora podríamos realizar un ping hacia Internet, y este nos debería resultar satisfactorio.
+	\begin{verbatim}
+$ ip netns exec ns1 ping google.es
+> PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+> 64 bytes from 8.8.8.8: icmp_seq=1 ttl=50 time=48.5ms
+> 64 bytes from 8.8.8.8: icmp_seq=2 ttl=50 time=58.5ms
+	\end{verbatim}
+
+	\addvspace{10px}
+	
+	\par \noindent Aún así, no resulta muy comodo el utilizar \colorbox{Lavender}{\textit{ip netns exec}} seguido de la aplicación a utilizar. Es por esto por lo que es común ejecutar dicho comando para asignar el network namespace a una shell. Esto sería tal que así:
+	\begin{verbatim}
+$ ip netns exec ns1 /bin/bash
+	\end{verbatim}
+	\par \noindent Utilizaremos \colorbox{Lavender}{\textit{exit}} para salir de la shell y abandonar el network namespace.
+
 
 	% https://blogs.igalia.com/dpino/2016/04/10/network-namespaces/
 	
@@ -191,6 +293,8 @@ $ ip netns exec ns1 ping 127.0.0.1
 		\item Linux. \textit{Sistema operativo tipo UNIX, de codigo abierto, multiplataforma, multiusuario y multitarea.}
 		\item Kernel de linux. \textit{Núcleo del sistema operativo Linux.}
 		\item PID. \textit{Process Identifier}
+		\item root. \textit{Cuenta superusuario del sistema operativo Linux.}
+		\item veth-pair. \textit{Virtual Ethernet Pair}
 	\end{itemize}
 
 	%%% Bibliography
@@ -244,6 +348,11 @@ $ ip netns exec ns1 ping 127.0.0.1
 		\item
 		\label{bib:link10}
 		\href{https://blogs.igalia.com/dpino/2016/04/10/network-namespaces/}{\textit{Network Namespaces}}
+		
+		%11
+		\item
+		\label{bib:link11}
+		\href{https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#veth}{\textit{Introduction to Linux interfaces for virtual networking. VETH}}
 		
 		
 		
