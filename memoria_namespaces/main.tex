@@ -24,7 +24,7 @@
 	\author{Enrique Fernández Sánchez \\ Universidad Politécnica de Cartagena}
 	
 	%% EDITAR PARA SEGUIMIENTO DE VERSIONES
-	\date{Revisión 28 Abril 2021}
+	\date{Revisión 21 Mayo 2021}
 	
 	\maketitle
 	\tableofcontents
@@ -51,8 +51,8 @@
 		\item Mount (mnt)
 		\item Process ID (pid)
 		\item Network (net)
+		\item User ID (user) 
 		\item Interprocess Communication (ipc)
-		\item User ID (user)
 		\item Control group (cgroup)
 		\item Time
 	\end{enumerate}
@@ -274,6 +274,59 @@ $ ip netns exec ns1 /bin/bash
 	% https://blogs.igalia.com/dpino/2016/04/10/network-namespaces/
 	
 	\pagebreak
+	\subsubsection{User ID (user)}
+	\par \noindent Cada sistema dispone de una manera de monitorizar que usuario es el dueño de cada archivo. Esto permite al sistema restringir el acceso a aquellos archivos que consideramos sensibles. Además, bloquea el acceso entre diferentes usuarios dentro del mismo sistema. Para el usuario, este identificador de usuarios se muestra como el usuario que en ese momento está conectado, sin embargo, para nuestro sistema, el identificador de usuario esta compuesto por una combinación arbitraria de caracteres alfanuméricos. Con el fin de mantener el monitoreo correctamente, hay un proceso encargado de transformar esos caracteres a un número específico de identificación (UID), como por ejemplo sería 1000. Es este valor el que se asocia con los archivos creados por este usuario. Esto nos aporta la ventaja de que, si un usuario cambia su nombre, no es necesario reconstruir el sistema de archivos, ya que su UID sigue siendo 1000.\\
+	
+	\par \noindent Si por ejemplo queremos ver el UID del usuario que estamos usando en este momento, podemos ejecutar: \textit{echo \$UID}, el cual nos devolverá el número asociado a nuestro usuario, en mi caso es el 1000.\\
+	
+	\par \noindent Además de diferenciar entre los IDs de usuarios (UID), también se nos permite separar entre IDs de grupos (GID). En linux, un grupo sirve para agrupar usuarios de modo que un grupo puede tener asociado un privilegio que le permite usar un recurso o programas.\\
+	
+	\par \noindent Por lo tanto, el namespace de UID, lo que nos permite es tener un UID y GID diferente al del host. 
+	
+	\begin{lstlisting}[language=bash, caption=Ejemplo de uso UID namespace]
+$ ls -l /proc/$$/ns		# espacios de nombres originales
+$ id
+> uid=1000(user) gid=1000(user) groups=1000(user), ...
+$ unshare -r -u bash	# Crea un namespace de tipo usuario, programa bash
+$ id
+> uid=0(root) gid=0(root) groups=0(root),65534(nobody)
+$ cat /proc/$$/uid_map
+>          0       1000          1
+$ cat /etc/shadow		# No nos deja acceder
+> cat: /etc/shadow: Permission denied
+$ exit
+	\end{lstlisting}
+	
+	\addvspace{20px}
+	
+	\par \noindent Como vemos en el ejemplo, el UID de usuario difiere de la máquina host. Dentro del namespace, tenemos UID 0, sin embargo, eso no significa que podamos acceder a los archivos con UID 0 de la máquina host, ya que en verdad lo que hace el namespace es \textit{mapear} el UID 1000 al 0.
+	
+	\pagebreak
+	
+	\subsubsection{Interprocess Communication namespace (IPC)}
+	\par \noindent Este namespace supone uno de los más técnicos, complicados de entender y explicar. IPC (Interprocess comunication) controla la comunicación entre procesos, utilizando zonas de la memoría que están compartidas, colas de mensajes, y semáforos. La aplicación más común para este tipo de gestión es el uso en bases de datos.
+	
+	\subsubsection{Control group (cgroup)}
+	\par \noindent Los grupos de control, cgroups, de Linux suponen un mecanismo para controlar los diferentes recursos de nuestro sistema. Cuando CGroups están activos, pueden controlar la cantidad de CPU, RAM, acceso I/O, o cualquier faceta que un proceso puede consumir. Además, permiten definir jerarquías en las que se agrupan, de manera en la que el administrador del sistema puede definir como se asignan los recursos o llevar la contabilidad de los mismos.\\
+	
+	\par \noindent Por defecto, los CGroups se crean en el sistema de archivos virtual /sys/fs/cgroup. Si creamos un namespace de tipo CGroups, lo que estamos haciendo es mover el espacio de archivos virtual de dicho CGroup. Un ejemplo de esto sería, creamos un CGroup namespace en el root /sys/fs/cgroup/mycgroup. El host verá lo siguiente /sys/fs/cgroup/mycgroup/\{group1, group2, group3\}, sin embargo, el namespace solo verá \{group1, group2, group3\}. Esto es así ya que aporta seguridad a un namespace ya que los procesos del namespace solo pueden acceder a su sistema de archivos.
+	
+	\addvspace{60px}
+	
+	\begin{figure}[h]
+		\begin{center}
+			% https://8gwifi.org/docs/linux-namespace.jsp
+			\includegraphics[width=1\textwidth]{img/linux-namespace1.png}
+			\caption{Diferentes namespaces en Linux y su API de acceso.}
+		\end{center}
+	\end{figure}
+	
+	
+	\pagebreak
+	\subsubsection{Time}
+	\par \noindent
+	
+	\pagebreak
 	
 	% Imagen namespaces: https://twitter.com/b0rk/status/1240364585766576128/photo/1
 	
@@ -289,12 +342,14 @@ $ ip netns exec ns1 /bin/bash
 	\pagebreak
 	\section{Glosario de términos}
 	\begin{itemize}
-		\item Namespaces. \textit{Espacio de nombres}
+		\item Namespace. \textit{Espacio de nombres}
 		\item Linux. \textit{Sistema operativo tipo UNIX, de codigo abierto, multiplataforma, multiusuario y multitarea.}
 		\item Kernel de linux. \textit{Núcleo del sistema operativo Linux.}
 		\item PID. \textit{Process Identifier}
 		\item root. \textit{Cuenta superusuario del sistema operativo Linux.}
 		\item veth-pair. \textit{Virtual Ethernet Pair}
+		\item UID. \textit{Identificador de usuario.}
+		\item GID. \textit{Identificador de grupo.}
 	\end{itemize}
 
 	%%% Bibliography
@@ -355,15 +410,16 @@ $ ip netns exec ns1 /bin/bash
 		\href{https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#veth}{\textit{Introduction to Linux interfaces for virtual networking. VETH}}
 		
 		
+		%11
+		\item
+		\label{bib:link12}
+		\href{https://elpuig.xeill.net/Members/vcarceler/articulos/introduccion-a-los-grupos-de-control-cgroups-de-linux}{\textit{Introducción a los grupos de control (cgroups) de Linux}}
+		
 		
 		% X
 		\item
 		\label{bib:link20}
 		\href{https://jsitech1.gitbooks.io/meet-docker/content/fundamentos_de_docker.html}{Fundamentos de Docker}
-		
-		
-		
-		
 		
 	\end{enumerate}
 \end{document}
