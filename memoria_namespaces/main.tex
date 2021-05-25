@@ -24,7 +24,7 @@
 	\author{Enrique Fernández Sánchez \\ Universidad Politécnica de Cartagena}
 	
 	%% EDITAR PARA SEGUIMIENTO DE VERSIONES
-	\date{Revisión 21 Mayo 2021}
+	\date{Revisión 25 Mayo 2021}
 	
 	\maketitle
 	\tableofcontents
@@ -309,7 +309,7 @@ $ exit
 	\subsubsection{Control group (cgroup)}
 	\par \noindent Los grupos de control, cgroups, de Linux suponen un mecanismo para controlar los diferentes recursos de nuestro sistema. Cuando CGroups están activos, pueden controlar la cantidad de CPU, RAM, acceso I/O, o cualquier faceta que un proceso puede consumir. Además, permiten definir jerarquías en las que se agrupan, de manera en la que el administrador del sistema puede definir como se asignan los recursos o llevar la contabilidad de los mismos.\\
 	
-	\par \noindent Por defecto, los CGroups se crean en el sistema de archivos virtual /sys/fs/cgroup. Si creamos un namespace de tipo CGroups, lo que estamos haciendo es mover el espacio de archivos virtual de dicho CGroup. Un ejemplo de esto sería, creamos un CGroup namespace en el root /sys/fs/cgroup/mycgroup. El host verá lo siguiente /sys/fs/cgroup/mycgroup/\{group1, group2, group3\}, sin embargo, el namespace solo verá \{group1, group2, group3\}. Esto es así ya que aporta seguridad a un namespace ya que los procesos del namespace solo pueden acceder a su sistema de archivos.
+	\par \noindent Por defecto, los CGroups se crean en el sistema de archivos virtual /sys/fs/cgroup. Si creamos un namespace de tipo CGroups, lo que estamos haciendo es mover el espacio de archivos virtual de dicho CGroup. Un ejemplo de esto sería, creamos un CGroup namespace en el directorio /sys/fs/cgroup/mycgroup. El host verá lo siguiente /sys/fs/cgroup/mycgroup/\{group1, group2, group3\}, sin embargo, el namespace solo verá \{group1, group2, group3\}. Esto es así ya que aporta seguridad a un namespace ya que los procesos del namespace solo pueden acceder a su sistema de archivos.
 	
 	\addvspace{60px}
 	
@@ -317,19 +317,31 @@ $ exit
 		\begin{center}
 			% https://8gwifi.org/docs/linux-namespace.jsp
 			\includegraphics[width=1\textwidth]{img/linux-namespace1.png}
-			\caption{Diferentes namespaces en Linux y su API de acceso.}
+			\caption{Diferentes namespaces en Linux y su API de acceso. (\ref{bib:img1})}
 		\end{center}
 	\end{figure}
 	
 	
 	\pagebreak
 	\subsubsection{Time}
-	\par \noindent
+	\par \noindent Por último, nos queda el namespaces asociado al tiempo. Este namespace fue propuesto para que se incorporara al kernel de Linux en 2018 y en enero de 2020 fue añadido a la versión mainline de Linux. Apareció en la release 5.6 del kernel de Linux. \\
+	
+	\par \noindent El namespace time, permite que por cada namespace que tengamos, podamos crear desfases entre los relojes monotónicos (CLOCK\_MONOTONIC) y de boot (CLOCK\_BOOTTIME), de la máquina host. Esto permite que dentro de los contendores se nos permita cambiar la fecha y la hora, sin tener que modificar la hora del sistema host. Además, supone una capa más de seguridad, ya que no estamos vinculando directamente la hora a los relojes físicos de nuestro sistema.\\
+	
+	\par \noindent Un namespace de tipo time, es muy similar al namespace de tipo PID en la manera de como lo creamos. Utilizamos el comando unshare -T, y mediante una systemcall se nos creará un nuevo time namespace, pero no lo asocia directamente con el proceso. Tenemos que utilizar setns para asociar un proceso a un namespace, además todos los procesos dependientes también tendrán asignado dicho namespace. 
+	
+	\addvspace{80px}
+	
+	\begin{figure}[h]
+		\begin{center}
+			% https://twitter.com/b0rk/status/1240364585766576128/photo/1
+			\includegraphics[width=0.8\textwidth]{img/how_containers_work.jpg}
+			\caption{Como funcionan los contenedores. (\ref{bib:img2})}
+		\end{center}
+	\end{figure}
 	
 	\pagebreak
-	
-	% Imagen namespaces: https://twitter.com/b0rk/status/1240364585766576128/photo/1
-	
+
 	\pagebreak
 	
 	\section{Containers LXC}
@@ -410,16 +422,40 @@ $ exit
 		\href{https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#veth}{\textit{Introduction to Linux interfaces for virtual networking. VETH}}
 		
 		
-		%11
+		%12
 		\item
 		\label{bib:link12}
 		\href{https://elpuig.xeill.net/Members/vcarceler/articulos/introduccion-a-los-grupos-de-control-cgroups-de-linux}{\textit{Introducción a los grupos de control (cgroups) de Linux}}
+		
+		%13
+		\item
+		\label{bib:link13}
+		\href{https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=timers/core&id=769071ac9f20b6a447410c7eaa55d1a5233ef40c}{\textit{Time namespaces}}
+		
 		
 		
 		% X
 		\item
 		\label{bib:link20}
 		\href{https://jsitech1.gitbooks.io/meet-docker/content/fundamentos_de_docker.html}{Fundamentos de Docker}
+		
+	\end{enumerate}
+
+	\pagebreak
+
+	\subsection{Images}
+	\begin{enumerate}
+		%1
+		\item 
+		\label{bib:img1}\href{https://8gwifi.org/docs/linux-namespace.jsp}{Namespaces y API de acceso.}
+		
+		%2
+		\item 
+		\label{bib:img2}\href{https://twitter.com/b0rk/status/1240364585766576128}{How containers work.}
+		
+		
+		
+		
 		
 	\end{enumerate}
 \end{document}
