@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{listings}
+\usepackage{courier}
 
 \usepackage[dvipsnames]{xcolor}
 
@@ -33,6 +34,31 @@
 	
 	%%% TODO
 	\section{Introduction}
+	
+	\pagebreak
+	
+	\section{Interfaces de red en \textit{Linux}}
+	\noindent Linux dispone de una selección muy diferente de interfaces de red que nos permiten, de manera sencilla, el uso de máquinas virtuales o contenedores. En este apartado vamos a mencionar las interfaces más relevantes de cara a la virtualización ligera que proponemos para el despliegue de una red virtualizada. Para obtener una lista completa de las interfaces disponibles, podemos ejecutar el siguiente comando \texttt{ip link help}.\\
+	
+	\par \noindent En este trabajo, vamos a comentar la siguientes interfaces:
+	\begin{itemize}
+		\item eth0:{0,1,2...}
+		\item eth0.{0,1,2...} VLAN
+		\item eth0.{0,1,2...} VLAN 802.1ad
+		\item VETH pairs
+		\item TUN/TAP
+	\end{itemize}
+
+	\par \noindent Para la explicación de las diferentes interfaces, vamos a suponer que estamos utilizando el nombrado de interfaces de red antiguo. Esto proviene de que en la últimas versiones del kernel, se ha cambiado la forma en la que las interfaces de red son nombradas por Linux. Es por esto por lo que antes podíamos tener interfaces tal que \texttt{eth0} y ahora nos encontramos con la siguiente nomenclatura \texttt{enps30}. Este cambio surge ya que anteriormente se nombraban las diferentes interfaces conforme el propio ordenador estaba en la etapa de \texttt{boot}, por lo que podría pasar que a lo que nosotros entendiamos como \texttt{eth1}, en el proximo arranque fuera \texttt{eth0}, dando lugar a incontables errores en el sistema. Es por esto por lo que se empecó a trabajar en soluciones alternativas. Por ejemplo, la que hemos utilizado de ejemplo, utiliza la información aportada por la BIOS del dispositivo para catalogarlo en diferentes categorias, con su formato de nombre para cada categorias. Dichas categorías corresponden con las siguientes:
+	\begin{enumerate}
+		\item Nombres incorporando Firmware/BIOS que proporcionan un número asociado a dispositivos en la placa base. (ejemplo: \texttt{eno1})
+		\item Nombres incorporando Firmware/BIOS proveniente de una conexión PCI Express hotplug, con número asociado al conector. (ejemplo: \texttt{ens1})
+		\item Nombres que incorporan una localización física de un conector hardware. (ejemplo: \texttt{enp2s0})
+		\item Nombres que incorporan una la MAC de una interfaz. (ejemplo: \texttt{enx78e7d1ea46da})
+		\item Sistema clásico e impredecible, asignación de nombres nativa del kernel. (ejemplo: \texttt{eth0})
+	\end{enumerate}
+	
+	
 	
 	\pagebreak
 	
@@ -264,11 +290,11 @@ $ ip netns exec ns1 ping google.es
 
 	\addvspace{10px}
 	
-	\par \noindent Aún así, no resulta muy comodo el utilizar \colorbox{Lavender}{\textit{ip netns exec}} seguido de la aplicación a utilizar. Es por esto por lo que es común ejecutar dicho comando para asignar el network namespace a una shell. Esto sería tal que así:
+	\par \noindent Aún así, no resulta muy cómodo el utilizar \texttt{ip netns exec} seguido de la aplicación a utilizar. Es por esto por lo que es común ejecutar dicho comando para asignar el network namespace a una shell. Esto sería tal que así:
 	\begin{verbatim}
 $ ip netns exec ns1 /bin/bash
 	\end{verbatim}
-	\par \noindent Utilizaremos \colorbox{Lavender}{\textit{exit}} para salir de la shell y abandonar el network namespace.
+	\par \noindent Utilizaremos \texttt{exit} para salir de la shell y abandonar el network namespace.
 
 
 	% https://blogs.igalia.com/dpino/2016/04/10/network-namespaces/
@@ -419,7 +445,7 @@ $ exit
 		%11
 		\item
 		\label{bib:link11}
-		\href{https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#veth}{\textit{Introduction to Linux interfaces for virtual networking. VETH}}
+		\href{https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#veth}{\textit{Introduction to Linux interfaces for virtual networking}}
 		
 		
 		%12
