@@ -42,14 +42,16 @@
 	
 	\par \noindent En este trabajo, vamos a comentar la siguientes interfaces:
 	\begin{itemize}
-		\item eth0:{0,1,2...}
-		\item eth0.{0,1,2...} VLAN
-		\item eth0.{0,1,2...} VLAN 802.1ad
+		\item eth0:\{0,1,2...\}
+		\item eth0.\{0,1,2...\} VLAN
+		\item eth0.\{0,1,2...\} VLAN 802.1ad
 		\item VETH pairs
 		\item TUN/TAP
 	\end{itemize}
 
-	\par \noindent Para la explicación de las diferentes interfaces, vamos a suponer que estamos utilizando el nombrado de interfaces de red antiguo. Esto proviene de que en la últimas versiones del kernel, se ha cambiado la forma en la que las interfaces de red son nombradas por Linux. Es por esto por lo que antes podíamos tener interfaces tal que \texttt{eth0} y ahora nos encontramos con la siguiente nomenclatura \texttt{enps30}. Este cambio surge ya que anteriormente se nombraban las diferentes interfaces conforme el propio ordenador estaba en la etapa de \texttt{boot}, por lo que podría pasar que a lo que nosotros entendiamos como \texttt{eth1}, en el proximo arranque fuera \texttt{eth0}, dando lugar a incontables errores en el sistema. Es por esto por lo que se empecó a trabajar en soluciones alternativas. Por ejemplo, la que hemos utilizado de ejemplo, utiliza la información aportada por la BIOS del dispositivo para catalogarlo en diferentes categorias, con su formato de nombre para cada categorias. Dichas categorías corresponden con las siguientes:
+
+	\subsection{Nombres predecibles interfaces de red. \texttt{systemd networkd v197}}
+	 \noindent Para la explicación de las diferentes interfaces, vamos a suponer que estamos utilizando el nombrado de interfaces de red antiguo. Esto proviene de que en la últimas versiones del kernel, se ha cambiado la forma en la que las interfaces de red son nombradas por Linux. Es por esto por lo que antes podíamos tener interfaces tal que \texttt{eth0} y ahora nos encontramos con la siguiente nomenclatura \texttt{enps30}. Este cambio surge ya que anteriormente se nombraban las diferentes interfaces conforme el propio ordenador estaba en la etapa de \texttt{boot}, por lo que podría pasar que a lo que nosotros entendíamos como \texttt{eth1}, en el próximo arranque fuera \texttt{eth0}, dando lugar a incontables errores en el sistema. Es por esto por lo que se empecó a trabajar en soluciones alternativas. Por ejemplo, la que hemos utilizado de ejemplo, utiliza la información aportada por la BIOS del dispositivo para catalogarlo en diferentes categorías, con su formato de nombre para cada categorías. Dichas clasificación corresponde con las siguientes:
 	\begin{enumerate}
 		\item Nombres incorporando Firmware/BIOS que proporcionan un número asociado a dispositivos en la placa base. (ejemplo: \texttt{eno1})
 		\item Nombres incorporando Firmware/BIOS proveniente de una conexión PCI Express hotplug, con número asociado al conector. (ejemplo: \texttt{ens1})
@@ -58,11 +60,121 @@
 		\item Sistema clásico e impredecible, asignación de nombres nativa del kernel. (ejemplo: \texttt{eth0})
 	\end{enumerate}
 	
+	\pagebreak
+	\subsection{\texttt{enp2s0:\{0,1,2...\}}}
+	\par \noindent Todas las interfaces asociadas comparten la misma dirección MAC. Cada una de ellas, recibe el nombre de \textit{aliases}. La funcionalidad principal que tienen este tipo de interfaces es la de asignar varias direcciones de IP a una misma interfaz de red.
 	
+	\begin{verbatim}
+$ ip addr add 192.168.56.151/24 broadcast 192.168.56.255 dev enp2s0 
+label enp2s0:1
+	\end{verbatim}
+
+	\par \noindent Sin embargo, el comando \texttt{iproute2} admite esta misma funcionalidad sin tener que crear interfaces de red extra. Para ello, solo tenemos que asociar cada IP con la interfaz de red deseada.
+	\begin{verbatim}
+$ ip addr add 192.168.56.151/24 dev enp2s0
+$ ip addr add 192.168.56.251/24 dev enp2s0
+	\end{verbatim}
+
+	\subsection{VLAN. \texttt{enp2s0.\{0,1,2...\}}}
+	\par \noindent Mismo concepto que la interfaz anterior, sin embargo, utilizamos el estandar 802.1q, que permite etiquetar las tramas, para crear una red lógica independiente. Es necesario que la interfaz a la que estemos asignando, sea un puerto trunk, o bien sea tagged para una VLAN específica.
+	
+	\begin{verbatim}
+$ ip link add link enp2s0 name enp2s0.{num} type vlan id {num}
+$ ip addr add 192.168.100.1/24 brd 192.168.100.255 dev enp2s0.{num}
+$ ip link set dev enp2s0.{num} up
+	\end{verbatim}
+
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.4\textwidth]{img/diag_vlan.png}
+			\caption{Diagrama conexión VLANs}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
+	
+	\subsection{VLAN 802.1ad. \texttt{enp2s0}.\{0,1,2...\}}
+	
+	\subsection{Pares VETH.}
+	\noindent Los VETH (Ethernet virtuales) son un dispositivo que forman un túnel local ethernet. El dispositivo se crea en parejas.\\
+	
+	\noindent Los paquetes transmitidos por un extremo del VETH se reciben inmediatamente en el otro extremo. Si alguno de ellos se encuentra apagado, decimos que el link de la pareja esta también apagado.\\
+	
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{img/VETH.png}
+			\caption{Diagrama VETH y netns}
+		\end{center}
+	\end{figure}
+
+	\noindent Es necesario utilizar VETH cuando un namespace necesita comunicarse con el host, o viceversa.\\
+	
+	\noindent La configuración que tenemos que realizar para tener el diagrama de la Figura 2.
+	
+	\begin{verbatim}
+$ ip netns add net1
+$ ip netns add net2
+$ ip link add veth1 netns net1 type veth peer name veth1 netns net2
+	\end{verbatim}
+
+	\noindent De esta manera, tendríamos creados los namespaces \texttt{net1} y \texttt{net2}, que estarían interconectados con las interfaces \texttt{veth1} y \texttt{veth2}. Nos quedaría asignar una IP a cada interfaz. 
+	
+	
+	%% https://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/
+	\begin{verbatim}
+$ ip netns exec net1 ip addr add 10.1.1.1/24 dev veth1
+$ ip netns exec net1 ip link set veth1 up
+$ ip netns exec net2 ip addr add 10.1.1.2/24 dev veth1
+$ ip netns exec net2 ip link set veth1 up
+	\end{verbatim}
+
+	%% https://www.eduardocollado.com/2018/09/25/podcast-176-primeros-pasos-con-open-vswitch/
+	
+	\noindent Ahora nos quedaría la parte de crear un bridge entre las diferentes interfaces virtuales que hemos creado. Para esto, podemos utilizar una interfaz tipo \textit{bridge} de Linux, o bien podemos configurar un \textit{bridge} usando \textit{Open VSwitch}.
+	
+	%% https://matthewarcus.wordpress.com/2018/02/04/veth-devices-network-namespaces-and-open-vswitch/
+	
+	\begin{verbatim}
+$ ip link add veth1_br type veth peer name veth0 netns net1
+$ ip link add veth2_br type veth peer name veth0 netns net2
+$ ovs-vsctl add-br ovsbr0
+$ ovs-vsctl add-port ovsbr0 veth1_br
+$ ovs-vsctl add-port ovsbr0 veth2_br
+$ ovs-vsctl add-port ovsbr0 <outbound interface>
+	\end{verbatim}
+
+	\noindent Añadimos las direcciones IP que nos faltan:
+	
+	\begin{verbatim}
+$ ip addr add 10.1.1.10/24 dev veth1_br
+$ ip link set veth1_br up
+$ ip addr add 10.1.1.20/24 dev veth2_br
+$ ip link set veth2_br up
+$ ip netns exec net1 ip addr add 10.1.1.15/24 dev veth0
+$ ip netns exec net1 ip link set veth0 up
+$ ip netns exec net2 ip addr add 10.1.1.25/24 dev veth0
+$ ip netns exec net2 ip link set veth0 up
+$ ip netns exec net1 ip link set lo up
+$ ip netns exec net2 ip link set lo up
+	\end{verbatim}
+
+	\subsection{TUN/TAP}
+	\noindent Permite conectar una aplicación en específico con el kernel, utilizando un dispositivo Ethernet. Una aplicación puede acceder al tuntap o bien crearlo ella misma. \\
+	
+	\noindent TUN trabaja a nivel IP (capa 3), tiene por función principal definir túneles. No entiende nada de ARP (ni nada de nivel 2).\\
+	
+	\noindent TAP trabaja solo a nivel de MAC (entiende ARP, etc.) y sirve directamente para un bridge virtual. Los túneles los puede crear directamente el comando ip, por lo que la interfaz TUN apenas se utiliza. Sin embargo, TAP es muy utilizado para crear un \textit{bridge}.\\
+	
+	\noindent Un \textit{bridge} puede incorporar interfaces TAP. En este caso, la aplicación que lo monitoriza puede ser un hipervisor (Virtualbox, Qemu, libvirt), es decir, el \textit{bridge} está dentro del kernel.
+	
+	\noindent 
 	
 	\pagebreak
 	
-	\section{\textit{Espacio de nombres} en \textit{Linux}}
+	
+	
+	\pagebreak
+	\section{Espacio de nombres en \textit{Linux}}
 	\subsection{¿Qué es un \textit{espacio de nombres}?}
 	\noindent Los \textit{espacios de nombres}, o también llamados, \textit{namespaces}, son una característica del kernel de Linux que permite gestionar los recursos del kernel, pudiendo limitarlos a un proceso o grupo de procesos. Suponen una base de tecnología que aparece en las técnicas de virtualización más modernas (como puede ser Docker, Kubernetes, etc). A un nivel alto, permiten aislar procesos respecto al resto del kernel. \\
 	
@@ -367,6 +479,119 @@ $ exit
 	\end{figure}
 	
 	\pagebreak
+	
+	\subsection{Ejemplo de uso de 'netns' usando comando \texttt{ip}}
+	\noindent En este apartado, vamos a detallar un ejemplo de como funciona el comando IP manejando los 'network namespaces'.\\
+	
+	\noindent Creamos los \textit{network namespaces}, en este caso, con nombre h1 y h2. El sistema no crea directamente el namespace, lo que en realidad hace es definirlos en el sistema. El \textit{network namespace} se crea cuando una aplicación se asocia a el.
+	\begin{verbatim}
+$ ip netns add h1
+$ ip netns add h2
+	\end{verbatim}
+
+	\noindent Si utilizamos el comando \texttt{ip netns}, nos mostrará los netns existentes. Como es un sub-comando de \texttt{ip}, muestra los ns que el comando \texttt{lsns} no muestra. \\
+	
+	\noindent Procedemos a asociar una aplicación a cada netns. Utilizamos \texttt{bash}.
+	\begin{verbatim}
+$ ip netns exec h1 bash
+$ ip netns exec h2 bash
+	\end{verbatim}
+
+	\noindent Ahora, si que podemos utilizar el comando \texttt{lsns}. Comprobamos que si nos aparecen los ns que hemos creado, cosa que antes de asociar una aplicación al ns, no pasaba. \\
+	
+	\noindent El comando \texttt{ip} crea automaticamente un \textit{nsfs} para poder colocar los archivos de configuración del \textit{netns}. Para ello, debe crearse el directorio \texttt{/etc/netns/h1} y poner en el los archivos de configuración de la red.
+	\begin{verbatim}
+$ mkdir /etc/netns/h1
+$ echo "nameserver 8.8.8.8" > /etc/netns/h1/resolv.conf
+	\end{verbatim}
+
+	\noindent En este momento, tenemos el ns configurado con DNS. Nos quedaría realizar la conexión entre el ethernet físico de nuestro \textit{host} y las interfaces de nuestros namespaces. Para ello, vamos a utilizar un conmutador virtual, en este caso Open vSwitch.
+	\begin{verbatim}
+$ systemctl enable --now openvswitch.service
+	\end{verbatim}
+
+	\noindent Creamos un \textit{brige} utilizando el OpenvSwitch.
+	\begin{verbatim}
+$ $ ovs-vsctl add-br s1
+	\end{verbatim}
+
+	\noindent Utilizando el comando \texttt{ip}, creamos las interfaces virtuales de ethernet y las asignamos a sus namespaces.
+	\begin{verbatim}
+$ ip link add h1-eth0 type veth peer name s1-eth1
+$ ip link add h2-eth0 type veth peer name s1-eth2
+$ ip link set h1-eth0 netns h1
+$ ip link set h2-eth0 netns h2
+	\end{verbatim}
+
+	\pagebreak
+	
+	\noindent Utilizando el comando \texttt{ovs-vsctl}, asignamos al \textit{bridge} el otro par ethernet que hemos creado para cada namespace.
+	\begin{verbatim}
+$ ovs-vsctl add-port s1 s1-eth1
+$ ovs-vsctl add-port s1 s1-eth2
+	\end{verbatim}
+
+	\noindent Verificamos que el controlador sea \textit{standalone}, así el switch se comportará como un \textit{learning-switch}.
+	\begin{verbatim}
+$ ovs-vsctl set-fail-mode br0 standalone
+	\end{verbatim}
+
+	\noindent Como la conexión es desde localhost al exterior, entendemos que es una conexión fuera de banda.
+	\begin{verbatim}
+$ ovs-vsctl set controller br0 connection-mode=out-of-band
+	\end{verbatim}
+
+	\noindent En este momento, tenemos todos configurado a falta de habilitar las diferentes interfaces de nuestra topología.
+	\begin{verbatim}
+$ ip netns exec h1 ip link set h1-eth0 up
+$ ip netns exec h1 ip link set lo up
+$ ip netns exec h1 ip add add 10.0.0.1/24 dev h1-eth0
+$ ip netns exec h2 ip link set h2-eth0 up
+$ ip netns exec h2 ip link set lo up
+$ ip netns exec h2 ip add add 10.0.0.2/24 dev h2-eth0
+$ ip link set s1-eth1 up
+$ ip link set s1-eth2 up
+	\end{verbatim}
+
+	\noindent Ahora tenemos todas las interfaces configuradas, el switch activado y el sistema interconectado, por lo que podemos ejecutar un ping en una de las terminales de los namespaces para verificar la topología.
+	\begin{verbatim}
+$ ip netns exec h1 ping -c4 10.0.0.2
+	\end{verbatim}
+
+	\noindent Si queremos revertir todas las configuraciones que hemos hecho, lo que tenemos que hacer es ejecutar los siguientes comandos:
+	\begin{verbatim}
+$ ovs-vsctl del-br s1
+$ ip link delete s1-eth1
+$ ip link delete s1-eth2
+$ ip netns del h1
+$ ip netns del h2
+	\end{verbatim}
+
+	\pagebreak
+
+	\subsection{Ejemplo de uso de 'netns' usando comando \texttt{unshare}}
+	\noindent En el ejemplo anterior, utilizabamos el comando \texttt{ip} para manejar los netns, sin embargo, eso nos limitaba los tipos namespaces que queriamos asignar a nuestro namespace. En contra partida a esto, el comando \texttt{unshare} nos da más libertad a la hora de crear los namespaces. \\
+	
+	\noindent Utilizando \texttt{unshare}, no podemos ponerle un nombre, pero sí que nos permite asociarlo a un archivo, que montará con tipo bind. Esto nos permitirá utilizar en namespace aunque no haya ningún proceso corriendo en el, para ello podemos utilizar el comando \texttt{nsenter}.
+	\begin{verbatim}
+$ touch /var/net-h1
+$ touch /var/uts-h1
+$ unshare --net=/var/net-h1 --uts=/var/uts-h1 /bin/bash
+	\end{verbatim}
+
+	\noindent Utilizando el comando \texttt{nsenter} podemos ejecutar comandos dentro del namespace.
+	\begin{verbatim}
+$ nsenter --net=/var/net-h1 --uts=/var/uts-h1 hostname h1
+$ nsenter --net=/var/net-h1 --uts=/var/uts-h1 ip address
+	\end{verbatim}
+
+	\noindent Para destruir el namespace, lo que tendremos que hacer es desmontar los archivos asignados a dicho namespace.
+	\begin{verbatim}
+$ umount /var/net-h1
+$ umount /var/uts-h1
+	\end{verbatim}
+
+	\noindent Como será común necesitar más de un namespace, de ahora en adelante tendremos que utilizar los comandos \texttt{unshare} y \texttt{nsenter}.
 
 	\pagebreak
 	
@@ -376,18 +601,64 @@ $ exit
 	\section{Interconexión física de diferentes red virtuales}
 	\section{Openflow OKO}
 	
+	\pagebreak
+	\section{Anexo 1. Instalación de \texttt{ansible} para automatizar una VM}
+	\noindent En el caso de que queramos utilizar la herramienta ansible para configurar una VM, tendremos que seguir los siguientes pasos.
+	\begin{enumerate}
+		\item Asegurarnos de que tenemos instalado el programa en el host. La principal dependencia de \texttt{ansible} es \texttt{Python}. \\
+		Para instalar \texttt{ansible} en diferentes distribuciones sería tal que:
+		\begin{itemize}
+			\item Ubuntu 21.04:
+			\begin{verbatim}
+				$ sudo apt install -y software-properties-common
+				$ sudo add-apt-repository --yes --update ppa:ansible/ansible
+				$ sudo apt update
+				$ sudo apt install -y ansible
+			\end{verbatim}
+		
+			\item Fedora 32:
+			\begin{verbatim}
+				$ sudo dnf update
+				$ sudo dnf install ansible
+			\end{verbatim}
+		
+			\item OpenSUSE:
+			\begin{verbatim}
+				$ zypper in ansible
+			\end{verbatim}
+		
+			\item Arch Linux:
+			\begin{verbatim}
+				$ sudo pacman -S ansible
+			\end{verbatim} 
+		\end{itemize}
+	
+		\item Creamos una clave SSH para utilizarla como método de autentificación con la maquina virtual. 
+		\begin{verbatim}
+			(host)$ ssh-keygen -t ed25519 -C "Host Ansible ssh key"
+		\end{verbatim}
+		
+		\item Utilizando nuestro gestor de máquinas virtuales, encendemos la VM. Es importante que nos aseguremos que tiene internet, por lo que configuramos que la interfaz de red sea de tipo \textit{NAT}. Dentro de la máquina, buscaremos que ip tiene asignada con el comando \texttt{ip address}. Desde este momento, dejaremos la máquina virtual encendida.
+		
+		\item Procedemos a copiar la clave pública SSH que hemos generado en el paso dos. Utilizamos el siguiente comando, sustituyendo con el usuario e IP específico de la máquina.
+		\begin{verbatim}
+			(host)$ ssh-copy-id -i $HOME/.ssh/id_ed25519.pub <user>@<IP VM>
+		\end{verbatim}
+	\end{enumerate}
+	
 	%%% Glosario
 	\pagebreak
 	\section{Glosario de términos}
 	\begin{itemize}
 		\item Namespace. \textit{Espacio de nombres}
-		\item Linux. \textit{Sistema operativo tipo UNIX, de codigo abierto, multiplataforma, multiusuario y multitarea.}
-		\item Kernel de linux. \textit{Núcleo del sistema operativo Linux.}
+		\item Linux. \textit{Sistema operativo tipo UNIX, de codigo abierto, multiplataforma, multiusuario y multitarea}
+		\item Kernel de linux. \textit{Núcleo del sistema operativo Linux}
 		\item PID. \textit{Process Identifier}
-		\item root. \textit{Cuenta superusuario del sistema operativo Linux.}
+		\item root. \textit{Cuenta superusuario del sistema operativo Linux}
 		\item veth-pair. \textit{Virtual Ethernet Pair}
-		\item UID. \textit{Identificador de usuario.}
-		\item GID. \textit{Identificador de grupo.}
+		\item UID. \textit{Identificador de usuario}
+		\item GID. \textit{Identificador de grupo}
+		\item ns.  \textit{Network namespace}
 	\end{itemize}
 
 	%%% Bibliography
@@ -458,6 +729,10 @@ $ exit
 		\label{bib:link13}
 		\href{https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=timers/core&id=769071ac9f20b6a447410c7eaa55d1a5233ef40c}{\textit{Time namespaces}}
 		
+		%14
+		\item
+		\label{bib:link14}
+		\href{https://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/}{\textit{Network namespaces. Assign and configure}}
 		
 		
 		% X
