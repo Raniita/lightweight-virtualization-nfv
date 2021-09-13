@@ -11,6 +11,7 @@
 \usepackage[dvipsnames]{xcolor}
 
 \renewcommand{\lstlistingname}{Listado}
+\renewcommand{\lstlistlistingname}{Listado de códigos}
 
 % https://tex.stackexchange.com/questions/60209/how-to-add-an-extra-level-of-sections-with-headings-below-subsubsection
 \newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
@@ -19,25 +20,51 @@
 
 \begin{document}
 	\selectlanguage{spanish}
+	
+	%%%% PORTADA
 	\title{Aplicación de técnicas de virtualización ligera para la evaluación de redes de comunicaciones \\ 
 		\addvspace{10px} \large Trabajo Final de Estudios \\
 		\large Ingeniería Telemática}
 	\author{Enrique Fernández Sánchez \\ Universidad Politécnica de Cartagena}
 	
 	%% EDITAR PARA SEGUIMIENTO DE VERSIONES
-	\date{Revisión 25 Mayo 2021}
+	\date{Revisión Septiembre 2021}
 	
 	\maketitle
+	
+	%%% END PORTADA
+	
+	\pagebreak
+	
 	\tableofcontents
 	
 	\pagebreak
 	
-	%%% TODO
-	\section{Introduction}
+	\addcontentsline{toc}{section}{Índice de figuras}
+	\listoffigures
+	\addcontentsline{toc}{section}{Índice de tablas}
+	\listoftables
+	\addcontentsline{toc}{section}{Listado de códigos}
+	\lstlistoflistings
 	
 	\pagebreak
 	
-	\section{Interfaces de red en \textit{Linux}}
+	%%% TODO
+	\section*{Agradecimientos}
+	\addcontentsline{toc}{section}{Agradecimientos}
+	
+	\pagebreak
+	
+	%%% TODO
+	\section{Introducción}
+	
+	\pagebreak
+	%%% TODO
+	\section{Objetivos}
+	
+	\pagebreak
+	
+	\section{Interfaces de red virtuales en \textit{Linux}}
 	\noindent Linux dispone de una selección muy diferente de interfaces de red que nos permiten, de manera sencilla, el uso de máquinas virtuales o contenedores. En este apartado vamos a mencionar las interfaces más relevantes de cara a la virtualización ligera que proponemos para el despliegue de una red virtualizada. Para obtener una lista completa de las interfaces disponibles, podemos ejecutar el siguiente comando \texttt{ip link help}.\\
 	
 	\par \noindent En este trabajo, vamos a comentar la siguientes interfaces:
@@ -595,14 +622,27 @@ $ umount /var/uts-h1
 
 	\pagebreak
 	
-	\section{Containers LXC}
-	\section{Docker}
-	\section{Evaluación de prestaciones}
-	\section{Interconexión física de diferentes red virtuales}
-	\section{Openflow OKO}
+	\section{Virtualización}
+	\subsection{Contenedores usando \texttt{unshare}}
+	\subsection{Contenedores LXC}
+	\subsection{Contenedores Docker}
 	
 	\pagebreak
-	\section{Anexo 1. Instalación de \texttt{ansible} para automatizar una VM}
+
+	\section{Caso práctico: Virtualización para simulación de redes}
+	\subsection{Evaluación de prestaciones}
+	\subsection{Interconexión física de diferentes red virtuales}
+	\subsection{Openflow OKO}
+	
+	\pagebreak
+	
+	\section{Conclusiones}
+	
+	\pagebreak
+	\section*{Anexos}
+	\addcontentsline{toc}{section}{Anexos}
+	\subsection*{Anexo 1. Instalación de \texttt{ansible} para automatizar una VM}
+	\addcontentsline{toc}{subsection}{Anexo 1. Instalación \texttt{ansible}}
 	\noindent En el caso de que queramos utilizar la herramienta ansible para configurar una VM, tendremos que seguir los siguientes pasos.
 	\begin{enumerate}
 		\item Asegurarnos de que tenemos instalado el programa en el host. La principal dependencia de \texttt{ansible} es \texttt{Python}. \\
@@ -648,7 +688,8 @@ $ umount /var/uts-h1
 	
 	%%% Glosario
 	\pagebreak
-	\section{Glosario de términos}
+	\section*{Glosario de términos}
+	\addcontentsline{toc}{section}{Glosario de términos}
 	\begin{itemize}
 		\item Namespace. \textit{Espacio de nombres}
 		\item Linux. \textit{Sistema operativo tipo UNIX, de codigo abierto, multiplataforma, multiusuario y multitarea}
@@ -663,8 +704,10 @@ $ umount /var/uts-h1
 
 	%%% Bibliography
 	\pagebreak
-	\section{Bibliografía}
-	\subsection{Enlaces y referencias}
+	\section*{Bibliografía}
+	\addcontentsline{toc}{section}{Bibliografía}
+	\subsection*{Enlaces y referencias}
+	\addcontentsline{toc}{subsection}{Enlaces y referencias}
 	%%\hyperref[bib:link1]{\emph{Reference of bibliography}}
 	\begin{enumerate}
 		%1
@@ -735,6 +778,11 @@ $ umount /var/uts-h1
 		\href{https://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/}{\textit{Network namespaces. Assign and configure}}
 		
 		
+		%15 
+		\item
+		\label{bib: herramientas virtualizacion}
+		\href{https://www.uv.es/sto/charlas/2010_CIM/hvl-cim-2010.html/index.html}{\textit{Herramientas de virtualización libres para sistemas GNU/Linux}}
+		
 		% X
 		\item
 		\label{bib:link20}
@@ -744,7 +792,8 @@ $ umount /var/uts-h1
 
 	\pagebreak
 
-	\subsection{Images}
+	\subsection*{Imágenes}
+	\addcontentsline{toc}{subsection}{Imagenes}
 	\begin{enumerate}
 		%1
 		\item 
