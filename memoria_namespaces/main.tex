@@ -603,7 +603,7 @@ $ umount /var/uts-h1
 	
 	\pagebreak
 	\section{Anexo 1. Instalación de \texttt{ansible} para automatizar una VM}
-	\noindent En el caso de que queramos utilizar la herramienta ansible para configurar una VM, tendremos que seguir los siguientes pasos.
+	\noindent En el caso de que queramos utilizar la herramienta ansible para configurar una VM [\ref{bib:install ansible}], tendremos que seguir los siguientes pasos.
 	\begin{enumerate}
 		\item Asegurarnos de que tenemos instalado el programa en el host. La principal dependencia de \texttt{ansible} es \texttt{Python}. \\
 		Para instalar \texttt{ansible} en diferentes distribuciones sería tal que:
@@ -640,11 +640,51 @@ $ umount /var/uts-h1
 		
 		\item Utilizando nuestro gestor de máquinas virtuales, encendemos la VM. Es importante que nos aseguremos que tiene internet, por lo que configuramos que la interfaz de red sea de tipo \textit{NAT}. Dentro de la máquina, buscaremos que ip tiene asignada con el comando \texttt{ip address}. Desde este momento, dejaremos la máquina virtual encendida.
 		
-		\item Procedemos a copiar la clave pública SSH que hemos generado en el paso dos. Utilizamos el siguiente comando, sustituyendo con el usuario e IP específico de la máquina.
+		\item Procedemos a copiar la clave pública SSH que hemos generado en el paso dos. Utilizamos el siguiente comando, sustituyendo con el usuario e IP específico de la máquina. Tendremos que configurar una red tipo \textit{Host-only network} para poder comunicarnos correctamente con nuestra máquina virtual, para ello podemos seguir los pasos detallados en [\ref{bib:configure host-only}]
 		\begin{verbatim}
 			(host)$ ssh-copy-id -i $HOME/.ssh/id_ed25519.pub <user>@<IP VM>
 		\end{verbatim}
+	
+		\pagebreak
+		
+		\item En este momento ya podríamos conectar con la máquina virtual utilizando \texttt{ansible}. Sin embargo, por comodidad, lo que vamos a hacer es crear un archivo que funcione con inventario de servidores. Nos servirá para guardar las direcciones IP de los servidores en los que queremos ejecutar comandos remotos con \texttt{ansible}. Para ello, creamos un archivo \texttt{inventory}. Como ejemplo, dicho archivo puede ser tal que:
+		\begin{verbatim}
+		## VMs locals 
+		[virtualbox]
+		10.0.100.1
+		10.0.100.2
+		
+		## Server SSH
+		[server]
+		192.168.1.200
+		\end{verbatim}
+	
+		\item Para probar la conectividad. Nos aseguramos de que tenemos la máquina virtual encendida y que además, hemos copiado la clave ssh y tenemos su IP añadida a nuestro inventario. Después, procedemos a ejecutar el siguiente comando en la máquina host:
+		\begin{verbatim}
+			(host)$ ansible -i inventory -m ping
+		\end{verbatim}
+		\noindent En la consola nos aparecerá la información de cada uno de las IP que habrá probado para ejecutar el comando remoto \texttt{ping}.
 	\end{enumerate}
+
+	\pagebreak
+	
+	\section{Anexo 2. Configuración de \textit{Guest Network} para comunicar con la VM}
+	\noindent Para comunicar nuestra máquina host [\ref{bib:configure host-only}], con una \textit{virtual machine} es necesario que estén en una misma red, es por esto por lo que vamos a crear una red en especifico para ello. En el programa \textit{Virtualbox}, esta funcionalidad recibe el nombre de \textit{Host-only}.\\
+	
+	\noindent Es importante que cuando queramos configurar una máquina virtual con esta funcionalidad que siempre pongamos el adaptador de red 1 como el que tendrá la comunicación \textit{guest}, mientras que el adaptador 2 será el que tendrá la conexión a internet via \textit{NAT}.\\
+	
+	\noindent Procedemos a enumerar los pasos a seguir para configurar una máquina virtual con conectividad con el host, utilizando \textit{Virtualbox}.
+	
+	\begin{enumerate}
+		\item Abrimos el programa \textit{Virtualbox}. Navegamos a la sección: \textbf{File $\rightarrow$ Preferences}.
+		\item Seleccionamos la tabla de \textbf{\textit{Host-only Networks}}. Procedemos a pulsar el botón + para añadir una nueva red.
+		\item Asignamos las diferentes IP que considermos. Es importante que dejemos activado el servidor DHCP, así la máquina virtual tendrá una IP válida dentro de la red.
+		\item Ahora, lo que tenemos que hacer es añadir una interfaz de red a nuestra máquina virtual. Para ello, vamos a las \textbf{Setting}s de la máquina virtual. En el apartado de Network, cambiamos el \textbf{Adapter 1} a\textbf{ Host-only Adapter}, y asignamos una segunda interfaz de red con NAT (Adapter 2 attached to NAT).
+		\item Para comprobar que lo hemos hecho correctamente. Arrancamos la máquina virtual, ejecutamos el comando \texttt{ip address}. Nos deberían aparacer las diferentes interfaces que previamente hemos configurado, es decir, una interfaz de loopback, otra que corresponde al Host-only network, y por último, una que corresponda con la interfaz de NAT.
+	\end{enumerate}
+	
+	\pagebreak
+	\section{Anexo 3. Playbooks \texttt{ansible}}
 	
 	%%% Glosario
 	\pagebreak
@@ -733,6 +773,18 @@ $ umount /var/uts-h1
 		\item
 		\label{bib:link14}
 		\href{https://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/}{\textit{Network namespaces. Assign and configure}}
+		
+		
+		%15
+		\item
+		\label{bib:configure host-only}
+		\href{https://www.tecmint.com/network-between-guest-vm-and-host-virtualbox/}{How to configure Network Between Guest VM and Host in Virtualbox}
+		
+		
+		%16
+		\item
+		\label{bib:install ansible}
+		\href{https://www.cyberciti.biz/faq/how-to-install-ansible-on-fedora-for-it-and-server-automation/}{How to install ansible on fedora for it and server automation}
 		
 		
 		% X
