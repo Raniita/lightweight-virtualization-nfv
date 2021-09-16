@@ -57,10 +57,54 @@
 	
 	%%% TODO
 	\section{Introducción}
+	\noindent Con el fin de concluir los estudios de grado en ingeniería telemática, es necesaria la investigación y el posterior desarrollo del \textit{Trabajo Fin de Estudios} (TFE). Dicho trabajo, tiene como objetivo enfrentar al alumno a un proceso de investigación en el que pueda aplicar los conceptos que ha ido aprendiendo durante su paso por el grado, además pudiendo añadir puntos de innovación, y aportar soluciones nuevas a un proyecto en específico.\\
+	
+	\noindent En este documento, recojo lo que sería mi memoria en relación al TFE. En dicho documento comentaremos los detallaremos las diferentes investigaciones realizadas sobre virtualización en sistemas Linux, como funcionan los contenedores y como utilizar virtualización ligera para la evaluación de redes de comunicaciones, en nuestro caso, de conmutación de paquetes.
+	
+	\subsection{Contexto del trabajo}
+	\noindent Este proyecto nace con el objetivo de profundizar en conceptos tan importantes como pueden ser la virtualización, o los bien conocidos \textit{contenedores}. Además, particularizamos estas tecnologías y las acercamos al campo de la telemática para utilizarlas con el fin de evaluar y simular redes de conmutación de tipo IP. \\
+	
+	\noindent Partiendo de supuesto de que las herramientas más sencillas de simulación de redes se nos pueden quedar cortas en cuanto queremos escalar el sistema, nos topamos en que otras soluciones pueden ser mucho más \textit{resource hungry} de lo que podríamos imaginar. Además, tampoco podemos contar con realizar dichas pruebas de manera física, ya que el presupuesto del proyecto escalaría de nivel exponencial. Esto sucede ya que deberíamos configurar cada dispositivo de manera específica, y después proceder a interconectarlos con una tecnología de red adecuada, que en nuestro caso, son tecnologías en fase de desarrollo o evaluación de prestaciones.\\
+	
+	\noindent Conociendo las limitaciones, establecemos una serie de objetivos de cara a evaluar el viaje que realicemos durante ese proyecto, y poder evaluar posteriormente los avances que hemos podido conseguir, y además las conclusiones vinculadas a estos. Estos objetivos podrían ser:\\
+	\begin{itemize}
+		\item Análisis de diferentes opciones de simulación de redes. Tanto basadas en virtualización, como las que no.
+		\item Comprender la diferencia entre virtualización \textit{ligera} y virtualización \textit{dura}.
+		\item Profundizar en el concepto de \textit{interfaces virtuales} en Linux.
+		\item Definir que es el \textit{espacio de nombres} y ejemplificar cada uno de ellos.
+		\item Aproximación al concepto de contenedor, relacionarlo con los \textit{espacio de nombres}.
+		\item Aportar una solución válida para la simulación y evaluación de un sistema, utilizando la virtualización ligera.
+	\end{itemize}
 	
 	\pagebreak
+	
 	%%% TODO
-	\section{Objetivos}
+	\subsection{Objetivos}
+	\noindent Como bien hemos adelantado en el apartado anterior, el objetivo principal de este proyecto es el de analizar la situación en el ámbito de simulación y evaluación de redes de comunicación, además, concretar en aquellas soluciones que estén basadas en virtualización ligera. Por lo tanto, se pretende: \\
+	\begin{itemize}
+		\item Aprendes los conceptos básicos de NFV.
+		\item Estudiar, dentro del sistema operativo Linux, las diferentes tecnologías que nos permiten adoptar soluciones NFV.
+		\item Definir que es \textit{espacio de nombres} y como podemos aplicarlo para virtualizar redes.
+		\item Desgranar el concepto amplio de contenedor.
+		\item Desarrollar una aplicación conceptual para la evaluación de un sistema en concreto, utilizando virtualización ligera.
+	\end{itemize}
+
+	\subsection{Descripción de los capítulos restantes de la memoria}
+	
+	\pagebreak
+	
+	\section{NFV}
+	%% https://www.youtube.com/watch?v=3JEAK66wujg
+	\noindent NFV surge a partir de las necesidades de las operadoras para solucionar problemas de gran escala de la red. Este movimiento nace en X. Uno de los objetivos que se pretenden desde el punto de vista de las operadoras, es reducir los costes y optimizar la red. Esto sucede ya que las redes actuales sufren de tres problemas: falta de escalabilidad en momentos precisos y específicos; excasa flexibilidad de la red, en momento específicos necesitaremos modificar funcionamientos de nodos en concreto, pero no se nos posibilita; falta de innovación en la gestión de los recursos, nuevos servicios, etc. Todo esto ocurre ya que las redes de las operadoras han evolucionado muy poco. \\
+	
+	\noindent La solución que se propone es la virtualización de las redes. Esto nace en octubre de 2012, a partir del paper: https://portal.etsi.org/nfv/nfv\_white\_paper.pdf
+	
+	
+	
+	
+	
+	
+	\noindent Entendemos la virtualización ligera como un tipo de virtualización de un sistema. Dicha virtualización se hace a nivel de sistema operativo, aportando que existan diferentes espacios de usuarios aislados entre sí, y todo esto estando todos bajo el mismo kernel. Las diferentes implementaciones de 
 	
 	\pagebreak
 	
@@ -733,6 +777,7 @@ $ umount /var/uts-h1
 	\section*{Glosario de términos}
 	\addcontentsline{toc}{section}{Glosario de términos}
 	\begin{itemize}
+		\item NFV. \textit{Network Function Virtualization}, o bien, Virtualización de funciones de red.
 		\item Namespace. \textit{Espacio de nombres}
 		\item Linux. \textit{Sistema operativo tipo UNIX, de codigo abierto, multiplataforma, multiusuario y multitarea}
 		\item Kernel de linux. \textit{Núcleo del sistema operativo Linux}
