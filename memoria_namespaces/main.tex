@@ -49,6 +49,25 @@
 	
 	\pagebreak
 	
+	%%% Glosario
+	\pagebreak
+	\section*{Glosario de términos}
+	\addcontentsline{toc}{section}{Glosario de términos}
+	\begin{itemize}
+		\item NFV. \textit{Network Function Virtualization}, o bien, Virtualización de funciones de red.
+		\item Namespace. \textit{Espacio de nombres}
+		\item Linux. \textit{Sistema operativo tipo UNIX, de codigo abierto, multiplataforma, multiusuario y multitarea}
+		\item Kernel de linux. \textit{Núcleo del sistema operativo Linux}
+		\item PID. \textit{Process Identifier}
+		\item root. \textit{Cuenta superusuario del sistema operativo Linux}
+		\item veth-pair. \textit{Virtual Ethernet Pair}
+		\item UID. \textit{Identificador de usuario}
+		\item GID. \textit{Identificador de grupo}
+		\item ns.  \textit{Network namespace}
+	\end{itemize}
+	
+	\pagebreak
+	
 	%%% TODO
 	\section*{Agradecimientos}
 	\addcontentsline{toc}{section}{Agradecimientos}
@@ -59,10 +78,12 @@
 	\section{Introducción}
 	\noindent Con el fin de concluir los estudios de grado en ingeniería telemática, es necesaria la investigación y el posterior desarrollo del \textit{Trabajo Fin de Estudios} (TFE). Dicho trabajo, tiene como objetivo enfrentar al alumno a un proceso de investigación en el que pueda aplicar los conceptos que ha ido aprendiendo durante su paso por el grado, además pudiendo añadir puntos de innovación, y aportar soluciones nuevas a un proyecto en específico.\\
 	
-	\noindent En este documento, recojo lo que sería mi memoria en relación al TFE. En dicho documento comentaremos los detallaremos las diferentes investigaciones realizadas sobre virtualización en sistemas Linux, como funcionan los contenedores y como utilizar virtualización ligera para la evaluación de redes de comunicaciones, en nuestro caso, de conmutación de paquetes.
+	\noindent En este documento, recojo lo que sería mi memoria en relación al TFE. En dicho documento detallaremos las diferentes investigaciones realizadas sobre el concepto de virtualización en sistemas Linux, como funcionan los contenedores y como utilizar la virtualización ligera para la evaluación de redes de comunicaciones, en nuestro caso, de conmutación de paquetes.
 	
 	\subsection{Contexto del trabajo}
-	\noindent Este proyecto nace con el objetivo de profundizar en conceptos tan importantes como pueden ser la virtualización, o los bien conocidos \textit{contenedores}. Además, particularizamos estas tecnologías y las acercamos al campo de la telemática para utilizarlas con el fin de evaluar y simular redes de conmutación de tipo IP. \\
+	\noindent Este proyecto nace con el objetivo de profundizar en conceptos novedosos para el ámbito de red, como por ejemplo podría ser NFV. Definimos NFV (Network Function Virtualization) como la virtualización de hardware físico de red, con el fin de solucionar problemas de escalabilidad y de optimización.\\
+	
+	 \noindent Además, trabajaremos sobre otras tecnologías igual de importantes como pueden ser la virtualización de recursos, o los bien conocidos \textit{contenedores}. Particularizaremos estas tecnologías y las acercamos al campo de conocimiento de la telemática para utilizarlas con el fin de evaluar y simular redes de conmutación de tipo IP. \\
 	
 	\noindent Partiendo de supuesto de que las herramientas más sencillas de simulación de redes se nos pueden quedar cortas en cuanto queremos escalar el sistema, nos topamos en que otras soluciones pueden ser mucho más \textit{resource hungry} de lo que podríamos imaginar. Además, tampoco podemos contar con realizar dichas pruebas de manera física, ya que el presupuesto del proyecto escalaría de nivel exponencial. Esto sucede ya que deberíamos configurar cada dispositivo de manera específica, y después proceder a interconectarlos con una tecnología de red adecuada, que en nuestro caso, son tecnologías en fase de desarrollo o evaluación de prestaciones.\\
 	
@@ -76,13 +97,13 @@
 		\item Aportar una solución válida para la simulación y evaluación de un sistema, utilizando la virtualización ligera.
 	\end{itemize}
 	
-	\pagebreak
+	%\pagebreak
 	
 	%%% TODO
 	\subsection{Objetivos}
 	\noindent Como bien hemos adelantado en el apartado anterior, el objetivo principal de este proyecto es el de analizar la situación en el ámbito de simulación y evaluación de redes de comunicación, además, concretar en aquellas soluciones que estén basadas en virtualización ligera. Por lo tanto, se pretende: \\
 	\begin{itemize}
-		\item Aprendes los conceptos básicos de NFV.
+		\item Aprendes los conceptos básicos de la virtualización de sistemas de red (NFV).
 		\item Estudiar, dentro del sistema operativo Linux, las diferentes tecnologías que nos permiten adoptar soluciones NFV.
 		\item Definir que es \textit{espacio de nombres} y como podemos aplicarlo para virtualizar redes.
 		\item Desgranar el concepto amplio de contenedor.
@@ -93,11 +114,29 @@
 	
 	\pagebreak
 	
-	\section{NFV}
+	\section{Virtualización de funciones de red}
 	%% https://www.youtube.com/watch?v=3JEAK66wujg
 	\noindent NFV surge a partir de las necesidades de las operadoras para solucionar problemas de gran escala de la red. Este movimiento nace en X. Uno de los objetivos que se pretenden desde el punto de vista de las operadoras, es reducir los costes y optimizar la red. Esto sucede ya que las redes actuales sufren de tres problemas: falta de escalabilidad en momentos precisos y específicos; excasa flexibilidad de la red, en momento específicos necesitaremos modificar funcionamientos de nodos en concreto, pero no se nos posibilita; falta de innovación en la gestión de los recursos, nuevos servicios, etc. Todo esto ocurre ya que las redes de las operadoras han evolucionado muy poco. \\
 	
-	\noindent La solución que se propone es la virtualización de las redes. Esto nace en octubre de 2012, a partir del paper: https://portal.etsi.org/nfv/nfv\_white\_paper.pdf
+	\noindent La solución que se propone para estos problemas es la virtualización de las redes. Esta corriente nace en octubre de 2012, a partir del \textit{paper} [\ref{paper nfv 2012}], creado con la colaboración de 13 operadoras de red internacionales. En el, se plantea el objetivo de esbozar los diferentes beneficios y retos de la virtualización de recursos de red, y los motivos para fomentar una colaboración internacional para acelerar el desarrollo y el despliegue de soluciones interoperables basadas en servidores estándar del sector de gran volumen. Esto supone el primer paso a la nueva tecnología de las redes. \\
+	
+	\noindent La virtualización de las redes consiste en el desarrollo de un enfoque en software de las redes. Intenta solucionar los problemas planteados, aportando innovación y una mayor escalabilidad de las redes. Supone el conjunto de SDN y NFV, normalmente la virtualización de redes no existe una sin la otra [\ref{youtube: nfv y sdn cristina}].\\
+	
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.7\textwidth]{img/classic_network_vs_nfv.png}
+			\label{imagen comparativa classic network nfv}
+			\caption{Comparativa enfoque clásico de las redes contra el enfoque virtualizado. [\ref{paper nfv 2012}]}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
+	
+	\noindent La actualidad es cada dispositivo, corresponde con un aparato físico. Son aparatos embebidos y solo cumplen una función específica. Utilizando la virtualización de red, podemos llegar al punto de tenerlo todo virtualizado. Tenemos una 'imagen' de router que la podemos desplegar en cualquier ordenador de caracter general, y cumplir diferentes funciones a la vez (que un router sea a la vez un firewall, por ejemplo).\\
+	
+	\noindent Las funciones de red están basadas en tener un software y hardware específico para cada dispositivo. NFV nos aporta que esos recursos software y hardware, se despliegan en servidores físicos de proposito general. Por lo tanto, un mismo nodo físico, puede ser DHCP, router o Firewall.\\
+	
+	%% IMAGEN
 	
 	
 	
@@ -681,113 +720,6 @@ $ umount /var/uts-h1
 	\pagebreak
 	
 	\section{Conclusiones}
-	
-	\pagebreak
-	\section*{Anexos}
-	\addcontentsline{toc}{section}{Anexos}
-	\subsection*{Anexo 1. Instalación de \texttt{ansible} para automatizar una VM}
-	\addcontentsline{toc}{subsection}{Anexo 1. Instalación \texttt{ansible}}
-	\noindent En el caso de que queramos utilizar la herramienta ansible para configurar una VM, tendremos que seguir los siguientes pasos.
-	\begin{enumerate}
-		\item Asegurarnos de que tenemos instalado el programa en el host. La principal dependencia de \texttt{ansible} es \texttt{Python}. \\
-		Para instalar \texttt{ansible} en diferentes distribuciones sería tal que:
-		\begin{itemize}
-			\item Ubuntu 21.04:
-			\begin{verbatim}
-				$ sudo apt install -y software-properties-common
-				$ sudo add-apt-repository --yes --update ppa:ansible/ansible
-				$ sudo apt update
-				$ sudo apt install -y ansible
-			\end{verbatim}
-		
-			\item Fedora 32:
-			\begin{verbatim}
-				$ sudo dnf update
-				$ sudo dnf install ansible
-			\end{verbatim}
-		
-			\item OpenSUSE:
-			\begin{verbatim}
-				$ zypper in ansible
-			\end{verbatim}
-		
-			\item Arch Linux:
-			\begin{verbatim}
-				$ sudo pacman -S ansible
-			\end{verbatim} 
-		\end{itemize}
-	
-		\item Creamos una clave SSH para utilizarla como método de autentificación con la maquina virtual. 
-		\begin{verbatim}
-			(host)$ ssh-keygen -t ed25519 -C "Host Ansible ssh key"
-		\end{verbatim}
-		
-		\item Utilizando nuestro gestor de máquinas virtuales, encendemos la VM. Es importante que nos aseguremos que tiene internet, por lo que configuramos que la interfaz de red sea de tipo \textit{NAT}. Dentro de la máquina, buscaremos que ip tiene asignada con el comando \texttt{ip address}. Desde este momento, dejaremos la máquina virtual encendida.
-		
-		\item Procedemos a copiar la clave pública SSH que hemos generado en el paso dos. Utilizamos el siguiente comando, sustituyendo con el usuario e IP específico de la máquina. Tendremos que configurar una red tipo \textit{Host-only network} para poder comunicarnos correctamente con nuestra máquina virtual, para ello podemos seguir los pasos detallados en [\ref{bib:configure host-only}]
-		\begin{verbatim}
-			(host)$ ssh-copy-id -i $HOME/.ssh/id_ed25519.pub <user>@<IP VM>
-		\end{verbatim}
-	
-		\pagebreak
-		
-		\item En este momento ya podríamos conectar con la máquina virtual utilizando \texttt{ansible}. Sin embargo, por comodidad, lo que vamos a hacer es crear un archivo que funcione con inventario de servidores. Nos servirá para guardar las direcciones IP de los servidores en los que queremos ejecutar comandos remotos con \texttt{ansible}. Para ello, creamos un archivo \texttt{inventory}. Como ejemplo, dicho archivo puede ser tal que:
-		\begin{verbatim}
-		## VMs locals 
-		[virtualbox]
-		10.0.100.1
-		10.0.100.2
-		
-		## Server SSH
-		[server]
-		192.168.1.200
-		\end{verbatim}
-	
-		\item Para probar la conectividad. Nos aseguramos de que tenemos la máquina virtual encendida y que además, hemos copiado la clave ssh y tenemos su IP añadida a nuestro inventario. Después, procedemos a ejecutar el siguiente comando en la máquina host:
-		\begin{verbatim}
-			(host)$ ansible -i inventory -m ping
-		\end{verbatim}
-		\noindent En la consola nos aparecerá la información de cada uno de las IP que habrá probado para ejecutar el comando remoto \texttt{ping}.
-	\end{enumerate}
-
-	\pagebreak
-	
-	\subsection*{Anexo 2. Configuración de \textit{Guest Network} para comunicar con la VM}
-	\addcontentsline{toc}{subsection}{Anexo 2. Configuración de \textit{Guest Network} para comunicar con la VM}
-	\noindent Para comunicar nuestra máquina host [\ref{bib:configure host-only}], con una \textit{virtual machine} es necesario que estén en una misma red, es por esto por lo que vamos a crear una red en especifico para ello. En el programa \textit{Virtualbox}, esta funcionalidad recibe el nombre de \textit{Host-only}.\\
-	
-	\noindent Es importante que cuando queramos configurar una máquina virtual con esta funcionalidad que siempre pongamos el adaptador de red 1 como el que tendrá la comunicación \textit{guest}, mientras que el adaptador 2 será el que tendrá la conexión a internet via \textit{NAT}.\\
-	
-	\noindent Procedemos a enumerar los pasos a seguir para configurar una máquina virtual con conectividad con el host, utilizando \textit{Virtualbox}.
-	
-	\begin{enumerate}
-		\item Abrimos el programa \textit{Virtualbox}. Navegamos a la sección: \textbf{File $\rightarrow$ Preferences}.
-		\item Seleccionamos la tabla de \textbf{\textit{Host-only Networks}}. Procedemos a pulsar el botón + para añadir una nueva red.
-		\item Asignamos las diferentes IP que considermos. Es importante que dejemos activado el servidor DHCP, así la máquina virtual tendrá una IP válida dentro de la red.
-		\item Ahora, lo que tenemos que hacer es añadir una interfaz de red a nuestra máquina virtual. Para ello, vamos a las \textbf{Setting}s de la máquina virtual. En el apartado de Network, cambiamos el \textbf{Adapter 1} a\textbf{ Host-only Adapter}, y asignamos una segunda interfaz de red con NAT (Adapter 2 attached to NAT).
-		\item Para comprobar que lo hemos hecho correctamente. Arrancamos la máquina virtual, ejecutamos el comando \texttt{ip address}. Nos deberían aparacer las diferentes interfaces que previamente hemos configurado, es decir, una interfaz de loopback, otra que corresponde al Host-only network, y por último, una que corresponda con la interfaz de NAT.
-	\end{enumerate}
-	
-	\pagebreak
-	\subsection*{Anexo 3. Playbooks \texttt{ansible}}
-	\addcontentsline{toc}{subsection}{Anexo 3. Playbooks \texttt{ansible}}
-	
-	%%% Glosario
-	\pagebreak
-	\section*{Glosario de términos}
-	\addcontentsline{toc}{section}{Glosario de términos}
-	\begin{itemize}
-		\item NFV. \textit{Network Function Virtualization}, o bien, Virtualización de funciones de red.
-		\item Namespace. \textit{Espacio de nombres}
-		\item Linux. \textit{Sistema operativo tipo UNIX, de codigo abierto, multiplataforma, multiusuario y multitarea}
-		\item Kernel de linux. \textit{Núcleo del sistema operativo Linux}
-		\item PID. \textit{Process Identifier}
-		\item root. \textit{Cuenta superusuario del sistema operativo Linux}
-		\item veth-pair. \textit{Virtual Ethernet Pair}
-		\item UID. \textit{Identificador de usuario}
-		\item GID. \textit{Identificador de grupo}
-		\item ns.  \textit{Network namespace}
-	\end{itemize}
 
 	%%% Bibliography
 	\pagebreak
@@ -881,6 +813,16 @@ $ umount /var/uts-h1
 		\label{bib: herramientas virtualizacion}
 		\href{https://www.uv.es/sto/charlas/2010_CIM/hvl-cim-2010.html/index.html}{\textit{Herramientas de virtualización libres para sistemas GNU/Linux}}
 		
+		%18
+		\item
+		\label{paper nfv 2012}
+		\href{https://portal.etsi.org/nfv/nfv_white_paper.pdf}{NFV white paper}
+		
+		%19
+		\item
+		\label{youtube: nfv y sdn cristina}
+		\href{https://www.youtube.com/watch?v=3JEAK66wujg}{Youtube: NFV y SDN: las redes del futuro y del presente - Cristina Santana | T3chFest 2018}
+		
 		% X
 		\item
 		\label{bib:link20}
@@ -902,8 +844,97 @@ $ umount /var/uts-h1
 		\label{bib:img2}\href{https://twitter.com/b0rk/status/1240364585766576128}{How containers work.}
 		
 		
-		
-		
-		
 	\end{enumerate}
+
+	\pagebreak
+	
+	\pagebreak
+	\section*{Anexos}
+	\addcontentsline{toc}{section}{Anexos}
+	\subsection*{Anexo 1. Instalación de \texttt{ansible} para automatizar una VM}
+	\addcontentsline{toc}{subsection}{Anexo 1. Instalación \texttt{ansible}}
+	\noindent En el caso de que queramos utilizar la herramienta ansible para configurar una VM, tendremos que seguir los siguientes pasos.
+	\begin{enumerate}
+		\item Asegurarnos de que tenemos instalado el programa en el host. La principal dependencia de \texttt{ansible} es \texttt{Python}. \\
+		Para instalar \texttt{ansible} en diferentes distribuciones sería tal que:
+		\begin{itemize}
+			\item Ubuntu 21.04:
+			\begin{verbatim}
+				$ sudo apt install -y software-properties-common
+				$ sudo add-apt-repository --yes --update ppa:ansible/ansible
+				$ sudo apt update
+				$ sudo apt install -y ansible
+			\end{verbatim}
+			
+			\item Fedora 32:
+			\begin{verbatim}
+				$ sudo dnf update
+				$ sudo dnf install ansible
+			\end{verbatim}
+			
+			\item OpenSUSE:
+			\begin{verbatim}
+				$ zypper in ansible
+			\end{verbatim}
+			
+			\item Arch Linux:
+			\begin{verbatim}
+				$ sudo pacman -S ansible
+			\end{verbatim} 
+		\end{itemize}
+		
+		\item Creamos una clave SSH para utilizarla como método de autentificación con la maquina virtual. 
+		\begin{verbatim}
+			(host)$ ssh-keygen -t ed25519 -C "Host Ansible ssh key"
+		\end{verbatim}
+		
+		\item Utilizando nuestro gestor de máquinas virtuales, encendemos la VM. Es importante que nos aseguremos que tiene internet, por lo que configuramos que la interfaz de red sea de tipo \textit{NAT}. Dentro de la máquina, buscaremos que ip tiene asignada con el comando \texttt{ip address}. Desde este momento, dejaremos la máquina virtual encendida.
+		
+		\item Procedemos a copiar la clave pública SSH que hemos generado en el paso dos. Utilizamos el siguiente comando, sustituyendo con el usuario e IP específico de la máquina. Tendremos que configurar una red tipo \textit{Host-only network} para poder comunicarnos correctamente con nuestra máquina virtual, para ello podemos seguir los pasos detallados en [\ref{bib:configure host-only}]
+		\begin{verbatim}
+			(host)$ ssh-copy-id -i $HOME/.ssh/id_ed25519.pub <user>@<IP VM>
+		\end{verbatim}
+		
+		\pagebreak
+		
+		\item En este momento ya podríamos conectar con la máquina virtual utilizando \texttt{ansible}. Sin embargo, por comodidad, lo que vamos a hacer es crear un archivo que funcione con inventario de servidores. Nos servirá para guardar las direcciones IP de los servidores en los que queremos ejecutar comandos remotos con \texttt{ansible}. Para ello, creamos un archivo \texttt{inventory}. Como ejemplo, dicho archivo puede ser tal que:
+		\begin{verbatim}
+			## VMs locals 
+			[virtualbox]
+			10.0.100.1
+			10.0.100.2
+			
+			## Server SSH
+			[server]
+			192.168.1.200
+		\end{verbatim}
+		
+		\item Para probar la conectividad. Nos aseguramos de que tenemos la máquina virtual encendida y que además, hemos copiado la clave ssh y tenemos su IP añadida a nuestro inventario. Después, procedemos a ejecutar el siguiente comando en la máquina host:
+		\begin{verbatim}
+			(host)$ ansible -i inventory -m ping
+		\end{verbatim}
+		\noindent En la consola nos aparecerá la información de cada uno de las IP que habrá probado para ejecutar el comando remoto \texttt{ping}.
+	\end{enumerate}
+	
+	\pagebreak
+	
+	\subsection*{Anexo 2. Configuración de \textit{Guest Network} para comunicar con la VM}
+	\addcontentsline{toc}{subsection}{Anexo 2. Configuración de \textit{Guest Network} para comunicar con la VM}
+	\noindent Para comunicar nuestra máquina host [\ref{bib:configure host-only}], con una \textit{virtual machine} es necesario que estén en una misma red, es por esto por lo que vamos a crear una red en especifico para ello. En el programa \textit{Virtualbox}, esta funcionalidad recibe el nombre de \textit{Host-only}.\\
+	
+	\noindent Es importante que cuando queramos configurar una máquina virtual con esta funcionalidad que siempre pongamos el adaptador de red 1 como el que tendrá la comunicación \textit{guest}, mientras que el adaptador 2 será el que tendrá la conexión a internet via \textit{NAT}.\\
+	
+	\noindent Procedemos a enumerar los pasos a seguir para configurar una máquina virtual con conectividad con el host, utilizando \textit{Virtualbox}.
+	
+	\begin{enumerate}
+		\item Abrimos el programa \textit{Virtualbox}. Navegamos a la sección: \textbf{File $\rightarrow$ Preferences}.
+		\item Seleccionamos la tabla de \textbf{\textit{Host-only Networks}}. Procedemos a pulsar el botón + para añadir una nueva red.
+		\item Asignamos las diferentes IP que considermos. Es importante que dejemos activado el servidor DHCP, así la máquina virtual tendrá una IP válida dentro de la red.
+		\item Ahora, lo que tenemos que hacer es añadir una interfaz de red a nuestra máquina virtual. Para ello, vamos a las \textbf{Setting}s de la máquina virtual. En el apartado de Network, cambiamos el \textbf{Adapter 1} a\textbf{ Host-only Adapter}, y asignamos una segunda interfaz de red con NAT (Adapter 2 attached to NAT).
+		\item Para comprobar que lo hemos hecho correctamente. Arrancamos la máquina virtual, ejecutamos el comando \texttt{ip address}. Nos deberían aparacer las diferentes interfaces que previamente hemos configurado, es decir, una interfaz de loopback, otra que corresponde al Host-only network, y por último, una que corresponda con la interfaz de NAT.
+	\end{enumerate}
+	
+	\pagebreak
+	\subsection*{Anexo 3. Playbooks \texttt{ansible}}
+	\addcontentsline{toc}{subsection}{Anexo 3. Playbooks \texttt{ansible}}
 \end{document}
