@@ -134,13 +134,22 @@
 	
 	\pagebreak
 	
-	\section{Virtualización de funciones de red}
-	%% https://www.youtube.com/watch?v=3JEAK66wujg
-	\noindent NFV surge a partir de las necesidades de las operadoras para solucionar problemas de gran escala de la red. Este movimiento nace en X. Uno de los objetivos que se pretenden desde el punto de vista de las operadoras, es reducir los costes y optimizar la red. Esto sucede ya que las redes actuales sufren de tres problemas: falta de escalabilidad en momentos precisos y específicos; excasa flexibilidad de la red, en momento específicos necesitaremos modificar funcionamientos de nodos en concreto, pero no se nos posibilita; falta de innovación en la gestión de los recursos, nuevos servicios, etc. Todo esto ocurre ya que las redes de las operadoras han evolucionado muy poco. \\
-	
-	\noindent La solución que se propone para estos problemas es la virtualización de las redes. Esta corriente nace en octubre de 2012, a partir del \textit{paper} [\ref{paper nfv 2012}], creado con la colaboración de 13 operadoras de red internacionales. En el, se plantea el objetivo de esbozar los diferentes beneficios y retos de la virtualización de recursos de red, y los motivos para fomentar una colaboración internacional para acelerar el desarrollo y el despliegue de soluciones interoperables basadas en servidores estándar del sector de gran volumen. Esto supone el primer paso a la nueva tecnología de las redes. \\
-	
-	\noindent La virtualización de las redes consiste en el desarrollo de un enfoque en software de las redes. Intenta solucionar los problemas planteados, aportando innovación y una mayor escalabilidad de las redes. Supone el conjunto de SDN y NFV, normalmente la virtualización de redes no existe una sin la otra [\ref{youtube: nfv y sdn cristina}].\\
+	\section{Virtualización de Funciones de Red (\textit{NFV})}
+	%% https://www.youtube.com/watch?v=3JEAK66wujg	
+	\noindent El punto de partida de ``virtualización de funciones de red'' surge a partir de las necesidades de las operadoras para solucionar problemas de gran escala de la red. Estos se puede resumir en los siguientes:
+	\begin{itemize}
+		\item Saturación en la red o en servicios específicos de la red.
+		\item Servicios que requieren una instalación manual o que necesitan una intervención manual.
+		\item Problemas relacionados con operadoras, como puede ser la reducción de costes del servicio.
+	\end{itemize}
+	\noindent Estos problemas radican en una serie de motivos, pero principalmente tiene que ver con el poco crecimiento de la red, y su rápida adopción por la sociedad. Si concretamos estos motivos, podrían ser tal que:
+	\begin{itemize}
+		\item Falta de estabilidad, debido a la poca flexibilidad de la misma.
+		\item Poca evolución en las redes ``core''.
+		\item Falta de innovación, se hace realmente difícil crear nuevos servicios.
+	\end{itemize}
+
+	\noindent En general, se podría resumir en que la poca innovación y la falta de flexibilidad, hacían realmente difícil cambiar ciertos servicios y estructuras críticas de la red ``core''. Para ello, para solucionar todos estos problemas, desde los grupos de trabajo de la ITU se empezó a trabajar en nuevas propuestas con el fin de aportar nuevas alternativas. La solución propuesta con más apoyo sería ``la virtualización de funciones de red'', que tendría su punto de partida en octubre de 2012, en un grupo de trabajo de la ITU, formado por 13 operadoras internacionales, dando lugar a un paper informativo (link a paper) en el que se detallaba de forma teórica la solución de NFV.
 	
 	\begin{figure}[h]
 		\begin{center}
@@ -157,11 +166,24 @@
 	\noindent Las funciones de red están basadas en tener un software y hardware específico para cada dispositivo. NFV nos aporta que esos recursos software y hardware, se despliegan en servidores físicos de proposito general. Por lo tanto, un mismo nodo físico, puede ser DHCP, router o Firewall.\\
 	
 	%% IMAGEN
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.4\textwidth]{img/NFV-image-v2.jpg}
+			\label{img: comparativa redes classic vs nfv}
+			\caption{Comparativa redes clásicas vs redes basadas en NFV [\ref{bib: what is nfv}]}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
+
+	\noindent La virtualización de funciones de red supone una manera para reducir costes y acelerar el desarrollo de servicios para los operadores de red a costa de desacoplar funciones como pueden ser un ``firewall'' en un hardware dedicado, moviendolos a servidores virtuales. Tal y como podemos ver en la comparativa de la Figura \ref{img: comparativa redes classic vs nfv}, sustituimos electrónica de red específica, como podrían ser router, switches, etc; por máquinas virtualizadas que se despliegan en servidores de carácter general, dando lugar a un mayor control y escalabilidad de los sistemas físicos. A consecuencia de esto, podemos ver como las redes toman un camino diferente, dejando a atrás el hardware y software propietario, para centrarse en un enfoque basado en el software. \\
+	
+	\subsection{Tecnologías implicadas}
+	\noindent Para que este cambio de paradigma se materialice, es decir, pase de ser ``papers'' con soluciones generalistas, y que de verdad se materialicen en una solución implantable, tienen que realizarse una serie de desarrollos, los cuales provocan que aún a día de hoy sean soluciones experimentales, que aunque son utilizadas en entornos reales, todavía están en continuo desarrollo. Además, aunque estamos hablando de NFV, hay una tecnología extra que también aparece en la ecuación, esta tecnología es el SDN (Software Defined Networks)
 	
 	
 	
-	
-	
+	\subsection{Virtualización ligera}
 	
 	\noindent Entendemos la virtualización ligera como un tipo de virtualización de un sistema. Dicha virtualización se hace a nivel de sistema operativo, aportando que existan diferentes espacios de usuarios aislados entre sí, y todo esto estando todos bajo el mismo kernel. Las diferentes implementaciones de 
 	
@@ -178,7 +200,7 @@
 		\item eth0:\{0,1,2...\}
 		\item eth0.\{0,1,2...\} VLAN
 		\item eth0.\{0,1,2...\} VLAN 802.1ad
-		\item VETH pairs
+		\item Pares de ethernet virtuales (\textit{VETH pairs})
 		\item TUN/TAP
 	\end{itemize}
 
@@ -838,10 +860,15 @@ $ umount /var/uts-h1
 		
 		%18
 		\item
+		\label{bib: what is nfv}
+		\href{https://www.ciena.com/insights/articles/What-is-NFV-prx.html}{W\textit{hat is Network Function Virtualization(NFV)?}}
+		
+		%19
+		\item
 		\label{paper nfv 2012}
 		\href{https://portal.etsi.org/nfv/nfv_white_paper.pdf}{NFV white paper}
 		
-		%19
+		%20
 		\item
 		\label{youtube: nfv y sdn cristina}
 		\href{https://www.youtube.com/watch?v=3JEAK66wujg}{Youtube: NFV y SDN: las redes del futuro y del presente - Cristina Santana | T3chFest 2018}
