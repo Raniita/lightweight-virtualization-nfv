@@ -56,6 +56,8 @@
 	
 	\noindent{\large \textbf{NFV} (\textit{Network Function Virtualization})}. \textit{Network Function Virtualization}, o bien, Virtualización de funciones de red.\\
 		 
+	\noindent{\large \textbf{SDN} (\textit{Software Defined Networks})}\\
+		 
 	\noindent{\large \textbf{Namespace}}. \textit{Espacio de nombres}\\
 		 
 	\noindent{\large \textbf{NS} (\textit{Network namespace})}. Tipo de espacio de nombres en Linux que tiene por función aislar la parte de red de la máquina host.\\
@@ -153,7 +155,7 @@
 	
 	\begin{figure}[h]
 		\begin{center}
-			\includegraphics[width=0.7\textwidth]{img/classic_network_vs_nfv.png}
+			\includegraphics[width=0.55\textwidth]{img/classic_network_vs_nfv.png}
 			\label{imagen comparativa classic network nfv}
 			\caption{Comparativa enfoque clásico de las redes contra el enfoque virtualizado. [\ref{paper nfv 2012}]}
 		\end{center}
@@ -165,7 +167,6 @@
 	
 	\noindent Las funciones de red están basadas en tener un software y hardware específico para cada dispositivo. NFV nos aporta que esos recursos software y hardware, se despliegan en servidores físicos de proposito general. Por lo tanto, un mismo nodo físico, puede ser DHCP, router o Firewall.\\
 	
-	%% IMAGEN
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=0.4\textwidth]{img/NFV-image-v2.jpg}
@@ -174,12 +175,17 @@
 		\end{center}
 	\end{figure}
 
-	\pagebreak
-
 	\noindent La virtualización de funciones de red supone una manera para reducir costes y acelerar el desarrollo de servicios para los operadores de red a costa de desacoplar funciones como pueden ser un ``firewall'' en un hardware dedicado, moviendolos a servidores virtuales. Tal y como podemos ver en la comparativa de la Figura \ref{img: comparativa redes classic vs nfv}, sustituimos electrónica de red específica, como podrían ser router, switches, etc; por máquinas virtualizadas que se despliegan en servidores de carácter general, dando lugar a un mayor control y escalabilidad de los sistemas físicos. A consecuencia de esto, podemos ver como las redes toman un camino diferente, dejando a atrás el hardware y software propietario, para centrarse en un enfoque basado en el software. \\
 	
+	\pagebreak
+	
 	\subsection{Tecnologías implicadas}
-	\noindent Para que este cambio de paradigma se materialice, es decir, pase de ser ``papers'' con soluciones generalistas, y que de verdad se materialicen en una solución implantable, tienen que realizarse una serie de desarrollos, los cuales provocan que aún a día de hoy sean soluciones experimentales, que aunque son utilizadas en entornos reales, todavía están en continuo desarrollo. Además, aunque estamos hablando de NFV, hay una tecnología extra que también aparece en la ecuación, esta tecnología es el SDN (Software Defined Networks)
+	\noindent Para que este cambio de paradigma se materialice, es decir, pase de ser ``papers'' con soluciones generalistas, y que de verdad se materialicen en una solución implantable, tienen que realizarse una serie de desarrollos, los cuales provocan que aún a día de hoy sean soluciones experimentales, que aunque son utilizadas en entornos reales, todavía están en continuo desarrollo. Además, aunque estamos hablando de NFV, hay una tecnología extra que también aparece en la ecuación, esta tecnología es el SDN (Software Defined Networks). En este caso particular, nos encontramos con que el NFV no puede existir sin el SDN, y viceversa. Si tuviéramos que definir brevemente cada una de dichas tecnologías, podríamos resumirlo en lo siguiente:
+	\begin{itemize}
+		\item \textit{Software Defined Networks}. Suponen un punto de vista de las redes, en las que las propias redes utilizan una serie de controladores, basados en software o en API de control, con el fin de dirigir el tráfico de red y comunicarse con la infraestructura hardware de capas superiores.
+		 
+		\item \textit{Network Functions Virtualizations}.
+	\end{itemize}
 	
 	
 	
@@ -877,6 +883,16 @@ $ umount /var/uts-h1
 		\item
 		\label{servers running linux}
 		\href{https://hostingtribunal.com/blog/linux-statistics/}{Percentage of server that run in Linux}
+		
+		%21
+		\item
+		\label{bib: vmware sdn}
+		\href{https://www.vmware.com/es/topics/glossary/content/software-defined-networking.html}{¿Qué son las redes definidas por software (SDN)?}
+		
+		%22
+		\item
+		\label{bib: vmware nfv}
+		\href{https://www.vmware.com/es/topics/glossary/content/virtual-networking.html}{¿Qué son las redes virtuales?}
 		
 		% X
 		\item
