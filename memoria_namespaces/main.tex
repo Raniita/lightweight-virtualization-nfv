@@ -22,10 +22,10 @@
 	\selectlanguage{spanish}
 	
 	%%%% PORTADA
-	\title{Aplicación de técnicas de virtualización ligera para la evaluación de redes de comunicaciones \\ 
-		\addvspace{10px} \large Trabajo Final de Estudios \\
-		\large Ingeniería Telemática}
-	\author{Enrique Fernández Sánchez \\ Universidad Politécnica de Cartagena}
+	\title{\textbf{Aplicación de técnicas de virtualización ligera para la evaluación de redes de comunicaciones} \\ 
+	\addvspace{10px} \large \textit{Trabajo Final de Estudios} \\
+	\large Ingeniería Telemática}
+	\author{Autor: Enrique Fernández Sánchez \\ Tutor: Josemaria Malgosa Sanahuja \\ \\Universidad Politécnica de Cartagena}
 	
 	%% EDITAR PARA SEGUIMIENTO DE VERSIONES
 	\date{Revisión Septiembre 2021}
@@ -53,18 +53,27 @@
 	\pagebreak
 	\section*{Glosario de términos}
 	\addcontentsline{toc}{section}{Glosario de términos}
-	\begin{itemize}
-		\item NFV. \textit{Network Function Virtualization}, o bien, Virtualización de funciones de red.
-		\item Namespace. \textit{Espacio de nombres}
-		\item Linux. \textit{Sistema operativo tipo UNIX, de codigo abierto, multiplataforma, multiusuario y multitarea}
-		\item Kernel de linux. \textit{Núcleo del sistema operativo Linux}
-		\item PID. \textit{Process Identifier}
-		\item root. \textit{Cuenta superusuario del sistema operativo Linux}
-		\item veth-pair. \textit{Virtual Ethernet Pair}
-		\item UID. \textit{Identificador de usuario}
-		\item GID. \textit{Identificador de grupo}
-		\item ns.  \textit{Network namespace}
-	\end{itemize}
+	
+	\noindent{\large \textbf{NFV} (\textit{Network Function Virtualization})}. \textit{Network Function Virtualization}, o bien, Virtualización de funciones de red.\\
+		 
+	\noindent{\large \textbf{Namespace}}. \textit{Espacio de nombres}\\
+		 
+	\noindent{\large \textbf{NS} (\textit{Network namespace})}. Tipo de espacio de nombres en Linux que tiene por función aislar la parte de red de la máquina host.\\
+	
+	\noindent{\large \textbf{Linux}}. Sistema operativo tipo UNIX, de codigo abierto, multiplataforma, multiusuario y multitarea.\\
+		 
+	\noindent{\large \textbf{Kernel de Linux}}. Núcleo del sistema operativo Linux.\\
+		 
+	\noindent{\large \textbf{PID} (\textit{Process Identifier})}. Identificador de procesos que están ejecutándose bajo un sistema tipo Linux.\\
+	
+	\noindent{\large \textbf{UID} (\textit{User identifier})}. Encontrado normalmente como un número o palabra, supone un identificador de usuario dentro del sistema Linux.\\
+	
+	\noindent{\large \textbf{GID} (\textit{Group Identifier})}. Al igual que sucede con el UID, suele aparecer como un número o palabra y hace referencia al identificador de grupo dentro del sistema de Linux.\\
+		 
+	\noindent{\large \textbf{root}}. Cuenta superusuario del sistema operativo Linux.\\
+		 
+	\noindent{\large \textbf{veth-pair} (\textit{Virtual Ethernet Pair})}. Tipo de interfaz virtual. Funcionan de dos en parejas.\\
+		 
 	
 	\pagebreak
 	
@@ -111,6 +120,17 @@
 	\end{itemize}
 
 	\subsection{Descripción de los capítulos restantes de la memoria}
+	\noindent En este apartado se comentará brevemente la distribución de capítulos de la memoria. Además, se mencionará que temas se han abordado en cada uno de ellos.
+	\begin{itemize}
+		\item \textbf{Capítulo 1}: Introducción.
+		\item \textbf{Capítulo 2}: Virtualización de funciones de red.
+		\item \textbf{Capítulo 3}: Interfaces de red virtuales en Linux.
+		\item \textbf{Capítulo 4}: Espacio de nombres en Linux.
+		\item \textbf{Capítulo 5}: Virtualización.
+		\item \textbf{Capítulo 6}: Caso práctico: Virtualización para la simulación de redes.
+		\item \textbf{Capítulo 7}: Conclusiones.
+	\end{itemize}
+	
 	
 	\pagebreak
 	
@@ -148,6 +168,9 @@
 	\pagebreak
 	
 	\section{Interfaces de red virtuales en \textit{Linux}}
+	\noindent En este capítulo, vamos a profundizar en el concepto de interfaces de red virtuales, pero las específicas al sistema operativo basados en el kernel de Linux. Hacemos esto ya que los servidores utilizados a gran escala, la mayoría hacen uso de distribuciones de Linux
+	
+	
 	\noindent Linux dispone de una selección muy diferente de interfaces de red que nos permiten, de manera sencilla, el uso de máquinas virtuales o contenedores. En este apartado vamos a mencionar las interfaces más relevantes de cara a la virtualización ligera que proponemos para el despliegue de una red virtualizada. Para obtener una lista completa de las interfaces disponibles, podemos ejecutar el siguiente comando \texttt{ip link help}.\\
 	
 	\par \noindent En este trabajo, vamos a comentar la siguientes interfaces:
@@ -822,6 +845,11 @@ $ umount /var/uts-h1
 		\item
 		\label{youtube: nfv y sdn cristina}
 		\href{https://www.youtube.com/watch?v=3JEAK66wujg}{Youtube: NFV y SDN: las redes del futuro y del presente - Cristina Santana | T3chFest 2018}
+		
+		%20
+		\item
+		\label{servers running linux}
+		\href{https://hostingtribunal.com/blog/linux-statistics/}{Percentage of server that run in Linux}
 		
 		% X
 		\item
