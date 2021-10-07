@@ -28,7 +28,7 @@
 	\author{Autor: Enrique Fernández Sánchez \\ Tutor: Josemaria Malgosa Sanahuja \\ \\Universidad Politécnica de Cartagena}
 	
 	%% EDITAR PARA SEGUIMIENTO DE VERSIONES
-	\date{Revisión Septiembre 2021}
+	\date{Revisión Octubre 2021}
 	
 	\maketitle
 	
@@ -184,20 +184,19 @@
 	\begin{itemize}
 		\item \textit{Software Defined Networks}. Suponen un punto de vista de las redes, en las que las propias redes utilizan una serie de controladores, basados en software o en API de control, con el fin de dirigir el tráfico de red y comunicarse con la infraestructura hardware de capas superiores.
 		 
-		\item \textit{Network Functions Virtualizations}.
+		\item \textit{Network Functions Virtualizations}. % TODO
 	\end{itemize}
 	
 	
 	
 	\subsection{Virtualización ligera}
 	
-	\noindent Entendemos la virtualización ligera como un tipo de virtualización de un sistema. Dicha virtualización se hace a nivel de sistema operativo, aportando que existan diferentes espacios de usuarios aislados entre sí, y todo esto estando todos bajo el mismo kernel. Las diferentes implementaciones de 
+	\noindent Entendemos la virtualización ligera como un tipo de virtualización de un sistema. Dicha virtualización se hace a nivel de sistema operativo, aportando que existan diferentes espacios de usuarios aislados entre sí, y todo esto estando todos bajo el mismo kernel. Las diferentes implementaciones de % TODO
 	
 	\pagebreak
 	
 	\section{Interfaces de red virtuales en \textit{Linux}}
-	\noindent En este capítulo, vamos a profundizar en el concepto de interfaces de red virtuales, pero las específicas al sistema operativo basados en el kernel de Linux. Hacemos esto ya que los servidores utilizados a gran escala, la mayoría hacen uso de distribuciones de Linux
-	
+	\noindent En este capítulo, vamos a profundizar en el concepto de interfaces de red virtuales, pero las específicas al sistema operativo basados en el kernel de Linux. Hacemos esto ya que los servidores utilizados a gran escala, la mayoría hacen uso de distribuciones de Linux. % TODO \\
 	
 	\noindent Linux dispone de una selección muy diferente de interfaces de red que nos permiten, de manera sencilla, el uso de máquinas virtuales o contenedores. En este apartado vamos a mencionar las interfaces más relevantes de cara a la virtualización ligera que proponemos para el despliegue de una red virtualizada. Para obtener una lista completa de las interfaces disponibles, podemos ejecutar el siguiente comando \texttt{ip link help}.\\
 	
@@ -211,17 +210,37 @@
 	\end{itemize}
 
 
-	\subsection{Nombres predecibles interfaces de red. \texttt{systemd networkd v197}}
-	 \noindent Para la explicación de las diferentes interfaces, vamos a suponer que estamos utilizando el nombrado de interfaces de red antiguo. Esto proviene de que en la últimas versiones del kernel, se ha cambiado la forma en la que las interfaces de red son nombradas por Linux. Es por esto por lo que antes podíamos tener interfaces tal que \texttt{eth0} y ahora nos encontramos con la siguiente nomenclatura \texttt{enps30}. Este cambio surge ya que anteriormente se nombraban las diferentes interfaces conforme el propio ordenador estaba en la etapa de \texttt{boot}, por lo que podría pasar que a lo que nosotros entendíamos como \texttt{eth1}, en el próximo arranque fuera \texttt{eth0}, dando lugar a incontables errores en el sistema. Es por esto por lo que se empecó a trabajar en soluciones alternativas. Por ejemplo, la que hemos utilizado de ejemplo, utiliza la información aportada por la BIOS del dispositivo para catalogarlo en diferentes categorías, con su formato de nombre para cada categorías. Dichas clasificación corresponde con las siguientes:
+	\subsection{Nombres predecibles en dispositivos físicos.}
+	%\noindent \% Comentar udev (dinamic device management) \% \\
+	\noindent Con el fin de comprender como se nombran las diferentes interfaces de red, es necesario que estudiemos el servicio \texttt{udev} (\textit{Dynamic device management}). \texttt{udev} es el gestor de dispositivos que utiliza el kernel de Linux, su función principal es permitir al administrador del sistema operativo registrar manejadores del espacio de usuario para eventos del sistema. Estos eventos que recibe el servicio \texttt{udev} son principalmente generados por el kernel, en respuesta a eventos físicos relacionados con dispositivos periféricos. Por lo tanto, el propósito de \texttt{udev} es actuar sobre la detección de periféricos y con conexiones tipo \textit{hotplug}, pudiendo encadenar acciones necesarias que devuelven el control al kernel, como por ejemplo, cargar módulos específicos o un firmware de un dispositivo. [\ref{bib: udev archwiki}] \\
+	
+	\noindent Además, \texttt{udev} también se encarga de gestionar los nodos de dispositivos en el directorio \texttt{/dev} añadiendo, enlazando simbólicamente y renombrándolos. Por otro lado, una consideración a tener en cuenta es que \texttt{udev} maneja los eventos de manera concurrente, lo que aporta una mejora de rendimiento, pero a la vez puede dar problemas a la hora de que el orden de carga de los módulos del kernel no se conserva entre los arranques. Un ejemplo de esto podría ser que en el caso de tener dos discos duros (uno llamado \texttt{/dev/sda} y otro \texttt{/dev/sdb}), en el siguiente arranque el orden de de arranque puede variar, generando que ambos identificadores se intercambien entre sí, desencadenando una serie de problemas en nuestro sistema. [\ref{bib: udev archwiki}]\\
+	
+	\pagebreak
+	
+	% Captura de regla udev modificada por usuario
+	\noindent A modo de ejemplo, el usuario puede crear sus propias reglas, de modo que puede realizar las acciones que ya hemos comentado, de acuerdo a sus propias necesidades. A modo de ejemplo, podemos ver en la siguiente captura (Figura \ref{img: udev rule}) como hemos creado un archivo en la ruta \texttt{/etc/udev/rules.d/} en el que definimos la regla para un dispositivo físico en específico (en este caso un USB). Identificamos el dispositivo que queremos a través de los atributos \texttt{idVendor} e \texttt{idProduct} (atributos necesarios para cualquier dispositivo USB), después le asignamos un "MODE" que corresponde con los permisos que le queremos asignar al dispositivo (en modo numérico) y el grupo al que permitimos acceder al dispositivo.\\
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=1\textwidth]{img/udev_rule.png}
+			\caption{Regla \texttt{udev} definida por el usuario} 
+			\label{img: udev rule}
+		\end{center}
+	\end{figure}
+	
+	% Comentamos el cambio en el nombrado de las interfaces de red 
+	\noindent En el caso de las interfaces físicas de red, vamos a suponer que estamos utilizando el nombrado de interfaces de red antiguo. Esto proviene de que en la últimas versiones del kernel, se ha cambiado la forma en la que las interfaces de red son nombradas por Linux (\texttt{systemd networkd v197} [\ref{bib: systemd networkd v197}]). Es por esto por lo que antes podíamos tener interfaces tal que \texttt{eth0} y ahora nos encontramos con la siguiente nomenclatura \texttt{enps30}. Este cambio surge ya que anteriormente se nombraban las diferentes interfaces conforme el propio ordenador estaba en la etapa de \texttt{boot}, por lo que podría pasar que a lo que nosotros entendíamos como \texttt{eth1}, en el próximo arranque fuera \texttt{eth0}, dando lugar a incontables errores en el sistema. Es por esto por lo que se empecó a trabajar en soluciones alternativas. Por ejemplo, la que acabamos de comentar, utiliza la información aportada por la BIOS del dispositivo para catalogarlo en diferentes categorías, con su formato de nombre para cada categorías. Dichas clasificación corresponde con las siguientes:
 	\begin{enumerate}
-		\item Nombres incorporando Firmware/BIOS que proporcionan un número asociado a dispositivos en la placa base. (ejemplo: \texttt{eno1})
-		\item Nombres incorporando Firmware/BIOS proveniente de una conexión PCI Express hotplug, con número asociado al conector. (ejemplo: \texttt{ens1})
+		\item Nombres incorporados en Firmware/BIOS que proporcionan un número asociado a dispositivos en la placa base. (ejemplo: \texttt{eno1})
+		\item Nombres incorporados en Firmware/BIOS proveniente de una conexión PCI Express hotplug, con número asociado al conector. (ejemplo: \texttt{ens1})
 		\item Nombres que incorporan una localización física de un conector hardware. (ejemplo: \texttt{enp2s0})
 		\item Nombres que incorporan una la MAC de una interfaz. (ejemplo: \texttt{enx78e7d1ea46da})
 		\item Sistema clásico e impredecible, asignación de nombres nativa del kernel. (ejemplo: \texttt{eth0})
 	\end{enumerate}
 	
 	\pagebreak
+	
 	\subsection{\texttt{enp2s0:\{0,1,2...\}}}
 	\par \noindent Todas las interfaces asociadas comparten la misma dirección MAC. Cada una de ellas, recibe el nombre de \textit{aliases}. La funcionalidad principal que tienen este tipo de interfaces es la de asignar varias direcciones de IP a una misma interfaz de red.
 	
@@ -261,12 +280,16 @@ $ ip link set dev enp2s0.{num} up
 	
 	\noindent Los paquetes transmitidos por un extremo del VETH se reciben inmediatamente en el otro extremo. Si alguno de ellos se encuentra apagado, decimos que el link de la pareja esta también apagado.\\
 	
+	% TODO Rehacer el diagrama. Un diagrama sin la conexion entre netns y otro diagrama con solo la conexion entre netns
+	
 	\begin{figure}[h]
 		\begin{center}
 			\includegraphics[width=0.5\textwidth]{img/VETH.png}
 			\caption{Diagrama VETH y netns}
 		\end{center}
 	\end{figure}
+
+	% TODO explicar brevemente que los veth pairs se usan normalmente en los namespaces, que más adelante introduciremos
 
 	\noindent Es necesario utilizar VETH cuando un namespace necesita comunicarse con el host, o viceversa.\\
 	
@@ -328,10 +351,9 @@ $ ip netns exec net2 ip link set lo up
 	
 	\noindent Un \textit{bridge} puede incorporar interfaces TAP. En este caso, la aplicación que lo monitoriza puede ser un hipervisor (Virtualbox, Qemu, libvirt), es decir, el \textit{bridge} está dentro del kernel.
 	
-	\noindent 
-	
-	\pagebreak
-	
+	% TODO
+	% Ejemplo: 2 Apps en C que se comunican utilizan TAP
+	% Ejemplo: Intentar Bindear App a un TAP del Kernel (socket.bind)
 	
 	
 	\pagebreak
@@ -340,6 +362,16 @@ $ ip netns exec net2 ip link set lo up
 	\noindent Los \textit{espacios de nombres}, o también llamados, \textit{namespaces}, son una característica del kernel de Linux que permite gestionar los recursos del kernel, pudiendo limitarlos a un proceso o grupo de procesos. Suponen una base de tecnología que aparece en las técnicas de virtualización más modernas (como puede ser Docker, Kubernetes, etc). A un nivel alto, permiten aislar procesos respecto al resto del kernel. \\
 	
 	\par \noindent El objetivo de cada \textit{namespaces} es adquirir una característica global del sistema como una abstracción que haga parecer a los procesos de dentro del \textit{namespace} que tienen su propia instancia aislada del recurso global.
+	
+	% TODO
+	\subsection{¿Cómo crear/acceder a un \textit{namespace}?}
+	\noindent Comentar que los namespaces se asocian a procesos. Para ello utilizamos los siguientes comandos:
+	\begin{itemize}
+		\item \texttt{unshare}. Permite asociar un namespace a un archivo. Si habia un namespace ya en ese archivo, lo sobreescribe. (No puede reutilizar)
+		\item \texttt{nsenter}. Puede acceder al namespace de un archivo existente. (Si podemos reutilizar)
+	\end{itemize}
+
+	\noindent Comentar acerca de como mantener vivos los namespaces
 	
 	\subsection{¿Cúantos \textit{namespaces} hay?}
 	\par\noindent El kernel ha estado en contaste evolución desde que 1991, cuando Linus Torvalds comenzó el proyecto, actualmente sigue muy activo y se siguen añadiendo nuevas características. El origen de los namespaces se remonta a la versión del kernel 2.4.19, lanzada en 2002. Conforme fueron pasando los años, más tipos diferentes de namespaces se fueron añadiendo a Linux. El concepto de \textit{User namespaces}, se consideró terminado con la versión 3.9.\\
@@ -417,6 +449,9 @@ $ ls /mnt/cp
 	
 	\par \noindent Como vemos en el ejemplo, dentro del namespaces lo que hacemos es crear un \textit{mount} de tipo \textit{bind}, que tiene por función que un archivo de la máquina host se monte en un directorio en específico, en este caso, un directorio unicamente del programa que hemos asignado al namespace. Otro ejemplo de uso de estos namespaces es crear un sistema de archivos temporal que solo sea visible para ese proceso.
 	
+	% TODO
+	% Ejemplo: limitar un USB a que solo lo vea un namespace
+	
 	\pagebreak
 	
 	\subsubsection{Process ID namespace}
@@ -488,7 +523,7 @@ $ ip netns exec <network-namespace> <command>
 	\pagebreak
 	
 	\subsubsubsection{Ejemplo práctico}
-	\par \noindent Una de las problemáticas que supone el uso de los network namespaces, es que solo podemos asignar \textbf{una interfaz} a \textbf{un namespace}. Suponiendo el caso en el que el usuario root tenga asignada la interfaz eth0 (identificador de una interfaz de red física), significaría que solo los programas en el namespace de root podrán acceder a dicha interfaz. En el caso de que eth0 sea la salida a Internet de nuestro sistema, pues eso conllevaría que no podríamos tener conexión a Internet en nuestros namespaces. La solución para esto reside en los \textbf{veth-pair}.
+	\par \noindent Una de las problemáticas que supone el uso de los network namespaces, es que solo podemos asignar \textbf{una interfaz real} a \textbf{un namespace}. Suponiendo el caso en el que el usuario root tenga asignada la interfaz eth0 (identificador de una interfaz de red física), significaría que solo los programas en el namespace de root podrán acceder a dicha interfaz. En el caso de que eth0 sea la salida a Internet de nuestro sistema, pues eso conllevaría que no podríamos tener conexión a Internet en nuestros namespaces. La solución para esto reside en los \textbf{veth-pair}.
 	
 	\addvspace{10px}
 	
@@ -609,6 +644,10 @@ $ exit
 	\par \noindent Los grupos de control, cgroups, de Linux suponen un mecanismo para controlar los diferentes recursos de nuestro sistema. Cuando CGroups están activos, pueden controlar la cantidad de CPU, RAM, acceso I/O, o cualquier faceta que un proceso puede consumir. Además, permiten definir jerarquías en las que se agrupan, de manera en la que el administrador del sistema puede definir como se asignan los recursos o llevar la contabilidad de los mismos.\\
 	
 	\par \noindent Por defecto, los CGroups se crean en el sistema de archivos virtual /sys/fs/cgroup. Si creamos un namespace de tipo CGroups, lo que estamos haciendo es mover el espacio de archivos virtual de dicho CGroup. Un ejemplo de esto sería, creamos un CGroup namespace en el directorio /sys/fs/cgroup/mycgroup. El host verá lo siguiente /sys/fs/cgroup/mycgroup/\{group1, group2, group3\}, sin embargo, el namespace solo verá \{group1, group2, group3\}. Esto es así ya que aporta seguridad a un namespace ya que los procesos del namespace solo pueden acceder a su sistema de archivos.
+	
+	% TODO
+	% Ejemplo limitar un programa en memoria
+	% App C Mayon que vemos con comando free que esta bien limitada
 	
 	\addvspace{60px}
 	
@@ -764,13 +803,15 @@ $ umount /var/uts-h1
 	\pagebreak
 
 	\section{Caso práctico: Virtualización para simulación de redes}
-	\subsection{Evaluación de prestaciones}
 	\subsection{Interconexión física de diferentes red virtuales}
-	\subsection{Openflow OKO}
+	\subsection{Evaluación de prestaciones}
 	
 	\pagebreak
 	
 	\section{Conclusiones}
+	
+	% Propuestas futuras
+	% Openflow OKO
 
 	%%% Bibliography
 	\pagebreak
@@ -893,6 +934,16 @@ $ umount /var/uts-h1
 		\item
 		\label{bib: vmware nfv}
 		\href{https://www.vmware.com/es/topics/glossary/content/virtual-networking.html}{¿Qué son las redes virtuales?}
+		
+		%23
+		\item
+		\label{bib: udev archwiki}
+		\href{https://wiki.archlinux.org/title/Udev}{\textit{Arch Linux Wiki: udev}}
+		
+		%24
+		\item
+		\label{bib: systemd networkd v197}
+		\href{https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/}{Predictable Network Interface Names}
 		
 		% X
 		\item
