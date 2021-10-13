@@ -256,7 +256,7 @@ $ ip addr add 192.168.56.251/24 dev enp2s0
 	\end{verbatim}
 
 	\subsection{VLAN. \texttt{enp2s0.\{0,1,2...\}}}
-	\par \noindent Mismo concepto que la interfaz anterior, sin embargo, utilizamos el estandar 802.1q, que permite etiquetar las tramas, para crear una red lógica independiente. Es necesario que la interfaz a la que estemos asignando, sea un puerto trunk, o bien sea tagged para una VLAN específica.
+	\par \noindent Siguiendo el mismo concepto que la interfaz anterior, pero en este caso utilizando el estándar 802.1q, que permite etiquetar las tramas, para crear una red lógica independiente. Es necesario que la interfaz a la que estemos asignando, sea un puerto trunk, o bien sea tagged para una VLAN específica.
 	
 	\begin{verbatim}
 $ ip link add link enp2s0 name enp2s0.{num} type vlan id {num}
@@ -264,7 +264,7 @@ $ ip addr add 192.168.100.1/24 brd 192.168.100.255 dev enp2s0.{num}
 $ ip link set dev enp2s0.{num} up
 	\end{verbatim}
 
-	\begin{figure}[h]
+	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=0.4\textwidth]{img/diag_vlan.png}
 			\caption{Diagrama conexión VLANs}
@@ -273,74 +273,116 @@ $ ip link set dev enp2s0.{num} up
 
 	\pagebreak
 	
-	\subsection{VLAN 802.1ad. \texttt{enp2s0}.\{0,1,2...\}}
+	\subsection{VLAN 802.1ad. \texttt{enp2s0}.\{0,1,2...\}.\{0,1,2...\}}
+	\noindent En este aparatado comentamos la interfaz virtual asociada al estándar 802.1ad, dicho estándar supone una actualización respecto a las VLANs basadas en 802.1q, pero añadiendo la posibilidad de tener dos tags dentro de mismo frame ethernet. En el caso del estándar 802.1q, solo podíamos tener un tag. El estándar de vlans 802.1ad es realmente útil cuando el proveedor de red y el usuario de dicha red quieren utilizar VLANs, además que amplía el límite de 4094 VLANs diferentes permitidas por el estándar 802.1Q [\ref{bib: 802.1ad}][\ref{bib: FS QinQ}]. Otra forma de la que nos podemos encontrar esta interfaz es bajo el nombre ``QinQ''. \\
 	
-	\subsection{Pares VETH.}
-	\noindent Los VETH (Ethernet virtuales) son un dispositivo que forman un túnel local ethernet. El dispositivo se crea en parejas.\\
-	
-	\noindent Los paquetes transmitidos por un extremo del VETH se reciben inmediatamente en el otro extremo. Si alguno de ellos se encuentra apagado, decimos que el link de la pareja esta también apagado.\\
-	
-	% TODO Rehacer el diagrama. Un diagrama sin la conexion entre netns y otro diagrama con solo la conexion entre netns
+	\noindent La estructura de la trama ethernet sigue la siguiente estructura,
 	
 	\begin{figure}[h]
 		\begin{center}
-			\includegraphics[width=0.5\textwidth]{img/VETH.png}
-			\caption{Diagrama VETH y netns}
+			\includegraphics[width=0.8\textwidth]{img/ethernet_8021ad.png}
+			\caption{Trama ethernet utilizando VLAN 802.1ad [\ref{bib: FS QinQ}]}
+			\label{ethernet 802.1ad}
+		\end{center}
+	\end{figure}
+	
+	\noindent Para configurar un enlace utilizando este estándar, tenemos que ejecutar los siguientes comandos [\ref{bib: openwrt virtual network interfaces}]:
+	\begin{verbatim}
+$ ip link add link eth0 eth0.1000 type vlan proto 802.1ad id 1000
+$ ip link add link eth0.1000 eth0.1000.1000 type vlan proto 802.1q id 1000
+ 	\end{verbatim}
+ 
+ 	\noindent De esta manera, lo que hacemos es asociar una primera VLAN a una interfaz de red, utilizando 802.1ad, después a esa misma interfaz con identificador, podemos asignar otra nueva VLAN, pero esta vez utilizando el estándar 802.1q. Por lo tanto, al final nos quedaría una interfaz similar a \texttt{eth0.1000.1000} en la que podemos distinguir dos identificadores de red virtual.
+	
+	\pagebreak
+	
+	\subsection{Pares VETH.}
+	\noindent Los \texttt{veth} (Ethernet virtuales) son un dispositivo virtual que forman un túnel local ethernet. El dispositivo se crea en parejas.\\
+	
+	\noindent Los paquetes transmitidos por un extremo del ethernet virtual se reciben inmediatamente en el otro extremo. Si alguno de ellos se encuentra apagado, decimos que el link de la pareja esta también apagado. A modo de ejemplo, nos fijamos una estructura básica en la que dos aplicaciones se comunican utilizando \texttt{veth}, tal y como vemos en la figura (\ref{ej1 veth})\\
+	
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{img/veth_ej1.png}
+			\caption{Ejemplo básico de utilización de pares virtuales ethernet}
+			\label{ej1 veth}
 		\end{center}
 	\end{figure}
 
-	% TODO explicar brevemente que los veth pairs se usan normalmente en los namespaces, que más adelante introduciremos
-
-	\noindent Es necesario utilizar VETH cuando un namespace necesita comunicarse con el host, o viceversa.\\
+	\noindent Las interfaces virtuales ethernet se inventaron con el fin de comunicar diferentes \textit{network namespaces}. Aunque profundizaremos en ello más adelante, los \texttt{namespace} de Linux permiten encapsular recursos globales del sistema de forma aislada, evitando que puedan interferir con procesos que estén fuera del \texttt{namespace}.\\
 	
-	\noindent La configuración que tenemos que realizar para tener el diagrama de la Figura 2.
+	\noindent La configuración necesaria para implementar el ejemplo de la figura \ref{ej1 veth} sería el siguiente [\ref{bib:example netns veth}]:
 	
 	\begin{verbatim}
-$ ip netns add net1
-$ ip netns add net2
-$ ip link add veth1 netns net1 type veth peer name veth1 netns net2
+$ ip netns add app1
+$ ip netns add app2
+$ ip link add veth1 netns app1 type veth peer name veth2 netns app2
 	\end{verbatim}
-
-	\noindent De esta manera, tendríamos creados los namespaces \texttt{net1} y \texttt{net2}, que estarían interconectados con las interfaces \texttt{veth1} y \texttt{veth2}. Nos quedaría asignar una IP a cada interfaz. 
 	
+	\noindent De esta manera, tendríamos creados los \texttt{namespaces} \texttt{app1} y \texttt{app2}, que estarían interconectados entre sí. Ahora procedemos a asignar una IP a cada interfaz. 
 	
-	%% https://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/
 	\begin{verbatim}
-$ ip netns exec net1 ip addr add 10.1.1.1/24 dev veth1
-$ ip netns exec net1 ip link set veth1 up
-$ ip netns exec net2 ip addr add 10.1.1.2/24 dev veth1
-$ ip netns exec net2 ip link set veth1 up
+$ ip netns exec app1 ip addr add 10.1.1.1/24 dev veth1
+$ ip netns exec app1 ip link set veth1 up
+$ ip netns exec app2 ip addr add 10.1.1.2/24 dev veth2
+$ ip netns exec app2 ip link set veth2 up
 	\end{verbatim}
+	
+	\pagebreak
 
-	%% https://www.eduardocollado.com/2018/09/25/podcast-176-primeros-pasos-con-open-vswitch/
-	
-	\noindent Ahora nos quedaría la parte de crear un bridge entre las diferentes interfaces virtuales que hemos creado. Para esto, podemos utilizar una interfaz tipo \textit{bridge} de Linux, o bien podemos configurar un \textit{bridge} usando \textit{Open VSwitch}.
-	
-	%% https://matthewarcus.wordpress.com/2018/02/04/veth-devices-network-namespaces-and-open-vswitch/
+	\noindent Para comprobar que hay conectividad entre las diferentes aplicaciones (\texttt{app1} y \texttt{app2}) utilizamos la función del comando \texttt{ip} para ejecutar programas dentro de un \texttt{network namespace}, en este caso realizar un ping entre ambas aplicaciones:
 	
 	\begin{verbatim}
-$ ip link add veth1_br type veth peer name veth0 netns net1
-$ ip link add veth2_br type veth peer name veth0 netns net2
+$ ip netns exec app1 ping 10.1.1.2
+	\end{verbatim}
+	
+	\noindent Por otro lado, si quisiéramos una topología más compleja, como por ejemplo que varios \texttt{namespaces} puedan hacer uso de una interfaz física, tendríamos que añadir un elemento extra a nuestro sistema. El diagrama de la topología podría ser tal que así:
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{img/veth_ej2.png}
+			\caption{Ejemplo avanzado de utilización de pares virtuales ethernet, utilizando \texttt{bridge}}
+			\label{ej2 veth}
+		\end{center}
+	\end{figure}
+	
+	\noindent Como podemos comprobar en la figura \ref{ej2 veth}, es necesario que utilicemos un ``bridge" para que podamos conectar ambas interfaces virtuales a una interfaz física, para replicar dicha topología, ejecutaremos los siguientes comandos:
+	
+	\begin{verbatim}
+$ ip netns add app1
+$ ip netns add app2
+$ ip link add veth1_br type veth peer name veth0 netns app1
+$ ip link add veth2_br type veth peer name veth0 netns app2
+
+	\end{verbatim}
+	
+	\noindent Para definir un bridge entre las diferentes interfaces virtuales que hemos creado, utilizaremos una interfaz tipo \textit{bridge} de Linux, o bien podemos configurar dicho \textit{bridge} usando \textit{Open vSwitch}. \textit{Open vSwitch} es un programa de código abierto diseñado para ser utilizado como un switch multi-capa virtual [\ref{bib: open vswitch}][\ref{bib: veth netns ovs}].
+	
+	\begin{verbatim}
+$ ip link add veth1_br type veth peer name veth0 netns app1
+$ ip link add veth2_br type veth peer name veth0 netns app2
 $ ovs-vsctl add-br ovsbr0
 $ ovs-vsctl add-port ovsbr0 veth1_br
 $ ovs-vsctl add-port ovsbr0 veth2_br
-$ ovs-vsctl add-port ovsbr0 <outbound interface>
+$ ovs-vsctl add-port ovsbr0 eth0
 	\end{verbatim}
 
-	\noindent Añadimos las direcciones IP que nos faltan:
+	\noindent Por último, añadimos las direcciones IP que nos faltan en la topología:
 	
 	\begin{verbatim}
 $ ip addr add 10.1.1.10/24 dev veth1_br
 $ ip link set veth1_br up
 $ ip addr add 10.1.1.20/24 dev veth2_br
 $ ip link set veth2_br up
-$ ip netns exec net1 ip addr add 10.1.1.15/24 dev veth0
-$ ip netns exec net1 ip link set veth0 up
-$ ip netns exec net2 ip addr add 10.1.1.25/24 dev veth0
-$ ip netns exec net2 ip link set veth0 up
-$ ip netns exec net1 ip link set lo up
-$ ip netns exec net2 ip link set lo up
+$ ip netns exec app1 ip addr add 10.1.1.15/24 dev veth0
+$ ip netns exec app1 ip link set veth0 up
+$ ip netns exec app2 ip addr add 10.1.1.25/24 dev veth0
+$ ip netns exec app2 ip link set veth0 up
+$ ip netns exec app1 ip link set lo up
+$ ip netns exec app2 ip link set lo up
 	\end{verbatim}
+
+	\noindent De esta manera, ya tendríamos la topología configurada con conectividad entre las diferentes aplicaciones, además de cada aplicación con una interfaz física de la máquina, todo esto utilizando una interfaz tipo \texttt{bridge}.
 
 	\subsection{TUN/TAP}
 	\noindent Permite conectar una aplicación en específico con el kernel, utilizando un dispositivo Ethernet. Una aplicación puede acceder al tuntap o bien crearlo ella misma. \\
@@ -885,7 +927,7 @@ $ umount /var/uts-h1
 		
 		%14
 		\item
-		\label{bib:link14}
+		\label{bib:example netns veth}
 		\href{https://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/}{\textit{Network namespaces. Assign and configure}}
 		
 		
@@ -944,6 +986,31 @@ $ umount /var/uts-h1
 		\item
 		\label{bib: systemd networkd v197}
 		\href{https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/}{Predictable Network Interface Names}
+		
+		%25
+		\item
+		\label{bib: open vswitch}
+		\href{https://www.openvswitch.org/}{Open vSwitch}
+		
+		%26
+		\item
+		\label{bib: veth netns ovs}
+		\href{https://matthewarcus.wordpress.com/2018/02/04/veth-devices-network-namespaces-and-open-vswitch/}{Veth Devices, Network Namespaces and Open vSwitch}
+		
+		%27
+		\item
+		\label{bib: 802.1ad}
+		\href{http://www.microhowto.info/tags/802.1ad.html}{IEEE 802.1ad}
+		
+		%28
+		\item
+		\label{bib: FS QinQ}
+		\href{https://img-en.fs.com/file/user_manual/s3800-series-qinq-operation.pdf}{FS.COM QinQ Operation}
+		
+		%30
+		\item
+		\label{bib: openwrt virtual network interfaces}
+		\href{https://openwrt.org/docs/guide-developer/networking/network.interfaces}{OpenWrt: Linux Network Interfaces}
 		
 		% X
 		\item
