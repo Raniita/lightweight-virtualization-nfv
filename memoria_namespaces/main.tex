@@ -98,26 +98,20 @@
 	
 	\noindent Partiendo de supuesto de que las herramientas más sencillas de simulación de redes se nos pueden quedar cortas en cuanto queremos escalar el sistema, nos topamos en que otras soluciones pueden ser mucho más \textit{resource hungry} de lo que podríamos imaginar. Además, tampoco podemos contar con realizar dichas pruebas de manera física, ya que el presupuesto del proyecto escalaría de nivel exponencial. Esto sucede ya que deberíamos configurar cada dispositivo de manera específica, y después proceder a interconectarlos con una tecnología de red adecuada, que en nuestro caso, son tecnologías en fase de desarrollo o evaluación de prestaciones.\\
 	
-	\noindent Conociendo las limitaciones, establecemos una serie de objetivos de cara a evaluar el viaje que realicemos durante ese proyecto, y poder evaluar posteriormente los avances que hemos podido conseguir, y además las conclusiones vinculadas a estos. Estos objetivos podrían ser:\\
-	\begin{itemize}
-		\item Análisis de diferentes opciones de simulación de redes. Tanto basadas en virtualización, como las que no.
-		\item Comprender la diferencia entre virtualización \textit{ligera} y virtualización \textit{dura}.
-		\item Profundizar en el concepto de \textit{interfaces virtuales} en Linux.
-		\item Definir que es el \textit{espacio de nombres} y ejemplificar cada uno de ellos.
-		\item Aproximación al concepto de contenedor, relacionarlo con los \textit{espacio de nombres}.
-		\item Aportar una solución válida para la simulación y evaluación de un sistema, utilizando la virtualización ligera.
-	\end{itemize}
+	%\noindent Conociendo las limitaciones, establecemos una serie de objetivos de cara a evaluar el viaje que realicemos durante ese proyecto, y poder evaluar posteriormente los avances que hemos podido conseguir, y además las conclusiones vinculadas a estos. Estos objetivos podrían ser:\\
+	%\begin{itemize}
 	
-	%\pagebreak
+	\pagebreak
 	
-	%%% TODO
 	\subsection{Objetivos}
-	\noindent Como bien hemos adelantado en el apartado anterior, el objetivo principal de este proyecto es el de analizar la situación en el ámbito de simulación y evaluación de redes de comunicación, además, concretar en aquellas soluciones que estén basadas en virtualización ligera. Por lo tanto, se pretende: \\
+	\noindent Como bien hemos adelantado en el apartado anterior, el objetivo principal de este proyecto es el de analizar la situación en el ámbito de simulación y evaluación de redes de comunicación, además, concretar en aquellas soluciones que estén basadas en virtualización ligera. Por lo tanto, se pretende: 
 	\begin{itemize}
-		\item Aprendes los conceptos básicos de la virtualización de sistemas de red (NFV).
+		\item Aprender los conceptos básicos de la virtualización de sistemas de red (NFV).
+		\item Comprender la diferencia entre virtualización \textit{ligera} y virtualización \textit{dura}.
 		\item Estudiar, dentro del sistema operativo Linux, las diferentes tecnologías que nos permiten adoptar soluciones NFV.
 		\item Definir que es \textit{espacio de nombres} y como podemos aplicarlo para virtualizar redes.
-		\item Desgranar el concepto amplio de contenedor.
+		\item Profundizar en el concepto de \textit{interfaces virtuales} en Linux.
+		\item Desgranar el concepto amplio de contenedor, relacionandolo con los \textit{espacios de nombres}.
 		\item Desarrollar una aplicación conceptual para la evaluación de un sistema en concreto, utilizando virtualización ligera.
 	\end{itemize}
 
@@ -179,13 +173,21 @@
 	
 	\pagebreak
 	
-	\subsection{Tecnologías implicadas}
-	\noindent Para que este cambio de paradigma se materialice, es decir, pase de ser ``papers'' con soluciones generalistas, y que de verdad se materialicen en una solución implantable, tienen que realizarse una serie de desarrollos, los cuales provocan que aún a día de hoy sean soluciones experimentales, que aunque son utilizadas en entornos reales, todavía están en continuo desarrollo. Además, aunque estamos hablando de NFV, hay una tecnología extra que también aparece en la ecuación, esta tecnología es el SDN (Software Defined Networks). En este caso particular, nos encontramos con que el NFV no puede existir sin el SDN, y viceversa. Si tuviéramos que definir brevemente cada una de dichas tecnologías, podríamos resumirlo en lo siguiente:
+\	\subsection{Tecnologías implicadas}
+	\noindent Para que este cambio de paradigma se materialice, es decir, pase de ser ``papers'' con soluciones generalistas, y que de verdad estas se materialicen en una solución viable, tienen que realizarse una serie de desarrollos, los cuales provocan que aún a día de hoy sean soluciones experimentales, que aunque son utilizadas en entornos reales, todavía están en continuo desarrollo. Además, aunque estamos hablando de NFV, hay una tecnología extra que también aparece en la ecuación, esta tecnología es el SDN (\textit{Software Defined Networks}). En este caso particular, nos encontramos con que el NFV no puede existir sin el SDN, y viceversa. Si tuviéramos que definir brevemente cada una de dichas tecnologías, podríamos resumirlo en lo siguiente:
 	\begin{itemize}
-		\item \textit{Software Defined Networks}. Suponen un punto de vista de las redes, en las que las propias redes utilizan una serie de controladores, basados en software o en API de control, con el fin de dirigir el tráfico de red y comunicarse con la infraestructura hardware de capas superiores.
+		\item \textit{Software Defined Networks}. Suponen un punto de vista de las redes, en las que las propias redes utilizan una serie de controladores, basados en software o en API de control, con el fin de dirigir el tráfico de red y comunicarse con la infraestructura hardware de capas superiores. (ver Figura \ref{img: sdn + nfv})
 		 
-		\item \textit{Network Functions Virtualizations}. % TODO
+		\item \textit{Network Functions Virtualizations}. NFV desacopla las funciones de la red de dispositivos de hardware dedicados y las traslada a servidores virtuales, y así se consolidan múltiples funciones en un único servidor físico. Dentro de este servidor físico, podemos distinguir diferentes funciones de red virtuales (VNF), dichas funciones suponen un conjunto de máquinas interconectadas entre sí, y cada una de ellas tiene una función distinta, y además, el conjunto de ellas tienen por objetivo realizar una función que antes era realizada por un equipo físico determinado (un router, firewall o similar). (ver Figura \ref{img: sdn + nfv})
 	\end{itemize}
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.8\textwidth]{img/sdn-y-nfv.jpg}
+			\caption{Comparativa en capas OSI de las tecnologías NFV y SDN [\ref{bib: sdn y nfv}]}
+			\label{img: sdn + nfv}
+		\end{center}
+	\end{figure}
 	
 	
 	
@@ -196,15 +198,15 @@
 	\pagebreak
 	
 	\section{Interfaces de red virtuales en \textit{Linux}}
-	\noindent En este capítulo, vamos a profundizar en el concepto de interfaces de red virtuales, pero las específicas al sistema operativo basados en el kernel de Linux. Hacemos esto ya que los servidores utilizados a gran escala, la mayoría hacen uso de distribuciones de Linux. % TODO \\
+	\noindent En este capítulo, vamos a profundizar en el concepto de interfaces de red virtuales, pero las específicas al sistema operativo basados en el kernel de Linux. Hacemos esto ya que los servidores utilizados a gran escala, la mayoría hacen uso de distribuciones de Linux. \\ % TODO
 	
 	\noindent Linux dispone de una selección muy diferente de interfaces de red que nos permiten, de manera sencilla, el uso de máquinas virtuales o contenedores. En este apartado vamos a mencionar las interfaces más relevantes de cara a la virtualización ligera que proponemos para el despliegue de una red virtualizada. Para obtener una lista completa de las interfaces disponibles, podemos ejecutar el siguiente comando \texttt{ip link help}.\\
 	
 	\par \noindent En este trabajo, vamos a comentar la siguientes interfaces:
 	\begin{itemize}
-		\item eth0:\{0,1,2...\}
-		\item eth0.\{0,1,2...\} VLAN
-		\item eth0.\{0,1,2...\} VLAN 802.1ad
+		\item MAC compartida: eth0:\{0,1,2...\}
+		\item VLAN 802.1q: eth0.\{0,1,2...\}
+		\item VLAN 802.1ad: eth0.\{0,1,2...\}
 		\item Pares de ethernet virtuales (\textit{VETH pairs})
 		\item TUN/TAP
 	\end{itemize}
@@ -241,7 +243,7 @@
 	
 	\pagebreak
 	
-	\subsection{\texttt{enp2s0:\{0,1,2...\}}}
+	\subsection{MAC compartida \texttt{enp2s0:\{0,1,2...\}}}
 	\par \noindent Todas las interfaces asociadas comparten la misma dirección MAC. Cada una de ellas, recibe el nombre de \textit{aliases}. La funcionalidad principal que tienen este tipo de interfaces es la de asignar varias direcciones de IP a una misma interfaz de red.
 	
 	\begin{verbatim}
@@ -255,7 +257,7 @@ $ ip addr add 192.168.56.151/24 dev enp2s0
 $ ip addr add 192.168.56.251/24 dev enp2s0
 	\end{verbatim}
 
-	\subsection{VLAN. \texttt{enp2s0.\{0,1,2...\}}}
+	\subsection{VLAN 802.1q \texttt{enp2s0.\{0,1,2...\}}}
 	\par \noindent Siguiendo el mismo concepto que la interfaz anterior, pero en este caso utilizando el estándar 802.1q, que permite etiquetar las tramas, para crear una red lógica independiente. Es necesario que la interfaz a la que estemos asignando, sea un puerto trunk, o bien sea tagged para una VLAN específica.
 	
 	\begin{verbatim}
@@ -852,6 +854,8 @@ $ umount /var/uts-h1
 	
 	\section{Conclusiones}
 	
+	\subsection{Propuestas futuras}
+	
 	% Propuestas futuras
 	% Openflow OKO
 
@@ -1011,6 +1015,11 @@ $ umount /var/uts-h1
 		\item
 		\label{bib: openwrt virtual network interfaces}
 		\href{https://openwrt.org/docs/guide-developer/networking/network.interfaces}{OpenWrt: Linux Network Interfaces}
+		
+		%31
+		\item
+		\label{bib: sdn y nfv}
+		\href{https://comparacloud.com/servicios-clouds/sdn-y-nfv/}{SDN \& NFV}
 		
 		% X
 		\item
