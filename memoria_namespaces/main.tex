@@ -18,6 +18,33 @@
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
 
+% Configure lstlisting
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=t,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+
+\lstset{style=mystyle}
+
 \begin{document}
 	\selectlanguage{spanish}
 	
@@ -387,16 +414,198 @@ $ ip netns exec app2 ip link set lo up
 	\noindent De esta manera, ya tendríamos la topología configurada con conectividad entre las diferentes aplicaciones, además de cada aplicación con una interfaz física de la máquina, todo esto utilizando una interfaz tipo \texttt{bridge}.
 
 	\subsection{TUN/TAP}
-	\noindent Permite conectar una aplicación en específico con el kernel, utilizando un dispositivo Ethernet. Una aplicación puede acceder al tuntap o bien crearlo ella misma. \\
+	\noindent TUN/TAP son dos interfaces de red virtuales de Linux, que permiten dar conectividad entre programas dentro del espacio de usuario, es decir permiten conectar aplicaciones en específico con el kernel. Esta interfaz es expuesta al usuario mediante la ruta \texttt{/dev/net/tun}. Como bien hemos mencionado, existen dos tipos de interfaces virtuales controladas por \texttt{/dev/net/tun}: 
 	
-	\noindent TUN trabaja a nivel IP (capa 3), tiene por función principal definir túneles. No entiende nada de ARP (ni nada de nivel 2).\\
+	\begin{itemize}
+		\item TUN. Interfaces encargadas de transportar paquetes IP (trabaja sobre la capa 3).
+		\item TAP. Interfaces encargadas de transportar paquetes Ethernet (trabaja sobre la capa 2).
+	\end{itemize}
 	
-	\noindent TAP trabaja solo a nivel de MAC (entiende ARP, etc.) y sirve directamente para un bridge virtual. Los túneles los puede crear directamente el comando ip, por lo que la interfaz TUN apenas se utiliza. Sin embargo, TAP es muy utilizado para crear un \textit{bridge}.\\
+	\vspace{5px}
+
+	\noindent \large \textbf{TUN (Capa 3)}\\
+	\noindent Las interfaces TUN (\texttt{IFF\_TUN}) transportan paquetes PDU (\textit{Protocol Data Units}) de la capa 3 [\ref{bib: tun vs tap}]:
+	\begin{itemize}
+		\item En la práctica, transporta paquetes IPv4 y/o paquetes IPv6.
+		\item La función \texttt{read()} devuelve un paquete de capa 3 PDU, es decir un paquete IP.
+		\item Utilizando la función \texttt{write()} podemos enviar un paquete IP.
+		\item No hay capa 2 en esta interfaz, por lo que los mecanismos que se ejecutan en esta capa no estarán presentes en la comunicación. Por ejemplo, no tenemos ARP.
+		\item Pueden funcionar como interfaces tipo \textit{Point to Point}.
+	\end{itemize}
 	
-	\noindent Un \textit{bridge} puede incorporar interfaces TAP. En este caso, la aplicación que lo monitoriza puede ser un hipervisor (Virtualbox, Qemu, libvirt), es decir, el \textit{bridge} está dentro del kernel.
+	\pagebreak
 	
-	% TODO
+	\noindent \large \textbf{TAP (Capa 2)}\\
+	\noindent Las interfaces TAP (\texttt{IFF\_TAP}) transportan paquetes de capa 2 \ref{bib: tun vs tap}: 
+	\begin{itemize}
+		\item En la práctica, transporta \textit{frames Ethernet}, por lo tanto, actuaría como si fuera un adaptador virtual de Ethernet (``bridge virtual'').
+		\item La función \texttt{read()} devuelve un paquete de capa L2, un \textit{frame Ethernet}.
+		\item Utilizando la función \texttt{write()} permite enviar un \textit{frame Ethernet}.
+		\item Podemos cambiar la MAC asociada a nuestra interfaz TAP utilizando el parámetro \texttt{SIOCSIFHWADDR}, en la función \texttt{ioctl()}, la cual usamos para crear un TUN/TAP dentro de nuestra aplicación.
+	\end{itemize}
+
+	\vspace{5px}
+
+	% Imagen comparativa entre TUN/TAP
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.6\textwidth]{img/tun_vs_tap.png}
+			\caption{Comparativa en capa OSI de las interfaces TUN/TAP. [\ref{bib_img: tun tap}]}
+			\label{img: tun vs tap}
+		\end{center}
+	\end{figure}
+	
+	\noindent Si nos fijamos en la figura \ref{img: tun vs tap}, podemos ver las diferencias entre ambas interfaces. Aún así, hay una que se utiliza mucho más que la otra, esta interfaz es TAP. Las interfaces tipo TAP son muy ampliamente utilizadas para realizar ``túneles virtuales'' para una aplicación en concreto. Sería la propia aplicación la encargada de monitorizar dicho ``túnel''. Podemos encontrar aplicaciones TAP en hipervisores o en clientes VPN.
+	
+	\pagebreak
+	
+	\noindent En el caso de que queramos crear interfaces TUN/TAP fuera de una aplicación, es decir, desde la línea de comandos, tendremos que utilizar los programas \texttt{tunctl} o \texttt{ip}. Para ello, podemos revisar los ejemplos \ref{lst: ej1 tunctl} y \ref{lst: ej2 tuntap ip} donde se comentan algunos de los comandos más importantes para trabajar con estar interfaces en cada uno de los programas mencionados.
+	
+	\vspace{10px}
+	
+	% Ejemplo 1: Creacion de tun/tap utilizando la linea de comandos
+	\begin{lstlisting}[language=Bash, label=lst: ej1 tunctl, caption=Ejemplo de uso de \texttt{tunctl} para controlar interfaces TUN/TAP [\ref{bib: tunctl + ip}]]
+# Create the tap interface by default
+tunctl 
+# equivalent to
+tunctl -p
+
+# For users 'user' create a tap interface
+tunctl -u user
+
+# Create  Tun interface
+tunctl -n
+# Configure IP Address for interface and enable
+ip addr add 192.168.0.254/24 dev tap0
+ip link set tap0 up
+# Add routing to interface
+route add -host 192.168.0.1 dev tap0
+
+# Delete interface
+tunctl -d tap0
+	\end{lstlisting}
+
+	\vspace{10px}
+
+	% Ejemplo 1.1: Creacion tun/tap pero usando comando ip
+	\begin{lstlisting}[language=Bash, label=lst: ej2 tuntap ip, caption=Ejemplo de uso de \texttt{ip} para controlar interfaces TUN/TAP [\ref{bib: tunctl + ip}]]
+# Show help
+ip tuntap help
+
+# Create tun/tap devices
+ip tuntap add dev tap0 mod tap		# create tap
+ip tuntap add dev tun0 mod tun		# create tun
+
+# Delete tun/tap devices
+ip tuntap del dev tap0 mod tap		# delete tap
+ip tuntap del dev tun0 mod tun		# delete tun
+	\end{lstlisting}
+
+	\pagebreak
+
+	\noindent Por otro lado, otra manera de trabajar con estas interfaces, es dejar que el programa que estemos utilizando cree dichas interfaces. Es por esto por lo que dentro del programa podemos definir que se refiera a la ruta \texttt{/dev/net/tun} para crear la interfaz necesaria. A modo de ejemplo, se implementa un programa en C que crea una interfaz TUN/TAP (en el programa elegimos cual de las dos queremos) y que devuelve el tamaño de los paquetes que reciba en dicha interfaz. Este ejemplo nos sirve para comprobar con una aplicación puede crear y gestionar una interfaz, y además, mediante un programa externo de captura de paquetes (\texttt{Wireshark}, \texttt{tcpdump}, etc...) ver los paquetes que llegan a la interfaz y cual es su estructura. \\
+	
+	\noindent El código utilizado sería el que vemos en [\ref{lst:tuntap.c}]. Es importante comentar que en la linea 80 podemos modificar el tipo de interfaz que vamos a crear, usaremos \texttt{IFF\_TUN} para crear un TUN y \texttt{IFF\_TAP} para crear un TAP.
 	% Ejemplo: 2 Apps en C que se comunican utilizan TAP
+	\vspace{10px}
+	\begin{lstlisting}[language=C, label=lst:tuntap.c, caption=Aplicación de ejemplo para crear tun/tap (tuntap.c) [\ref{bib: code tuntap.c}]]
+/**
+Receive incoming packages over tun/tap device. 
+stdout -> size of received package
+**/
+
+#include <net/if.h>
+#include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <string.h>
+#include <sys/types.h>
+#include <linux/if_tun.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+int tun_alloc(int flags)
+{
+	
+	struct ifreq ifr;
+	int fd, err;
+	char *clonedev = "/dev/net/tun";
+	
+	if ((fd = open(clonedev, O_RDWR)) < 0) {
+		return fd;
+	}
+	
+	memset(&ifr, 0, sizeof(ifr));
+	ifr.ifr_flags = flags;
+	
+	if ((err = ioctl(fd, TUNSETIFF, (void *) &ifr)) < 0) {
+		close(fd);
+		return err;
+	}
+	
+	printf("Open tun/tap device: %s for reading...\n", ifr.ifr_name);
+	
+	return fd;
+}
+
+int main()
+{
+	
+	int tun_fd, nread;
+	char buffer[1500];
+	
+	/* Flags: IFF_TUN   - TUN device (no Ethernet headers)
+	*        IFF_TAP   - TAP device
+	*        IFF_NO_PI - Do not provide packet information
+	*/
+	tun_fd = tun_alloc(IFF_TAP | IFF_NO_PI);
+	
+	if (tun_fd < 0) {
+		perror("Allocating interface");
+		exit(1);
+	}
+	
+	while (1) {
+		nread = read(tun_fd, buffer, sizeof(buffer));
+		if (nread < 0) {
+			perror("Reading from interface");
+			close(tun_fd);
+			exit(1);
+		}
+		
+		printf("Read %d bytes from tun/tap device\n", nread);
+	}
+	return 0;
+}
+	\end{lstlisting}
+
+	\pagebreak
+
+	\noindent Los pasos para realizar este ejemplo serían los siguientes:
+	\begin{lstlisting}[language=Bash, label=lst: instr tuntap.c , caption=Instrucciones para realizar las pruebas con el código [\ref{lst:tuntap.c}]]
+# Guardamos el codigo anterior en tuntap.c
+# Compilamos el programa
+gcc tuntap.c -o tun
+
+### Terminal 1
+# Ejecutamos el binario, este se quedara a la escucha en la interfaz creada
+./tun
+
+### Terminal 2
+# Asignamos una IP a la interfaz recien creada
+ip addr add 192.168.209.138/24 dev tun0
+ip link set dev tun0 up
+
+# Capturamos el trafico que viaja por la interfaz
+tcpdump -i tun0
+
+### Terminal 3
+# Mandamos trafico a la interfaz creada, un ping por ejemplo:
+ping -c 4 192.168.209.139 -I tun0
+	\end{lstlisting}
+	
+	
+	
 	% Ejemplo: Intentar Bindear App a un TAP del Kernel (socket.bind)
 	
 	
@@ -1021,6 +1230,21 @@ $ umount /var/uts-h1
 		\label{bib: sdn y nfv}
 		\href{https://comparacloud.com/servicios-clouds/sdn-y-nfv/}{SDN \& NFV}
 		
+		%32
+		\item
+		\label{bib: tun vs tap}
+		\href{https://www.gabriel.urdhr.fr/2021/05/08/tuntap/}{TUN/TAP interface (on Linux)}
+		
+		%33
+		\item
+		\label{bib: tunctl + ip}
+		\href{https://developpaper.com/creating-tap-tun-devices-with-ip-tuntap-and-tunctl-as-detailed-in-linux-network-tools/}{Creating tap/tun devices with IP tuntap and tunctl as detailed in Linux network tools}
+		
+		%34
+		\item
+		\label{bib: code tuntap.c}
+		\href{https://programmerclick.com/article/45831226469/}{Principio de diseño del controlador TUN/TAP de la tarjeta virtual}
+		
 		% X
 		\item
 		\label{bib:link20}
@@ -1040,6 +1264,11 @@ $ umount /var/uts-h1
 		%2
 		\item 
 		\label{bib:img2}\href{https://twitter.com/b0rk/status/1240364585766576128}{How containers work.}
+		
+		%3
+		\item
+		\label{bib_img: tun tap}
+		\href{https://en.wikipedia.org/wiki/TUN/TAP}{Wikipedia: TUN/TAP}
 		
 		
 	\end{enumerate}
