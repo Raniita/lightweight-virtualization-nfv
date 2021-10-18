@@ -618,13 +618,35 @@ ping -c 4 192.168.209.139 -I tun0
 	
 	% TODO
 	\subsection{¿Cómo crear/acceder a un \textit{namespace}?}
-	\noindent Comentar que los namespaces se asocian a procesos. Para ello utilizamos los siguientes comandos:
+	\noindent Los namespaces normalmente se suelen asociar a procesos o aplicaciones en específico. Para manipular estos namespaces, podemos destacar las siguientes herramientas: 
 	\begin{itemize}
-		\item \texttt{unshare}. Permite asociar un namespace a un archivo. Si habia un namespace ya en ese archivo, lo sobreescribe. (No puede reutilizar)
-		\item \texttt{nsenter}. Puede acceder al namespace de un archivo existente. (Si podemos reutilizar)
+		\item \texttt{unshare}. Permite asociar un namespace a un archivo. Si habia un namespace ya en ese archivo, lo sobreescribe. No nos permite reutilizar un namespace.
+		\item \texttt{nsenter}. Puede acceder al namespace de un archivo existente. Podemos asociar el namespace a un archivo del sistema, de modo que aunque cerremos el proceso asociado, el archivo sigue existiendo, y por lo tanto puede ser reutilizado.
 	\end{itemize}
 
-	\noindent Comentar acerca de como mantener vivos los namespaces
+	\noindent En resumen, si quisieramos mantener ``vivo'' un namespace, sería necesario que lo asociemos con un archivo del sistema, y después volver a ``crear'' el namespace con la herramienta \texttt{nsenter} apuntando a dicho archivo. A modo de ejemplo, sería tal que así:
+	
+	\begin{lstlisting}[language=Bash, label=lst: persistencia ns, caption=Ejemplo de un persistencia namespace]
+touch /root/ns-uts											# Creamos un archivo
+unshare --uts=/root/ns-uts /bin/bash		# Asociamos namespace UTS al archivo
+hostname FooBar
+
+# Salimos del namespace
+exit
+
+# Volvemos a entrar al namespace
+nsenter --uts=/root/ns-uts /bin/bash
+hostname                  # Nos devuelve 'FooBar'
+
+# Salimos del namespace
+exit
+
+umount /root/ns-uts 			# Eliminamos el namespace definitivamente
+	\end{lstlisting}
+	
+	\vspace{10px}
+	
+	\noindent Tal y como vemos en el ejemplo (\ref{lst: persistencia ns}), utilizamos los comandos \texttt{unshare} y \texttt{nsenter} para manipular un namespace de tipo UTS (hostname), veremos más en profundidad este namespace en el apartado \ref{sect: uts namespace}. Lo importante es comprobar que si asociamos un namespace a un archivo, podemos recuperar dicho namespace si utilizamos el comando \texttt{nsenter}. Además, si quisieramos eliminar permanentemente dicho namespace, tendríamos que hacer uso del comando \texttt{umount}.
 	
 	\subsection{¿Cúantos \textit{namespaces} hay?}
 	\par\noindent El kernel ha estado en contaste evolución desde que 1991, cuando Linus Torvalds comenzó el proyecto, actualmente sigue muy activo y se siguen añadiendo nuevas características. El origen de los namespaces se remonta a la versión del kernel 2.4.19, lanzada en 2002. Conforme fueron pasando los años, más tipos diferentes de namespaces se fueron añadiendo a Linux. El concepto de \textit{User namespaces}, se consideró terminado con la versión 3.9.\\
@@ -644,6 +666,7 @@ ping -c 4 192.168.209.139 -I tun0
 	\pagebreak
 	
 	\subsubsection{UTS namespace}
+	\label{sect: uts namespace}
 	\par \noindent El tipo más sencillo de todos los namespaces. La funcionalidad consiste en controlar el hostname asociado del ordenador, en este caso, del proceso o procesos asignados al namespace. Existen tres diferentes rutinas que nos permiten obtener y modifcar el hostname: 
 	\begin{itemize}
 		\item \textit{sethostname()}
