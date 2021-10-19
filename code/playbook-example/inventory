@@ -1,0 +1,11 @@
+# Comandos: ansible-playbook --ask-pass -i inventory <playbook>.yml
+# Instalar sshpass
+
+[all:vars] 
+ansible_connection=ssh 
+ansible_port=22 
+#ansible_ssh_user=admin
+
+[target]
+localhost ansible_connection=ssh # ansible_host=IP
+

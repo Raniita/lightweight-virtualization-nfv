@@ -1,0 +1,64 @@
+# Ejemplo de uso de un playbook
+# Run -> ansible-playbook --ask-pass -i inventory playbook.yml
+--- 
+- hosts: all
+  vars:
+    namespace:
+      one:
+        interface: eth1
+        ip: 10.0.0.5
+        role: null
+        path: Documents
+      two:
+        interface: eth2
+        ip: 10.0.0.7
+        role: ingest
+        path: Desktop
+      #three:
+      #  interface: eth3
+      #  ip: 10.0.0.6
+      #  role: null
+      #  path: Downloads
+  
+  tasks:
+    - name: Hello World!
+      debug: 
+        msg: "Hello World!"
+
+    - name: Iterating over items
+      debug:
+        msg: 
+          - "Hello '{{ item.fname }}', nice to meet you"
+          - "Your last name as per our record is '{{ item.lname }}'"
+          - "Your country of residence is '{{ item.location }}'"
+
+      loop:
+        - { fname: 'deepak', lname: 'prasad', location: 'India' }
+        - { fname: 'amit', lname: 'kumar', location: 'Argentina' }
+        - { fname: 'rahul', lname: 'sharma', location: 'Canada' }
+        - { fname: 'vivek', lname: 'mittal', location: 'Brazil' }
+        - { fname: 'anurag', lname: 'keshav', location: 'Japan' }
+        
+    - name: Test vars
+      with_dict: "{{ namespace }}"
+      #when: item.value.role == "ingest"
+      debug:
+        msg: 
+          - "Hello '{{ item.value.interface}}'"
+          
+    - name: Shell command with loop
+      with_dict: "{{ namespace }}"
+      shell: ls {{ item.value.path }} -lah
+      args:
+        chdir: /home/rani
+        executable: /bin/bash
+      register: ls_content
+      
+    - name: Echo stdout for each item
+      with_items: "{{ls_content.results}}"
+      loop_control:
+        label: "{{ item.item.key }}"
+      debug:
+        msg:
+          - "HOLA!!!"
+          - "{{ item.stdout_lines }}"
