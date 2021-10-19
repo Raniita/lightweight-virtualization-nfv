@@ -1330,55 +1330,55 @@ $ umount /var/uts-h1
 		Para instalar \texttt{ansible} en diferentes distribuciones sería tal que:
 		\begin{itemize}
 			\item Ubuntu 21.04:
-			\begin{verbatim}
-				$ sudo apt install -y software-properties-common
-				$ sudo add-apt-repository --yes --update ppa:ansible/ansible
-				$ sudo apt update
-				$ sudo apt install -y ansible
-			\end{verbatim}
+			\begin{lstlisting}[language=Bash, caption={Instalación \texttt{ansible} en Ubuntu}]
+sudo apt install -y software-properties-common
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+sudo apt update
+sudo apt install -y ansible
+			\end{lstlisting}
 			
 			\item Fedora 32:
-			\begin{verbatim}
-				$ sudo dnf update
-				$ sudo dnf install ansible
-			\end{verbatim}
+			\begin{lstlisting}[language=Bash, caption={Instalación \texttt{ansible} en Fedora}]
+sudo dnf update
+sudo dnf install ansible
+			\end{lstlisting}
 			
 			\item OpenSUSE:
-			\begin{verbatim}
-				$ zypper in ansible
-			\end{verbatim}
+			\begin{lstlisting}[language=Bash, caption={Instalación \texttt{ansible} en OpenSUSE}]
+zypper in ansible
+			\end{lstlisting}
 			
 			\item Arch Linux:
-			\begin{verbatim}
-				$ sudo pacman -S ansible
-			\end{verbatim} 
+			\begin{lstlisting}[language=Bash, caption={Instalación \texttt{ansible} en Arch Linux}]
+sudo pacman -S ansible
+			\end{lstlisting} 
 		\end{itemize}
 		
 		\item Creamos una clave SSH para utilizarla como método de autentificación con la maquina virtual. 
-		\begin{verbatim}
-			(host)$ ssh-keygen -t ed25519 -C "Host Ansible ssh key"
-		\end{verbatim}
+		\begin{lstlisting}[language=Bash, caption={Crear clave SSH para autenticación en VM}]
+(host)$ ssh-keygen -t ed25519 -C "Host Ansible ssh key"
+		\end{lstlisting}
+		
+		\pagebreak
 		
 		\item Utilizando nuestro gestor de máquinas virtuales, encendemos la VM. Es importante que nos aseguremos que tiene internet, por lo que configuramos que la interfaz de red sea de tipo \textit{NAT}. Dentro de la máquina, buscaremos que ip tiene asignada con el comando \texttt{ip address}. Desde este momento, dejaremos la máquina virtual encendida.
 		
 		\item Procedemos a copiar la clave pública SSH que hemos generado en el paso dos. Utilizamos el siguiente comando, sustituyendo con el usuario e IP específico de la máquina. Tendremos que configurar una red tipo \textit{Host-only network} para poder comunicarnos correctamente con nuestra máquina virtual, para ello podemos seguir los pasos detallados en [\ref{bib:configure host-only}]
-		\begin{verbatim}
-			(host)$ ssh-copy-id -i $HOME/.ssh/id_ed25519.pub <user>@<IP VM>
-		\end{verbatim}
-		
-		\pagebreak
-		
+		\begin{lstlisting}[language=Bash, caption={Copiar clave pública de \texttt{ansible} a VM}]
+(host)$ ssh-copy-id -i $HOME/.ssh/id_ed25519.pub <user>@<IP VM>
+		\end{lstlisting}
+
 		\item En este momento ya podríamos conectar con la máquina virtual utilizando \texttt{ansible}. Sin embargo, por comodidad, lo que vamos a hacer es crear un archivo que funcione con inventario de servidores. Nos servirá para guardar las direcciones IP de los servidores en los que queremos ejecutar comandos remotos con \texttt{ansible}. Para ello, creamos un archivo \texttt{inventory}. Como ejemplo, dicho archivo puede ser tal que:
-		\begin{verbatim}
-			## VMs locals 
-			[virtualbox]
-			10.0.100.1
-			10.0.100.2
+		\begin{lstlisting}[language=Bash, caption={Contenido del archivo \texttt{inventory} de \texttt{ansible}}]
+## VMs locals 
+[virtualbox]
+10.0.100.1
+10.0.100.2
 			
-			## Server SSH
-			[server]
-			192.168.1.200
-		\end{verbatim}
+## Server SSH
+[server]
+192.168.1.200
+		\end{lstlisting}
 		
 		\item Para probar la conectividad. Nos aseguramos de que tenemos la máquina virtual encendida y que además, hemos copiado la clave ssh y tenemos su IP añadida a nuestro inventario. Después, procedemos a ejecutar el siguiente comando en la máquina host:
 		\begin{verbatim}
