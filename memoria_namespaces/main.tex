@@ -10,8 +10,8 @@
 
 \usepackage[dvipsnames]{xcolor}
 
-\renewcommand{\lstlistingname}{Listado}
-\renewcommand{\lstlistlistingname}{Listado de códigos}
+\renewcommand{\lstlistingname}{Ejemplo}
+\renewcommand{\lstlistlistingname}{Listado de ejemplos}
 
 % https://tex.stackexchange.com/questions/60209/how-to-add-an-extra-level-of-sections-with-headings-below-subsubsection
 \newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
@@ -71,7 +71,7 @@
 	\listoffigures
 	\addcontentsline{toc}{section}{Índice de tablas}
 	\listoftables
-	\addcontentsline{toc}{section}{Listado de códigos}
+	\addcontentsline{toc}{section}{Listado de ejemplos}
 	\lstlistoflistings
 	
 	\pagebreak
@@ -172,13 +172,13 @@
 		\item Falta de innovación, se hace realmente difícil crear nuevos servicios.
 	\end{itemize}
 
-	\noindent En general, se podría resumir en que la poca innovación y la falta de flexibilidad, hacían realmente difícil cambiar ciertos servicios y estructuras críticas de la red ``core''. Para ello, para solucionar todos estos problemas, desde los grupos de trabajo de la ITU se empezó a trabajar en nuevas propuestas con el fin de aportar nuevas alternativas. La solución propuesta con más apoyo sería ``la virtualización de funciones de red'', que tendría su punto de partida en octubre de 2012, en un grupo de trabajo de la ITU, formado por 13 operadoras internacionales, dando lugar a un paper informativo (link a paper) en el que se detallaba de forma teórica la solución de NFV.
+	\noindent En general, se podría resumir en que la poca innovación y la falta de flexibilidad, hacían realmente difícil cambiar ciertos servicios y estructuras críticas de la red ``core''. Para ello, para solucionar todos estos problemas, desde los grupos de trabajo de la ITU se empezó a trabajar en nuevas propuestas con el fin de aportar nuevas alternativas. La solución propuesta con más apoyo sería ``la virtualización de funciones de red'', que tendría su punto de partida en octubre de 2012, en un grupo de trabajo de la ITU, formado por 13 operadoras internacionales, dando lugar a un paper informativo [\ref{paper nfv 2012}] en el que se detallaba de forma teórica la solución de NFV.
 	
 	\begin{figure}[h]
 		\begin{center}
 			\includegraphics[width=0.55\textwidth]{img/classic_network_vs_nfv.png}
 			\label{imagen comparativa classic network nfv}
-			\caption{Comparativa enfoque clásico de las redes contra el enfoque virtualizado. [\ref{paper nfv 2012}]}
+			\caption{Comparativa enfoque clásico de las redes contra el enfoque virtualizado. [\ref{img: nfv vs classic}]}
 		\end{center}
 	\end{figure}
 
@@ -186,13 +186,13 @@
 	
 	\noindent La actualidad es cada dispositivo, corresponde con un aparato físico. Son aparatos embebidos y solo cumplen una función específica. Utilizando la virtualización de red, podemos llegar al punto de tenerlo todo virtualizado. Tenemos una 'imagen' de router que la podemos desplegar en cualquier ordenador de caracter general, y cumplir diferentes funciones a la vez (que un router sea a la vez un firewall, por ejemplo).\\
 	
-	\noindent Las funciones de red están basadas en tener un software y hardware específico para cada dispositivo. NFV nos aporta que esos recursos software y hardware, se despliegan en servidores físicos de proposito general. Por lo tanto, un mismo nodo físico, puede ser DHCP, router o Firewall.\\
+	\noindent Las funciones de red están basadas en tener un software y hardware específico para cada dispositivo. NFV nos aporta que esos recursos software y hardware, se despliegan en servidores físicos de proposito general. Por lo tanto, un mismo nodo físico, puede ser DHCP, router o Firewall. [\ref{bib: what is nfv}]\\
 	
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=0.4\textwidth]{img/NFV-image-v2.jpg}
 			\label{img: comparativa redes classic vs nfv}
-			\caption{Comparativa redes clásicas vs redes basadas en NFV [\ref{bib: what is nfv}]}
+			\caption{Comparativa redes clásicas vs redes basadas en NFV [\ref{img: nfv vs classic 2}]}
 		\end{center}
 	\end{figure}
 
@@ -201,7 +201,7 @@
 	\pagebreak
 	
 \	\subsection{Tecnologías implicadas}
-	\noindent Para que este cambio de paradigma se materialice, es decir, pase de ser ``papers'' con soluciones generalistas, y que de verdad estas se materialicen en una solución viable, tienen que realizarse una serie de desarrollos, los cuales provocan que aún a día de hoy sean soluciones experimentales, que aunque son utilizadas en entornos reales, todavía están en continuo desarrollo. Además, aunque estamos hablando de NFV, hay una tecnología extra que también aparece en la ecuación, esta tecnología es el SDN (\textit{Software Defined Networks}). En este caso particular, nos encontramos con que el NFV no puede existir sin el SDN, y viceversa. Si tuviéramos que definir brevemente cada una de dichas tecnologías, podríamos resumirlo en lo siguiente:
+	\noindent Para que este cambio de paradigma se materialice, es decir, pase de ser ``papers'' con soluciones generalistas, y que de verdad estas se materialicen en una solución viable, tienen que realizarse una serie de desarrollos, los cuales provocan que aún a día de hoy sean soluciones experimentales, que aunque son utilizadas en entornos reales, todavía están en continuo desarrollo. Además, aunque estamos hablando de NFV, hay una tecnología extra que también aparece en la ecuación, esta tecnología es el SDN (\textit{Software Defined Networks}). En este caso particular, nos encontramos con que el NFV no puede existir sin el SDN, y viceversa [\ref{bib: sdn y nfv}]. Si tuviéramos que definir brevemente cada una de dichas tecnologías, podríamos resumirlo en lo siguiente:
 	\begin{itemize}
 		\item \textit{Software Defined Networks}. Suponen un punto de vista de las redes, en las que las propias redes utilizan una serie de controladores, basados en software o en API de control, con el fin de dirigir el tráfico de red y comunicarse con la infraestructura hardware de capas superiores. (ver Figura \ref{img: sdn + nfv})
 		 
@@ -211,7 +211,7 @@
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=0.8\textwidth]{img/sdn-y-nfv.jpg}
-			\caption{Comparativa en capas OSI de las tecnologías NFV y SDN [\ref{bib: sdn y nfv}]}
+			\caption{Comparativa en capas OSI de las tecnologías NFV y SDN [\ref{img: sdn vs nfv osi}] }
 			\label{img: sdn + nfv}
 		\end{center}
 	\end{figure}
@@ -229,12 +229,12 @@
 	
 	\noindent Linux dispone de una selección muy diferente de interfaces de red que nos permiten, de manera sencilla, el uso de máquinas virtuales o contenedores. En este apartado vamos a mencionar las interfaces más relevantes de cara a la virtualización ligera que proponemos para el despliegue de una red virtualizada. Para obtener una lista completa de las interfaces disponibles, podemos ejecutar el siguiente comando \texttt{ip link help}.\\
 	
-	\par \noindent En este trabajo, vamos a comentar la siguientes interfaces:
+	\par \noindent En este trabajo, vamos a comentar la siguientes interfaces [\ref{bib:virtual interface list}]:
 	\begin{itemize}
 		\item MAC compartida: eth0:\{0,1,2...\}
 		\item VLAN 802.1q: eth0.\{0,1,2...\}
-		\item VLAN 802.1ad: eth0.\{0,1,2...\}
-		\item Pares de ethernet virtuales (\textit{VETH pairs})
+		\item VLAN 802.1ad: eth0.\{0,1,2...\}.\{0,1,2...\}
+		\item Pares de ethernet virtuales (\textit{veth pairs})
 		\item TUN/TAP
 	\end{itemize}
 
@@ -302,7 +302,7 @@ $ ip link set dev enp2s0.{num} up
 
 	\pagebreak
 	
-	\subsection{VLAN 802.1ad. \texttt{enp2s0}.\{0,1,2...\}.\{0,1,2...\}}
+	\subsection{VLAN 802.1ad. \texttt{enp2s0}.\texttt{\{0,1,2...\}.\{0,1,2...\}}}
 	\noindent En este aparatado comentamos la interfaz virtual asociada al estándar 802.1ad, dicho estándar supone una actualización respecto a las VLANs basadas en 802.1q, pero añadiendo la posibilidad de tener dos tags dentro de mismo frame ethernet. En el caso del estándar 802.1q, solo podíamos tener un tag. El estándar de vlans 802.1ad es realmente útil cuando el proveedor de red y el usuario de dicha red quieren utilizar VLANs, además que amplía el límite de 4094 VLANs diferentes permitidas por el estándar 802.1Q [\ref{bib: 802.1ad}][\ref{bib: FS QinQ}]. Otra forma de la que nos podemos encontrar esta interfaz es bajo el nombre ``QinQ''. \\
 	
 	\noindent La estructura de la trama ethernet sigue la siguiente estructura,
@@ -310,7 +310,7 @@ $ ip link set dev enp2s0.{num} up
 	\begin{figure}[h]
 		\begin{center}
 			\includegraphics[width=0.8\textwidth]{img/ethernet_8021ad.png}
-			\caption{Trama ethernet utilizando VLAN 802.1ad [\ref{bib: FS QinQ}]}
+			\caption{Trama ethernet utilizando VLAN 802.1ad [\ref{img: frame ethernet 802.1ad}]}
 			\label{ethernet 802.1ad}
 		\end{center}
 	\end{figure}
@@ -326,7 +326,7 @@ $ ip link add link eth0.1000 eth0.1000.1000 type vlan proto 802.1q id 1000
 	\pagebreak
 	
 	\subsection{Pares VETH.}
-	\noindent Los \texttt{veth} (Ethernet virtuales) son un dispositivo virtual que forman un túnel local ethernet. El dispositivo se crea en parejas.\\
+	\noindent Los \texttt{veth} (Ethernet virtuales) son un dispositivo virtual que forman un túnel local ethernet. El dispositivo se crea en parejas. [\ref{bib:virtual interface list}]\\
 	
 	\noindent Los paquetes transmitidos por un extremo del ethernet virtual se reciben inmediatamente en el otro extremo. Si alguno de ellos se encuentra apagado, decimos que el link de la pareja esta también apagado. A modo de ejemplo, nos fijamos una estructura básica en la que dos aplicaciones se comunican utilizando \texttt{veth}, tal y como vemos en la figura (\ref{ej1 veth})\\
 	
@@ -649,7 +649,7 @@ umount /root/ns-uts 			# Eliminamos el namespace definitivamente
 	\noindent Tal y como vemos en el ejemplo (\ref{lst: persistencia ns}), utilizamos los comandos \texttt{unshare} y \texttt{nsenter} para manipular un namespace de tipo UTS (hostname), veremos más en profundidad este namespace en el apartado \ref{sect: uts namespace}. Lo importante es comprobar que si asociamos un namespace a un archivo, podemos recuperar dicho namespace si utilizamos el comando \texttt{nsenter}. Además, si quisieramos eliminar permanentemente dicho namespace, tendríamos que hacer uso del comando \texttt{umount}.
 	
 	\subsection{¿Cúantos \textit{namespaces} hay?}
-	\par\noindent El kernel ha estado en contaste evolución desde que 1991, cuando Linus Torvalds comenzó el proyecto, actualmente sigue muy activo y se siguen añadiendo nuevas características. El origen de los namespaces se remonta a la versión del kernel 2.4.19, lanzada en 2002. Conforme fueron pasando los años, más tipos diferentes de namespaces se fueron añadiendo a Linux. El concepto de \textit{User namespaces}, se consideró terminado con la versión 3.9.\\
+	\par\noindent El kernel ha estado en contaste evolución desde que 1991, cuando Linus Torvalds comenzó el proyecto, actualmente sigue muy activo y se siguen añadiendo nuevas características. El origen de los namespaces se remonta a la versión del kernel 2.4.19, lanzada en 2002. Conforme fueron pasando los años, más tipos diferentes de namespaces se fueron añadiendo a Linux. El concepto de \textit{User namespaces}, se consideró terminado con la versión 3.9. [\ref{bib:ns overview}]\\
 	\par \noindent Actualmente, tenemos 8 tipos diferentes de namespaces, siendo el último añadido en la versión 5.8 (lanzada el 2 de Agosto de 2020). 
 	
 	\begin{enumerate}
@@ -660,7 +660,7 @@ umount /root/ns-uts 			# Eliminamos el namespace definitivamente
 		\item User ID (user) 
 		\item Interprocess Communication (ipc)
 		\item Control group (cgroup)
-		\item Time
+		\item Time [\ref{bib:time ns}]
 	\end{enumerate}
 	
 	\pagebreak
@@ -677,8 +677,8 @@ umount /root/ns-uts 			# Eliminamos el namespace definitivamente
 	
 	% example uts: https://medium.com/@teddyking/linux-namespaces-850489d3ccf
 	% https://www.cloudsavvyit.com/742/what-are-linux-namespaces-and-what-are-they-used-for/
-	\par \noindent Un ejemplo muy basico de uso de este namespaces podría ser el siguiente:\\
-	\begin{lstlisting}[language=bash, caption=Example usage UTS namespace]
+	\par \noindent Un ejemplo muy basico de uso de este namespaces podría ser el siguiente [\ref{bib:ns tutorial1}]:\\
+	\begin{lstlisting}[language=bash, caption=Ejemplo de uso de UTS namespace]
 $ sudo su			# super user
 $ hostname			# current hostname
 > arch-linux					
@@ -731,13 +731,13 @@ $ ls /mnt/cp
 	\pagebreak
 	
 	\subsubsection{Process ID namespace}
-	\par \noindent Para entender en que consiste este namespace, primero tenemos que conocer la definición de \textit{process id} dentro del Kernel. En este caso, \textit{process id} hace referencia a un número entero que utiliza el Kernel para identificar los procesos de manera unívoca.\\
+	\par \noindent Para entender en que consiste este namespace, primero tenemos que conocer la definición de \textit{process id} dentro del Kernel. En este caso, \textit{process id} hace referencia a un número entero que utiliza el Kernel para identificar los procesos de manera unívoca. [\ref{bib:pid wikipedia}]\\
 	
 	\par \noindent Concretando, aísla el namespace de la ID del proceso asignado, dando lugar a que, por ejemplo, otros namespaces puedan tener el mismo PID. Esto nos lleva a la situación de que un proceso dentro de un \textit{PID namespace} piense que tiene asignado el ID "1", mientras que en la realidad (en la máquina host) tiene otro ID asignado.
 	
 	\addvspace{10px}
 	
-	\begin{lstlisting}[language=bash, caption=Example of usage process id namespace]
+	\begin{lstlisting}[language=bash, caption=Uso de process id namespace]
 $ echo $$		# PID de la shell
 $ ls -l /proc/$$/ns	# ID espacios de nombres 
 $ sudo unshare -f --mount-proc -p /bin/sh
@@ -751,14 +751,14 @@ $ exit
 
 	\addvspace{10px}
 	
-	\par \noindent Si ejecutamos el ejemplo, lo que podemos comprobar es que el ID del proceso que está dentro del namespaces (\texttt{echo \$\$}), no coincide con el proceso que podemos ver de la máquina host (\texttt{ps -ef | grep /bin/sh}). Más concretamente, el primer proceso creado en un PID namespace recibirá el pid número 1, y además de un tratamiento especial ya que supone  un \texttt{init process} dentro de ese namespace.
+	\par \noindent Si ejecutamos el ejemplo, lo que podemos comprobar es que el ID del proceso que está dentro del namespaces (\texttt{echo \$\$}), no coincide con el proceso que podemos ver de la máquina host (\texttt{ps -ef | grep /bin/sh}). Más concretamente, el primer proceso creado en un PID namespace recibirá el pid número 1, y además de un tratamiento especial ya que supone  un \texttt{init process} dentro de ese namespace [\ref{bib:ns tutorial1}].
 	
 	% revisar: https://www.redhat.com/sysadmin/linux-pid-namespaces
 	% https://man7.org/linux/man-pages/man7/pid_namespaces.7.html
 	
 	\pagebreak
 	
-	\subsubsection{Network namespace}
+	\subsubsection{Network namespace (netns)}
 	\par \noindent Este namespaces nos permite aislar la parte red de una aplicación o proceso que nosotros elijamos. Con esto conseguimos que el \textit{stack} de red de la máquina host sea diferente al que tenemos en nuestro namespace. Debido a esto, el namespace crea una interfaz virtual, conjunto con el resto de necesidades para conformar un stack de red completo (tabla de enrutamiento, tabla ARP, etc...).\\
 	
 	\par \noindent Para crear un \textit{namespace} de tipo \textit{network}, y que este sea persistente, utilizamos la \textit{tool} ip (del \textit{package} iproute2).
@@ -798,7 +798,7 @@ $ ip netns exec <network-namespace> <command>
 
 	\pagebreak
 	
-	\subsubsubsection{Ejemplo práctico}
+	\noindent \textbf{\large Ejemplo práctico}\\
 	\par \noindent Una de las problemáticas que supone el uso de los network namespaces, es que solo podemos asignar \textbf{una interfaz real} a \textbf{un namespace}. Suponiendo el caso en el que el usuario root tenga asignada la interfaz eth0 (identificador de una interfaz de red física), significaría que solo los programas en el namespace de root podrán acceder a dicha interfaz. En el caso de que eth0 sea la salida a Internet de nuestro sistema, pues eso conllevaría que no podríamos tener conexión a Internet en nuestros namespaces. La solución para esto reside en los \textbf{veth-pair}.
 	
 	\addvspace{10px}
@@ -834,11 +834,11 @@ $ ip netns exec ns1 ip link set lo up
 $ ip netns exec ns1 ip route add default via 10.200.1.1
 	\end{lstlisting}
 
-	\addvspace{10px}
-
-	\par \noindent Siguiendo el ejemplo propuesto, llegamos hasta el punto en el que el tráfico saliente del namespace ns1, será redirigido a v-eth1. Sin embargo, esto no es suficiente para tener conexión a Internet. Tenemos que configurar el NAT en el eth0.
+	%\addvspace{10px}
 	
 	\pagebreak
+
+	\par \noindent Siguiendo el ejemplo propuesto, llegamos hasta el punto en el que el tráfico saliente del namespace ns1, será redirigido a v-eth1. Sin embargo, esto no es suficiente para tener conexión a Internet. Tenemos que configurar el NAT en el eth0.
 	
 	\begin{lstlisting}[language=bash, caption=Configuración de NAT para dar Internet a un network namespace]
 # Share internet access between host and NS
@@ -909,12 +909,14 @@ $ exit
 	
 	\addvspace{20px}
 	
-	\par \noindent Como vemos en el ejemplo, el UID de usuario difiere de la máquina host. Dentro del namespace, tenemos UID 0, sin embargo, eso no significa que podamos acceder a los archivos con UID 0 de la máquina host, ya que en verdad lo que hace el namespace es \textit{mapear} el UID 1000 al 0.
+	\par \noindent Como vemos en el ejemplo, el UID de usuario difiere de la máquina host. Dentro del namespace, tenemos UID 0, sin embargo, eso no significa que podamos acceder a los archivos con UID 0 de la máquina host, ya que en verdad lo que hace el namespace es \textit{mapear} el UID 1000 al 0. [\ref{bib:ns tutorial1}]
 	
-	\pagebreak
+	%\pagebreak
 	
 	\subsubsection{Interprocess Communication namespace (IPC)}
 	\par \noindent Este namespace supone uno de los más técnicos, complicados de entender y explicar. IPC (Interprocess comunication) controla la comunicación entre procesos, utilizando zonas de la memoría que están compartidas, colas de mensajes, y semáforos. La aplicación más común para este tipo de gestión es el uso en bases de datos.
+	
+	\pagebreak
 	
 	\subsubsection{Control group (cgroup)}
 	\par \noindent Los grupos de control, cgroups, de Linux suponen un mecanismo para controlar los diferentes recursos de nuestro sistema. Cuando CGroups están activos, pueden controlar la cantidad de CPU, RAM, acceso I/O, o cualquier faceta que un proceso puede consumir. Además, permiten definir jerarquías en las que se agrupan, de manera en la que el administrador del sistema puede definir como se asignan los recursos o llevar la contabilidad de los mismos.\\
@@ -927,7 +929,7 @@ $ exit
 	
 	\addvspace{60px}
 	
-	\begin{figure}[h]
+	\begin{figure}[h!]
 		\begin{center}
 			% https://8gwifi.org/docs/linux-namespace.jsp
 			\includegraphics[width=1\textwidth]{img/linux-namespace1.png}
@@ -940,19 +942,19 @@ $ exit
 	\subsubsection{Time}
 	\par \noindent Por último, nos queda el namespaces asociado al tiempo. Este namespace fue propuesto para que se incorporara al kernel de Linux en 2018 y en enero de 2020 fue añadido a la versión mainline de Linux. Apareció en la release 5.6 del kernel de Linux. \\
 	
-	\par \noindent El namespace time, permite que por cada namespace que tengamos, podamos crear desfases entre los relojes monotónicos (CLOCK\_MONOTONIC) y de boot (CLOCK\_BOOTTIME), de la máquina host. Esto permite que dentro de los contendores se nos permita cambiar la fecha y la hora, sin tener que modificar la hora del sistema host. Además, supone una capa más de seguridad, ya que no estamos vinculando directamente la hora a los relojes físicos de nuestro sistema.\\
+	\par \noindent El namespace time, permite que por cada namespace que tengamos, podamos crear desfases entre los relojes monotónicos (CLOCK\_MONOTONIC) y de boot (CLOCK\_BOOTTIME), de la máquina host. Esto permite que dentro de los contendores se nos permita cambiar la fecha y la hora, sin tener que modificar la hora del sistema host. Además, supone una capa más de seguridad, ya que no estamos vinculando directamente la hora a los relojes físicos de nuestro sistema. [\ref{bib:time ns kernel}]\\
 	
 	\par \noindent Un namespace de tipo time, es muy similar al namespace de tipo PID en la manera de como lo creamos. Utilizamos el comando unshare -T, y mediante una systemcall se nos creará un nuevo time namespace, pero no lo asocia directamente con el proceso. Tenemos que utilizar setns para asociar un proceso a un namespace, además todos los procesos dependientes también tendrán asignado dicho namespace. 
 	
 	\addvspace{80px}
 	
-	\begin{figure}[h]
-		\begin{center}
-			% https://twitter.com/b0rk/status/1240364585766576128/photo/1
-			\includegraphics[width=0.8\textwidth]{img/how_containers_work.jpg}
-			\caption{Como funcionan los contenedores. (\ref{bib:img2})}
-		\end{center}
-	\end{figure}
+	%\begin{figure}[h]
+	%	\begin{center}
+	%		% https://twitter.com/b0rk/status/1240364585766576128/photo/1
+	%		\includegraphics[width=0.8\textwidth]{img/how_containers_work.jpg}
+	%		\caption{Como funcionan los contenedores. (\ref{bib:img2})}
+	%	\end{center}
+	%\end{figure}
 	
 	\pagebreak
 	
@@ -1101,15 +1103,15 @@ $ umount /var/uts-h1
 	\begin{enumerate}
 		%1
 		\item 
-		\label{bib:link1} \href{https://lwn.net/Articles/531114/}{\textit{Namespaces}}
+		\label{bib:ns overview} \href{https://lwn.net/Articles/531114/}{\textit{Namespaces}}
 		
 		%2
 		\item 
-		\label{bib:link2} \href{https://laurel.datsi.fi.upm.es/~ssoo/SOA/namespaces.html}{Tutorial: Espacio de nombres en Linux}
+		\label{bib:ns tutorial1} \href{https://laurel.datsi.fi.upm.es/~ssoo/SOA/namespaces.html}{Tutorial: Espacio de nombres en Linux}
 		
 		%3
 		\item 
-		\label{bib:link3} \href{https://www.phoronix.com/scan.php?page=news_item&px=Linux-Time-Namespace-Coming}{\textit{Time namespaces coming to linux}}
+		\label{bib:time ns} \href{https://www.phoronix.com/scan.php?page=news_item&px=Linux-Time-Namespace-Coming}{\textit{Time namespaces coming to linux}}
 		
 		%4
 		\item 
@@ -1131,7 +1133,7 @@ $ umount /var/uts-h1
 		
 		%8
 		\item
-		\label{bib:link8}
+		\label{bib:pid wikipedia}
 		\href{https://en.wikipedia.org/wiki/Process_identifier}{Indentificador de procesos (\textit{process id})}
 		
 		
@@ -1147,7 +1149,7 @@ $ umount /var/uts-h1
 		
 		%11
 		\item
-		\label{bib:link11}
+		\label{bib:virtual interface list}
 		\href{https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#veth}{\textit{Introduction to Linux interfaces for virtual networking}}
 		
 		
@@ -1158,7 +1160,7 @@ $ umount /var/uts-h1
 		
 		%13
 		\item
-		\label{bib:link13}
+		\label{bib:time ns kernel}
 		\href{https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=timers/core&id=769071ac9f20b6a447410c7eaa55d1a5233ef40c}{\textit{Time namespaces}}
 		
 		%14
@@ -1198,47 +1200,47 @@ $ umount /var/uts-h1
 		\label{youtube: nfv y sdn cristina}
 		\href{https://www.youtube.com/watch?v=3JEAK66wujg}{Youtube: NFV y SDN: las redes del futuro y del presente - Cristina Santana | T3chFest 2018}
 		
-		%20
+		%21
 		\item
 		\label{servers running linux}
 		\href{https://hostingtribunal.com/blog/linux-statistics/}{Percentage of server that run in Linux}
 		
-		%21
+		%22
 		\item
 		\label{bib: vmware sdn}
 		\href{https://www.vmware.com/es/topics/glossary/content/software-defined-networking.html}{¿Qué son las redes definidas por software (SDN)?}
 		
-		%22
+		%23
 		\item
 		\label{bib: vmware nfv}
 		\href{https://www.vmware.com/es/topics/glossary/content/virtual-networking.html}{¿Qué son las redes virtuales?}
 		
-		%23
+		%24
 		\item
 		\label{bib: udev archwiki}
 		\href{https://wiki.archlinux.org/title/Udev}{\textit{Arch Linux Wiki: udev}}
 		
-		%24
+		%25
 		\item
 		\label{bib: systemd networkd v197}
 		\href{https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/}{Predictable Network Interface Names}
 		
-		%25
+		%26
 		\item
 		\label{bib: open vswitch}
 		\href{https://www.openvswitch.org/}{Open vSwitch}
 		
-		%26
+		%27
 		\item
 		\label{bib: veth netns ovs}
 		\href{https://matthewarcus.wordpress.com/2018/02/04/veth-devices-network-namespaces-and-open-vswitch/}{Veth Devices, Network Namespaces and Open vSwitch}
 		
-		%27
+		%28
 		\item
 		\label{bib: 802.1ad}
 		\href{http://www.microhowto.info/tags/802.1ad.html}{IEEE 802.1ad}
 		
-		%28
+		%29
 		\item
 		\label{bib: FS QinQ}
 		\href{https://img-en.fs.com/file/user_manual/s3800-series-qinq-operation.pdf}{FS.COM QinQ Operation}
@@ -1281,17 +1283,36 @@ $ umount /var/uts-h1
 	\addcontentsline{toc}{subsection}{Imagenes}
 	\begin{enumerate}
 		%1
-		\item 
-		\label{bib:img1}\href{https://8gwifi.org/docs/linux-namespace.jsp}{Namespaces y API de acceso.}
+		\item
+		\label{img: nfv vs classic}
+		\href{https://portal.etsi.org/nfv/nfv_white_paper.pdf}{NFV white paper}
 		
 		%2
-		\item 
-		\label{bib:img2}\href{https://twitter.com/b0rk/status/1240364585766576128}{How containers work.}
+		\item
+		\label{img: nfv vs classic 2}
+		\href{https://www.ciena.com/insights/articles/What-is-NFV-prx.html}{W\textit{hat is Network Function Virtualization(NFV)?}}
 		
 		%3
 		\item
+		\label{img: sdn vs nfv osi}
+		\href{https://comparacloud.com/servicios-clouds/sdn-y-nfv/}{SDN \& NFV}
+		
+		%4
+		\item
+		\label{img: frame ethernet 802.1ad}
+		\href{https://img-en.fs.com/file/user_manual/s3800-series-qinq-operation.pdf}{FS.COM QinQ Operation}
+		
+		%4
+		\item 
+		\label{bib:img1}\href{https://8gwifi.org/docs/linux-namespace.jsp}{Namespaces y API de acceso.}
+		
+		%5
+		\item
 		\label{bib_img: tun tap}
 		\href{https://en.wikipedia.org/wiki/TUN/TAP}{Wikipedia: TUN/TAP}
+		
+		%\item 
+		%\label{bib:img2}\href{https://twitter.com/b0rk/status/1240364585766576128}{How containers work.}
 		
 		
 	\end{enumerate}
