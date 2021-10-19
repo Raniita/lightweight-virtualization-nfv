@@ -423,7 +423,7 @@ $ ip netns exec app2 ip link set lo up
 	
 	\vspace{5px}
 
-	\noindent \large \textbf{TUN (Capa 3)}\\
+	\noindent \textbf{\large TUN (Capa 3)}\\
 	\noindent Las interfaces TUN (\texttt{IFF\_TUN}) transportan paquetes PDU (\textit{Protocol Data Units}) de la capa 3 [\ref{bib: tun vs tap}]:
 	\begin{itemize}
 		\item En la práctica, transporta paquetes IPv4 y/o paquetes IPv6.
@@ -435,7 +435,7 @@ $ ip netns exec app2 ip link set lo up
 	
 	\pagebreak
 	
-	\noindent \large \textbf{TAP (Capa 2)}\\
+	\noindent \textbf{\large TAP (Capa 2)}\\
 	\noindent Las interfaces TAP (\texttt{IFF\_TAP}) transportan paquetes de capa 2 \ref{bib: tun vs tap}: 
 	\begin{itemize}
 		\item En la práctica, transporta \textit{frames Ethernet}, por lo tanto, actuaría como si fuera un adaptador virtual de Ethernet (``bridge virtual'').
