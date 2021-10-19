@@ -1,7 +1,10 @@
 # Ejemplo de uso de un playbook
 # Run -> ansible-playbook --ask-pass -i inventory playbook.yml
 --- 
-- hosts: all
+- name: Ejemplo de uso playbook
+  hosts: all
+  #become: yes                   # --ask-become-pass
+  #become_user: root             # default
   vars:
     namespace:
       one:
@@ -62,3 +65,19 @@
         msg:
           - "HOLA!!!"
           - "{{ item.stdout_lines }}"
+   
+    # Fire and Forget  
+    #- name: Detach task
+    #  shell: python -m http.server
+    #  args: 
+    #    chdir: /home/rani/Desktop
+    #    executable: /bin/bash
+    #  async: 180
+    #  poll: 0
+
+    # Change with_dict to loop:
+    - name: Test vars with loop
+      loop: "{{ namespace | dict2items }}"
+      debug:
+        msg: 
+          - "Hello '{{ item.value.interface}}'"
