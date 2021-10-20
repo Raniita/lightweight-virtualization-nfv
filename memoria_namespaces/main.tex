@@ -919,13 +919,75 @@ $ exit
 	\pagebreak
 	
 	\subsubsection{Control group (cgroup)}
-	\par \noindent Los grupos de control, cgroups, de Linux suponen un mecanismo para controlar los diferentes recursos de nuestro sistema. Cuando CGroups están activos, pueden controlar la cantidad de CPU, RAM, acceso I/O, o cualquier faceta que un proceso puede consumir. Además, permiten definir jerarquías en las que se agrupan, de manera en la que el administrador del sistema puede definir como se asignan los recursos o llevar la contabilidad de los mismos.\\
+	\par \noindent Los grupos de control, o \texttt{cgroups}, de Linux suponen un mecanismo para controlar los diferentes recursos de nuestro sistema. Cuando un \texttt{cgroup} está activo, puede controlar la cantidad de CPU, RAM, acceso I/O, o cualquier faceta que un proceso puede consumir. Además, permiten definir jerarquías en las que se agrupan, de manera en la que el administrador del sistema puede definir como se asignan los recursos o llevar la contabilidad de los mismos. Cgroups permite las siguientes funcionalidades [\ref{bib: cgroups}]: 
+	\begin{itemize}
+		\item \textbf{Limitar recursos}. Podemos configurar un grupo para limitar un recurso (o varios de ellos) para cada proceso que asignemos.
+		\item \textbf{Priorizar tareas}. Podemos controlar cuantos recursos utiliza un proceso, comparándolo con otro proceso en un grupo diferente.
+		\item \textbf{Monitorización}. Los límites establecidos para los recursos son monitorizados y son reportados al usuario.
+		\item \textbf{Control}. Podemos controlar el estado de los procesos asociados a un grupo con un solo comando, pudiendo elegir entre ``congelado'', ``parado'' o ``reiniciado''.
+	\end{itemize}
 	
-	\par \noindent Por defecto, los CGroups se crean en el sistema de archivos virtual /sys/fs/cgroup. Si creamos un namespace de tipo CGroups, lo que estamos haciendo es mover el espacio de archivos virtual de dicho CGroup. Un ejemplo de esto sería, creamos un CGroup namespace en el directorio /sys/fs/cgroup/mycgroup. El host verá lo siguiente /sys/fs/cgroup/mycgroup/\{group1, group2, group3\}, sin embargo, el namespace solo verá \{group1, group2, group3\}. Esto es así ya que aporta seguridad a un namespace ya que los procesos del namespace solo pueden acceder a su sistema de archivos.
+	\noindent La primera versión de \texttt{cgroups} aparece en el Kernel en 2007, siendo esta la versión más estandarizada por la mayoría de distribuciones. Sin embargo, en 2016 aparece \texttt{cgroups v2} en el Kernel, aportando mejoras en la simplificación de los arboles de jerarquías de la ruta \texttt{/sys/fs/cgroup}, además de nuevas interfaces, aportando las bases para contenedores que utilizan el concepto de ``\textit{rootless}''. \\
 	
-	% TODO
-	% Ejemplo limitar un programa en memoria
-	% App C Mayon que vemos con comando free que esta bien limitada
+	\par \noindent En el caso de la versión \texttt{v1}, los \texttt{cgroups} se crean en el sistema de archivos virtual en la ruta \texttt{/sys/fs/cgroup}. Para crear un nuevo grupo, en nuestro caso con el objetivo de limitar un proceso en memoria, tendríamos que ejecutar lo siguiente:
+	\begin{verbatim}
+mkdir /sys/fs/cgroup/memory/<NombreGrupo>
+	\end{verbatim}
+
+	\noindent De esta manera, ya tendríamos un nuevo grupo creado, asociado al \texttt{cgroup} de memory. Si ejecutamos el comando ls en el directorio que acabamos de crear, podemos comprobar como se han generado una serie de recursos: 
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=1\textwidth]{img/cgroup_memory_ls.png}
+			\caption{Archivos asociados al grupo \texttt{test\_cg} una vez lo creamos}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
+	
+	\noindent Si quisiéramos establecer un límite en el uso de memoria, tendríamos que escribir en el archivo \texttt{memory.limit\_in\_bytes}, a modo de ejemplo, establecemos un límite de 50MB. Esto se haría tal que:
+	\begin{verbatim}
+echo 50000000 > /sys/fs/cgroup/memory/<NombreGrupo>/memory.limit_in_bytes
+	\end{verbatim}
+
+	\noindent Para comprobar el funcionamiento de este límite de memoria, vamos a asociarle un programa escrito en Python que consume mucha memoria RAM de golpe. El programa en cuestión vendría dado por el siguiente código:
+	\begin{lstlisting}[language=Python, caption={Programa en Python que consume 4 GB de RAM}]
+#!/usr/bin/python
+import numpy
+
+print("cgroup testing program (memory limit)")
+result = [numpy.random.bytes(1024*1024) for x in range(1024*4)]
+print("RAM used: {}M".format(len(result)))
+	\end{lstlisting}
+
+	\noindent Ejecutamos el programa, y comprobamos como la salida por consola es tal que: 
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.7\textwidth]{img/cgroup_python1.png}
+			\caption{Salida tras ejecutar el programa de Python sin limitar}
+			\label{img: cgroup python 1}
+		\end{center}
+	\end{figure}
+
+	\noindent Sin embargo, ahora vamos a proceder a limitar ese mismo programa en memoria. Para ello, vamos a añadir el PID asociado a la ejecución de dicho programa al siguiente archivo (ejecutando el script \texttt{./test\_memory.py \&}, nos aparece el PID):
+	\begin{verbatim}
+echo 62482 > /sys/fs/cgroup/memory/test_cg/cgroup.procs
+	\end{verbatim}
+	
+	\noindent De esta manera ya estaríamos limitando la memoria de ese programa en concreto. Al limitarlo, podemos comprobar como la salida en consola es tal que: 
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.7\textwidth]{img/cgroup_python2.png}
+			\caption{Salida tras ejecutar el programa de Python, una vez limitado}
+			\label{img: cgroup python 2}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
+	
+	\noindent Como podemos comprobar en las imágenes [\ref{img: cgroup python 1}] y [\ref{img: cgroup python 2}], la salida del programa no coincide. Esto es debido a que como el programa Python ha superado el límite establecido para su grupo, \texttt{cgroups} cerrado bruscamente dicho programa, por lo tanto no nos aparece la memoria consumida por el programa, solo se nos notifica que el proceso con PID 62482 ha pasado a estado ``\textit{killed}''.
 	
 	\addvspace{60px}
 	
@@ -1269,6 +1331,11 @@ $ umount /var/uts-h1
 		\item
 		\label{bib: code tuntap.c}
 		\href{https://programmerclick.com/article/45831226469/}{Principio de diseño del controlador TUN/TAP de la tarjeta virtual}
+		
+		%35
+		\item
+		\label{bib: cgroups}
+		\href{https://www.nginx.com/blog/what-are-namespaces-cgroups-how-do-they-work/}{What are namespaces cgroups how do they work}
 		
 		% X
 		\item
