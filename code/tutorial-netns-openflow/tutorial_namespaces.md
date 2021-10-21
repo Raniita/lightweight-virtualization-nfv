@@ -31,56 +31,56 @@
 
 
 ## Comentarios
-lsns solo muestra los ns con al menos una aplicación asociada, pero no
+`lsns` solo muestra los ns con al menos una aplicación asociada, pero no
 los definidos "a medio gas". Sin embargo ip netns list muestra los
 net-ns (incluidos los "a medio gas")
 
 Para que el openvswitch funcione, el sistema debe haber arrancado su
 demonio asociado. Lo más facil es hacer:
-systemctl start openvswitch.service
-systemctl enable openvswitch.service (hace el cambio permanente)
+`systemctl start openvswitch.service`
+`systemctl enable openvswitch.service` (hace el cambio permanente)
 
 Si queréis que el switch se comporte como un Learning-switch normal y
 corriente:
-ovs-vsctl set-controller s1 ptcp:127.0.0.1
-ovs-testcontroller ptcp: & (en ubuntu creo que es ovs-controller)
+`ovs-vsctl set-controller s1 ptcp:127.0.0.1`
+`ovs-testcontroller ptcp: &` (en ubuntu creo que es ovs-controller)
 
 ### Ejemplo con unshare:
 #### Namespace UTS 
-unshare --uts /bin/bash
-hostname prueba
-hostname # en las dos terminales
-exit # se destruye el ns
+* `unshare --uts /bin/bash`
+* `hostname prueba`
+* `hostname` # en las dos terminales
+* `exit` destruye el ns
 
 #### Namespace mount
-mkdir /tmp/prueba
-unshare --mount /bin/bash
-mount -n -t tmpfs tmpfs /tmp/prueba
-df -h #ambos terminales
+* `mkdir /tmp/prueba`
+* `unshare --mount /bin/bash`
+* `mount -n -t tmpfs tmpfs /tmp/prueba`
+* `df -h` en ambos terminales
 
 #### Namespace netns
-unshare --net /bin/bash
-ifconfig # ambos terminales
-exit
+* `unshare --net /bin/bash`
+* `ifconfig` en ambos terminales
+* `exit`
 
-// varios ns de diferente tipo
-unshare --net --mount --uts /bin/bash
+Con varios ns de diferente tipo
+* `unshare --net --mount --uts /bin/bash`
 
 ### Namespaces pesistentes
-// que permanezcan después del exit, y retomarlos con un nsenter (es
+Para que un namespace permanezcan después del exit, y retomarlos con un nsenter (es
 decir, cómo crear un ns "a medio gas" y añadirle una app cuando quiera
 con nsenter)
-touch /root/ns-uts
-unshare --uts=/root/ns-uts
-hostname FooBar
-exit
-nsenter --uts=/root/ns-uts /bin/bash
-hostname
-exit
-umount /root/ns-uts # esto mata el ns definitivamente
+* `touch /root/ns-uts`
+* `unshare --uts=/root/ns-uts`
+* `hostname FooBar`
+* `exit`
+* `nsenter --uts=/root/ns-uts /bin/bash`
+* `hostname`
+* `exit`
+* `umount /root/ns-uts # esto mata el ns definitivamente`
 
-// el netns no tiene nombre cuando se crea con unshare ¿cómo arreglarlo?
-en /var/run/netns/ ln -s /proc/<pid>/ns/net h1
+El netns no tiene nombre cuando se crea con unshare ¿cómo arreglarlo?
+en `/var/run/netns/`, ejecutando `ln -s /proc/<pid>/ns/net h1`
 
 ### Recordatorio
 Un netns creado con el comando ip crea automáticamente un
