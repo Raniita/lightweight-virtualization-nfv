@@ -2,8 +2,6 @@
 *.vdi
 *.txt
 
-tutorial_namespaces.md
-
 # Tex and TexStudio things
 *.aux
 *.glo
