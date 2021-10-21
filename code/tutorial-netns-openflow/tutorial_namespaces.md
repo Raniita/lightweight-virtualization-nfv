@@ -22,7 +22,7 @@
 19. `ovs-ofctl add-flow s1 in_port=1,actions=output:2`
 20. `ovs-ofctl add-flow s1 in_port=2,actions=output:1`
 21. (en h1) `ping -c4 10.0.0.2`
-22. # undo
+22. Undo everything
 23. `ovs-vsctl del-br s1`
 24. `ip link delete s1-eth1`
 25. `ip link delete s1-eth2`
