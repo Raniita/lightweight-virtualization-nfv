@@ -215,16 +215,36 @@
 			\label{img: sdn + nfv}
 		\end{center}
 	\end{figure}
-	
-	
+
+	\pagebreak
 	
 	\subsection{Virtualización ligera}
 	
-	\noindent Entendemos la virtualización ligera como un tipo de virtualización de un sistema. Dicha virtualización se hace a nivel de sistema operativo, aportando que existan diferentes espacios de usuarios aislados entre sí, y todo esto estando todos bajo el mismo kernel. Las diferentes implementaciones de % TODO
+	\noindent Entendemos la virtualización ligera como un tipo de virtualización de un sistema. Dicha virtualización se hace a nivel de sistema operativo, aportando que existan diferentes espacios de usuarios aislados entre sí, sin embargo, a diferencia del concepto `\textit{máquina virtual}' (virtualización dura), en la virtualización ligera todos los sistemas virtualizados dependen del \texttt{kernel} de la máquina host, mientras que en el caso de una máquina virtual, cada instancia tendría su propio \texttt{kernel} (ver Figura \ref{img: virtualization comparative}). [\ref{bib: virt ligera}]\\
+	
+	\noindent Por lo tanto, las ventajas destacables sobre la virtualización ligera frente a la virtualización ligera serían:
+	\begin{itemize}
+		\item Un único \texttt{kernel} para todas las instancias que queramos ejecutar.
+		\item Eliminamos el correspondiente \textit{overhead} al no tener que emular un \texttt{kernel} para cada instancia.
+		\item Menor consumo de CPU y RAM, comparado con las virtualizaciones duras.
+		\item Disponen de la posibilidad de iniciar, mover, parar o borrar la instancia virtualizada.
+	\end{itemize}
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.8\textwidth]{img/virtualization_comparative.png}
+			\caption{Comparativa entre virtualización ligera y virtualización dura [\ref{bib_img: comparativa virt}] }
+			\label{img: virtualization comparative}
+		\end{center}
+	\end{figure}
+	
+	% Introducción a los siguientes capítulos
+	\noindent En consecuencia de tener que utilizar un mismo \texttt{kernel} para todas las instancias, tenemos que profundizar sobre los conceptos de interfaces de red virtuales [\ref{sect: interfaces virtuales}] y espacios de nombres [\ref{sect: espacio nombres}], ya que serán piezas clave para tener nuestras instancias aisladas entre sí, pero a su vez conectadas con los diferentes recursos en red que nosotros definamos.
 	
 	\pagebreak
 	
 	\section{Interfaces de red virtuales en \textit{Linux}}
+	\label{sect: interfaces virtuales}
 	\noindent En este capítulo, vamos a profundizar en el concepto de interfaces de red virtuales, pero las específicas al sistema operativo basados en el kernel de Linux. Hacemos esto ya que los servidores utilizados a gran escala, la mayoría hacen uso de distribuciones de Linux. \\ % TODO
 	
 	\noindent Linux dispone de una selección muy diferente de interfaces de red que nos permiten, de manera sencilla, el uso de máquinas virtuales o contenedores. En este apartado vamos a mencionar las interfaces más relevantes de cara a la virtualización ligera que proponemos para el despliegue de una red virtualizada. Para obtener una lista completa de las interfaces disponibles, podemos ejecutar el siguiente comando \texttt{ip link help}.\\
@@ -611,6 +631,7 @@ ping -c 4 192.168.209.139 -I tun0
 	
 	\pagebreak
 	\section{Espacio de nombres en \textit{Linux}}
+	\label{sect: espacio nombres}
 	\subsection{¿Qué es un \textit{espacio de nombres}?}
 	\noindent Los \textit{espacios de nombres}, o también llamados, \textit{namespaces}, son una característica del kernel de Linux que permite gestionar los recursos del kernel, pudiendo limitarlos a un proceso o grupo de procesos. Suponen una base de tecnología que aparece en las técnicas de virtualización más modernas (como puede ser Docker, Kubernetes, etc). A un nivel alto, permiten aislar procesos respecto al resto del kernel. \\
 	
@@ -1135,7 +1156,7 @@ $ umount /var/uts-h1
 
 	\pagebreak
 	
-	\section{Virtualización}
+	\section{Virtualización ligera y contenedores}
 	\subsection{Contenedores usando \texttt{unshare}}
 	\subsection{Contenedores LXC}
 	\subsection{Contenedores Docker}
@@ -1337,6 +1358,11 @@ $ umount /var/uts-h1
 		\label{bib: cgroups}
 		\href{https://www.nginx.com/blog/what-are-namespaces-cgroups-how-do-they-work/}{What are namespaces cgroups how do they work}
 		
+		%36
+		\item
+		\label{bib: virt ligera}
+		\href{https://upcommons.upc.edu/handle/2117/78028?show=full}{TFG. Evaluación de prestaciones mediante NVF}
+		
 		% X
 		\item
 		\label{bib:link20}
@@ -1377,6 +1403,11 @@ $ umount /var/uts-h1
 		\item
 		\label{bib_img: tun tap}
 		\href{https://en.wikipedia.org/wiki/TUN/TAP}{Wikipedia: TUN/TAP}
+		
+		%6
+		\item
+		\label{bib_img: comparativa virt}
+		\href{https://www.slideshare.net/janghoonsim/docker-container-and-lightweight-virtualization}{Docker - container and lightweight virtualization}
 		
 		%\item 
 		%\label{bib:img2}\href{https://twitter.com/b0rk/status/1240364585766576128}{How containers work.}
