@@ -90,6 +90,8 @@
 	\noindent{\large \textbf{NS} (\textit{Network namespace})}. Tipo de espacio de nombres en Linux que tiene por función aislar la parte de red de la máquina host.\\
 	
 	\noindent{\large \textbf{Linux}}. Sistema operativo tipo UNIX, de codigo abierto, multiplataforma, multiusuario y multitarea.\\
+	
+	\noindent{\large \textbf{Unix}}. Sistema operativo portable, multitarea y multiusuario desarrollado a partir de 1969. Se divide en tres tareas básicas: el nucleo de sistema operativo, el interprete de comandos y programadas de utilidades.  \\
 		 
 	\noindent{\large \textbf{Kernel de Linux}}. Núcleo del sistema operativo Linux.\\
 		 
@@ -219,6 +221,7 @@
 	\pagebreak
 	
 	\subsection{Virtualización ligera}
+	\label{sect: virt ligera}
 	
 	\noindent Entendemos la virtualización ligera como un tipo de virtualización de un sistema. Dicha virtualización se hace a nivel de sistema operativo, aportando que existan diferentes espacios de usuarios aislados entre sí, sin embargo, a diferencia del concepto `\textit{máquina virtual}' (virtualización dura), en la virtualización ligera todos los sistemas virtualizados dependen del \texttt{kernel} de la máquina host, mientras que en el caso de una máquina virtual, cada instancia tendría su propio \texttt{kernel} (ver Figura \ref{img: virtualization comparative}). [\ref{bib: virt ligera}]\\
 	
@@ -1227,7 +1230,26 @@ $ umount /var/uts-h1
 	\pagebreak
 	
 	\section{Virtualización ligera y contenedores}
-	\subsection{Contenedores usando \texttt{unshare}}
+	\noindent En este capítulo vamos a trabajar el concepto de virtualización ligera, que ya introdujimos en el apartado \ref{sect: virt ligera}, pero esta vez aplicando los conceptos de \texttt{namespaces} del apartado anterior. Además, presentaremos el concepto de \textit{contenedor}, y como supone una de las piezas más importantes para la virtualización tal y como hoy día la conocemos. \\
+	
+	\noindent Recuperando la definición de \textbf{virtualización ligera}, entendemos este tipo de virtualización como aquella que \textbf{se realiza a nivel de sistema operativo}, permitiendo la coexistencia de diferentes espacios aislados entre sí. En dichos espacios, podremos ejecutar de manera aislada nuestras aplicaciones. Como punto en común, todos los espacios aislados que creemos, \textbf{utilizarán} como base \textbf{el mismo \texttt{kernel}}. La tecnología clave para realizar esta virtualización serán los diferentes \texttt{namespaces}, comentados en el apartado \ref{sect: espacio nombres}, que podremos combinar a nuestro gusto con el fin de crear un espacio aislado con todos los recursos necesarios para satisfacer las necesidades de nuestra aplicación. \\
+	
+	\noindent La principal ventaja que encontramos al utilizar \texttt{namespaces}, respecto a otro tipo de virtualizaciones como podrían ser las máquinas virtuales, es el aprovechamiento de los recursos de la máquina host. Al tener todos el mismo kernel, evitamos tener por duplicados los kernels para cada una de las instancias a realizar, ahorrando ciclos de CPU, como espacio en RAM.\\
+	
+	\noindent Por otro lado, tenemos el concepto de \textbf{contenedor}. Entendemos contenedor, en el ambito de la virtualización, como una abstracción a alto nivel de un sistema aislado creado utilizando \texttt{namespaces} y \texttt{cgroups}. Por lo tanto, si el kernel nos da la posibilidad de trabajar a bajo nivel utilizando dichos \texttt{namespaces}, en este caso, buscamos ir más allá y encapsular dicho espacio aislado en unas APIs de alto nivel, que sean mucho más fáciles de entender y de implementar. Tenemos muchos ejemplos de sistemas que trabajan con contenedores, y muchos de ellos implementados en una amplia variedad de lenguajes [\ref{bib:container is a lie}]. Algunos de los más importantes son:
+	\begin{itemize}
+		\item \texttt{LXC}, LinuX Containers, escrito en C: \url{https://linuxcontainers.org/}
+		\item \texttt{Docker}, escrito en Go: \url{https://www.docker.com/}
+		\item \texttt{Podman}, escrito en Go: \url{https://podman.io/}
+		\item \texttt{systemd-nspawn}, escrito en C, implementado dentro de \texttt{systemd}: \url{https://github.com/systemd/systemd}
+		\item \texttt{Vagga}, escrito en Rust: \url{https://github.com/tailhook/vagga}
+	\end{itemize}
+
+	\noindent Por último, es interesante comentar el concepto de \texttt{chroot}, ya que muchas de estas abstracciones de los \texttt{namespaces} hacen uso de esta técnica para su funcionamiento. Un \texttt{chroot} es una operación Unix que permite cambiar la ruta aparente de un directorio para un usuario en específico. Un proceso ejecutado después de realizar un \texttt{chroot} solo tendrá acceso al nuevo directorio definido y a sus subdirectorios, esta operación recibe el nombre de \texttt{chroot jail}, ya que los procesos no pueden leer ni escribir fuera del nuevo directorio. Este método suele ser de gran utilidad en virtualizaciones a nivel de kernel, es decir, virtualización ligera o contenedores. [\ref{bib: chroot jail}]
+	
+	\pagebreak
+	
+	\subsection{Creando nuestro propio contenedor}
 	\subsection{Contenedores LXC}
 	\subsection{Contenedores Docker}
 	
@@ -1268,7 +1290,7 @@ $ umount /var/uts-h1
 		
 		%4
 		\item 
-		\label{bib:link4} \href{https://platform.sh/blog/2020/the-container-is-a-lie/}{\textit{Container is a lie. Namespaces}}
+		\label{bib:container is a lie} \href{https://platform.sh/blog/2020/the-container-is-a-lie/}{\textit{Container is a lie. Namespaces}}
 		
 		%5
 		\item 
@@ -1438,10 +1460,20 @@ $ umount /var/uts-h1
 		\label{bib: sock}
 		\href{http://www.icir.org/christian/sock.html}{Aplicación sock}
 		
+		%38
+		\item
+		\label{bib: chroot jail}
+		\href{https://phoenixnap.com/kb/chroot-jail}{What is chroot jail and How to Use it?}
+		
 		% X
 		\item
-		\label{bib:link20}
-		\href{https://jsitech1.gitbooks.io/meet-docker/content/fundamentos_de_docker.html}{Fundamentos de Docker}
+		\label{bib: docker works namespaces}
+		\href{https://www.youtube.com/watch?v=-YnMr1lj4Z8}{Youtube LiveOverflow: How Docker Works - Intro to Namespaces}
+		
+		% X
+		%\item
+		%\label{bib:link20}
+		%\href{https://jsitech1.gitbooks.io/meet-docker/content/fundamentos_de_docker.html}{Fundamentos de Docker}
 		
 	\end{enumerate}
 
