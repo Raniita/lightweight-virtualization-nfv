@@ -499,7 +499,7 @@ tunctl -n
 ip addr add 192.168.0.254/24 dev tap0
 ip link set tap0 up
 # Add routing to interface
-route add -host 192.168.0.1 dev tap0
+ip route add 192.168.0.1 dev tap0
 
 # Delete interface
 tunctl -d tap0
@@ -522,6 +522,8 @@ ip tuntap del dev tun0 mod tun		# delete tun
 	\end{lstlisting}
 
 	\pagebreak
+	
+	\noindent \textbf{\large Ejemplo de aplicación que crea una interfaz tuntap}\\
 
 	\noindent Por otro lado, otra manera de trabajar con estas interfaces, es dejar que el programa que estemos utilizando cree dichas interfaces. Es por esto por lo que dentro del programa podemos definir que se refiera a la ruta \texttt{/dev/net/tun} para crear la interfaz necesaria. A modo de ejemplo, se implementa un programa en C que crea una interfaz TUN/TAP (en el programa elegimos cual de las dos queremos) y que devuelve el tamaño de los paquetes que reciba en dicha interfaz. Este ejemplo nos sirve para comprobar con una aplicación puede crear y gestionar una interfaz, y además, mediante un programa externo de captura de paquetes (\texttt{Wireshark}, \texttt{tcpdump}, etc...) ver los paquetes que llegan a la interfaz y cual es su estructura. \\
 	
@@ -624,9 +626,77 @@ tcpdump -i tun0
 ping -c 4 192.168.209.139 -I tun0
 	\end{lstlisting}
 	
+	\pagebreak
 	
+	%\vspace{10px}
+	\noindent \textbf{\large Ejemplo aislamiento entre puertos usando interfaz tuntap}\\
 	
-	% Ejemplo: Intentar Bindear App a un TAP del Kernel (socket.bind)
+	\noindent En este ejemplo, queremos comprobar el funcionamiento de una interfaz \texttt{tap}, pero poniéndonos en el caso de que el usuario cree dicha interfaz mediante el comando \texttt{ip} y un programa externo se asocie a dicha interfaz. Para ello, vamos a utilizar la aplicación \texttt{sock} [\ref{bib: sock}], que nos servirá para crear un socket IP en un puerto específico.
+	
+	\begin{lstlisting}[language=Bash, caption={Compilar e instalar programa \texttt{sock} (\ref{bib: sock})}]
+mkdir ~/tmp
+cd tmp
+tar zxvf sock-0.3.2.tar.gz
+cd sock-0.3.2
+./configure
+make
+sudo make install
+	\end{lstlisting}
+
+	\noindent Una vez tenemos el programa instalado, podemos proceder a crear la interfaz \texttt{tap}.
+	
+	\begin{lstlisting}[language=Bash, caption={Creación interfaz TAP}]
+ip tuntap add dev tap0 mode tap
+ip address add 192.168.3.1/24 dev tap0
+ip link set tap0 up
+ip route add 192.168.3.1 dev tap0
+	\end{lstlisting}
+
+	%\pagebreak
+	
+	\noindent Una vez ya tenemos creada la interfaz, podemos proceder a comprobar la funcionalidad utilizando el programa \texttt{sock}. Para ello, vamos a crear dos instancias cliente-servidor, cada una con un puerto asociado diferente.
+	
+	\begin{lstlisting}[language=Bash, caption={Uso de aplicacion \texttt{sock} para crear cliente servidor asociado a un puerto}]
+sock -s 192.168.3.1 1025    # Terminal 1 (servidor)
+sock 192.168.3.1 1025       # Terminal 2 (cliente)
+
+sock -s 192.168.3.1 1026    # Terminal 3 (servidor)
+sock 192.168.3.1 1026       # Terminal 4 (cliente)
+	\end{lstlisting}
+
+	\pagebreak
+
+	\noindent De esta manera, podemos escribir en cada una de las terminales, y comprobar que solo son recibidas por el servidor, o cliente, asociado al puerto de la terminal en cuestión. Es decir, en las interfaces \texttt{tuntap} tenemos aislamiento entre los diferentes puertos, por lo que funcionan de manera equivalente a un enlace \texttt{ethernet} físico. En la figura (\ref{img: ejemplo sock}) podemos ver el ejemplo realizado.
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=1\textwidth]{img/ejemplo_sock.png}
+			\caption{Uso de la aplicación \texttt{sock} con interfaces \texttt{tuntap}.}
+			\label{img: ejemplo sock}
+		\end{center}
+	\end{figure}
+	
+	\noindent Si comprobamos la tabla de enrutamiento de la interfaz creada, \texttt{tap0}, podemos ver como aparece asociado el trafico de la IP que le dimos a dicha interfaz, con que utilice la interfaz \texttt{tap0}. (Ver figura [\ref{img: ip route tap}])
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.75\textwidth]{img/tabla_encaminamiento_tuntap.png}
+			\caption{Tabla de encamientamiento para una interfaz tuntap.}
+			\label{img: ip route tap}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
+	
+	\noindent Por último, podemos comprobar la estructura de los paquetes enviados utilizando programas como \texttt{Wireshark}, \texttt{tcpdump}, etc. Es importante comentar que aunque los paquetes deberían viajar por la interfaz \texttt{tap0}, el kernel los redirige por \texttt{loopback}. En la figura \ref{img: wireshark tuntap} podemos ver un ejemplo de captura de un paquete enviado por el \texttt{tap0}.
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=1\textwidth]{img/wireshark_tuntap.png}
+			\caption{Captura de un paquete emitido por la interfaz \texttt{tap0}.}
+			\label{img: wireshark tuntap}
+		\end{center}
+	\end{figure}
 	
 	
 	\pagebreak
@@ -1362,6 +1432,11 @@ $ umount /var/uts-h1
 		\item
 		\label{bib: virt ligera}
 		\href{https://upcommons.upc.edu/handle/2117/78028?show=full}{TFG. Evaluación de prestaciones mediante NVF}
+		
+		%37
+		\item
+		\label{bib: sock}
+		\href{http://www.icir.org/christian/sock.html}{Aplicación sock}
 		
 		% X
 		\item
