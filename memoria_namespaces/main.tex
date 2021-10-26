@@ -151,7 +151,7 @@
 		\item \textbf{Capítulo 2}: Virtualización de funciones de red.
 		\item \textbf{Capítulo 3}: Interfaces de red virtuales en Linux.
 		\item \textbf{Capítulo 4}: Espacio de nombres en Linux.
-		\item \textbf{Capítulo 5}: Virtualización.
+		\item \textbf{Capítulo 5}: Virtualización ligera y contenedores.
 		\item \textbf{Capítulo 6}: Caso práctico: Virtualización para la simulación de redes.
 		\item \textbf{Capítulo 7}: Conclusiones.
 	\end{itemize}
@@ -1249,9 +1249,102 @@ $ umount /var/uts-h1
 	
 	\pagebreak
 	
-	\subsection{Creando nuestro propio contenedor}
-	\subsection{Contenedores LXC}
-	\subsection{Contenedores Docker}
+	\subsection{Creando nuestro propio ``contenedor''}
+	
+	\pagebreak
+	
+	\subsection{Contenedores \texttt{LXC}}
+	\noindent En ese apartado vamos a comentar la aplicación de contenedores LXC, LinuX Containers. Como bien hemos comentado en el apartado anterior, LXC consiste en una virtualización a nivel de sistema operativo (virtualización ligera), creada por el proyecto \url{linuxcontainers.org}, con el objetivo de poder ejecutar diferentes espacios aislados (contenedores) utilizando un único host, lo llamaremos LXC host. Aunque pueda parecer que estamos ante una técnica de virtualización basada en máquinas virtuales, se trata de espacios virtuales, en los que cada uno dispone de su propia CPU, memoria, redes, etc. Esto lo consigue gracias al uso de los \texttt{namespaces} y los \texttt{cgroups} en el host LXC. [\ref{bib: LXC arch}]. Algunas de las características más destacables son:
+	\begin{itemize}
+		\item Utiliza mount namespace para conseguir la estructura de directorios propia de una distribución de Linux.
+		\item El proceso asignado a cada namespaces es el \texttt{init}, por lo tanto tendremos un proceso de arranque del sistema.
+		\item Tiene sus propios usuarios, incluido un usuario root.
+		\item Una vez dentro del contenedor, podemos instalar aplicaciones utilizando el gestor de paquetes de la distribución (\texttt{apt}, \texttt{zipper}, \texttt{pacman}, etc...)
+	\end{itemize}
+
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.2\textwidth]{img/lxc_logo.png}
+			\caption{Logotipo del proyecto \url{linuxcontainers.org} [\ref{bib_img: lxc logo}]}
+		\end{center}
+	\end{figure}
+
+	\noindent \textbf{\large Contenedores sin privilegios}\\
+
+	\noindent Una característica muy importante de este tipo de contenedores es que permiten la posibilidad de configurar contenedores de dos tipos: contenedores con privilegios y contenedores sin privilegios. Esto es importante ya que si definimos un contenedor con privilegios, hay ciertas acciones que nos permitirían realizar comandos en el host. En el caso de que nuestro contenedor sea distribuido por terceros, puede suponer un problema grave de seguridad, ya que un atacante podría tomar el control de nuestro contenedor, y por consiguiente, también podría acceder a la información del host. Es por esto por lo que surge el concepto de contenedores sin privilegios (\textit{unprivileged containers}), considerados como una técnica mucho más segura ya que disponen de un nivel añadido de aislamiento respecto al host. La clave reside en ``mapear'' el UID del usuario \texttt{root} de nuestro contenedor a un UID del host que no tenga permisos de administrador. Por lo tanto, si un atacante consigue acceder a nuestro contenedor, y pudiera acceder al host, se vería con que no tiene permisos para realizar ninguna acción. [\ref{bib: LXC arch}]
+	
+	\pagebreak
+	
+	\noindent \textbf{\large Tipos de configuración de red en el host}\\
+	
+	\noindent LXC soporta dos tipos de conexiones virtuales de red. Estas son las siguientes: 
+	\begin{itemize}
+		\item NAT bridge. En este modo, LXC tiene su propio bridge (\texttt{lxcbr0}) que funciona en conjunto con las aplicaciones \texttt{dnsmasq} e \texttt{iptables} del host, dando lugar a que se puedan utilizar servicios red como DNS, DHCP y NAT dentro del propio contenedor.
+		\item Host bridge. En este modo, ese necesario que el host configure su propio bridge para dar servicio a las aplicaciones que creamos pertinentes. Esta opción nos permite mucha flexibilidad a la hora de interconectar nuestros contenedores para una funcionalidad específica.
+	\end{itemize}
+
+
+	\vspace{20px}
+
+	\noindent \textbf{\large Utilizar NAT bridge en un contenedor}\\
+
+	\noindent A modo de ejemplo, si quisiéramos utilizar redes tipo NAT bridge en un contenedor [\ref{bib: LXC arch}], primero tendríamos que crear el archivo \texttt{/etc/default/lxc-net} con el siguiente contenido:
+	\begin{lstlisting}[language=Bash, caption={Configuración interfaz NAT bridge en LXC}]
+# Leave USE_LXC_BRIDGE as "true" if you want to use lxcbr0 for your
+# containers.  Set to "false" if you'll use virbr0 or another existing
+# bridge, or mavlan to your host's NIC.
+USE_LXC_BRIDGE="true"
+
+# If you change the LXC_BRIDGE to something other than lxcbr0, then
+# you will also need to update your /etc/lxc/default.conf as well as the
+# configuration (/var/lib/lxc/<container>/config) for any containers
+# already created using the default config to reflect the new bridge
+# name.
+# If you have the dnsmasq daemon installed, you'll also have to update
+# /etc/dnsmasq.d/lxc and restart the system wide dnsmasq daemon.
+LXC_BRIDGE="lxcbr0"
+LXC_ADDR="10.0.3.1"
+LXC_NETMASK="255.255.255.0"
+LXC_NETWORK="10.0.3.0/24"
+LXC_DHCP_RANGE="10.0.3.2,10.0.3.254"
+LXC_DHCP_MAX="253"
+# Uncomment the next line if you'd like to use a conf-file for the lxcbr0
+# dnsmasq.  For instance, you can use 'dhcp-host=mail1,10.0.3.100' to have
+# container 'mail1' always get ip address 10.0.3.100.
+#LXC_DHCP_CONFILE=/etc/lxc/dnsmasq.conf
+
+# Uncomment the next line if you want lxcbr0's dnsmasq to resolve the .lxc
+# domain.  You can then add "server=/lxc/10.0.3.1' (or your actual $LXC_ADDR)
+# to your system dnsmasq configuration file (normally /etc/dnsmasq.conf,
+# or /etc/NetworkManager/dnsmasq.d/lxc.conf on systems that use NetworkManager).
+# Once these changes are made, restart the lxc-net and network-manager services.
+# 'container1.lxc' will then resolve on your host.
+#LXC_DOMAIN="lxc"
+	\end{lstlisting}
+
+	\pagebreak
+
+	\noindent Ahora, necesitamos modificar la \textit{template} del contenedor LXC para que utilice la interfaz que hemos configurado. Modificamos la plantilla con ruta \texttt{/etc/lxc/default.conf} tal que:
+	\begin{lstlisting}[language=Bash, caption={Configuración contenedor LXC para usar NAT bridge}]
+lxc.net.0.type = veth
+lxc.net.0.link = lxcbr0
+lxc.net.0.flags = up
+lxc.net.0.hwaddr = 00:16:3e:xx:xx:xx
+	\end{lstlisting}
+
+	\noindent Para que todos estos cambios se realicen, es necesario que tengamos activado el servicio \texttt{lxc-net.service}.
+	\begin{verbatim}
+> sudo systemctl enable lxc-net.service
+> sudo systemctl start lxc-net.service
+	\end{verbatim}
+
+	\vspace{20px}
+
+	\noindent \textbf{\large Crear un contenedor utilizando LXC}\\
+	
+	\pagebreak
+	
+	\subsection{Contenedores \texttt{Docker}}
 	
 	\pagebreak
 
@@ -1465,6 +1558,11 @@ $ umount /var/uts-h1
 		\label{bib: chroot jail}
 		\href{https://phoenixnap.com/kb/chroot-jail}{What is chroot jail and How to Use it?}
 		
+		%39
+		\item
+		\label{bib: LXC arch}
+		\href{https://wiki.archlinux.org/title/Linux_Containers}{ArchLinux Wiki: Linux Containers}
+		
 		% X
 		\item
 		\label{bib: docker works namespaces}
@@ -1515,6 +1613,11 @@ $ umount /var/uts-h1
 		\item
 		\label{bib_img: comparativa virt}
 		\href{https://www.slideshare.net/janghoonsim/docker-container-and-lightweight-virtualization}{Docker - container and lightweight virtualization}
+		
+		%7
+		\item
+		\label{bib_img: lxc logo}
+		\href{https://linuxcontainers.org/}{Linux Containers Logotipo}
 		
 		%\item 
 		%\label{bib:img2}\href{https://twitter.com/b0rk/status/1240364585766576128}{How containers work.}
