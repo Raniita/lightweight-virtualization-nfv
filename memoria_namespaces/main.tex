@@ -1340,7 +1340,106 @@ lxc.net.0.hwaddr = 00:16:3e:xx:xx:xx
 
 	\vspace{20px}
 
-	\noindent \textbf{\large Crear un contenedor utilizando LXC}\\
+	\noindent \textbf{\large Crear un contenedor con privilegios utilizando LXC}\\
+	
+	\noindent Si decidimos crear un contenedor con privilegios, tendríamos que seguir los siguientes pasos [\ref{bib: crear LXC}]:
+	\begin{lstlisting}[language=Bash, caption={Crear un contenedor con privilegios en LXC}]
+sudo lxc-create --template download --name <NombreContenedor>
+	\end{lstlisting}
+
+	\noindent Con este comando, LXC nos preguntará de manera interactiva por un \texttt{root filesystem} para el contenedor a descargar, además de la distribución elegida, la versión o la arquitectura. Si queremos hacerlo de manera que no sea interactivo, podemos crear el contenedor tal que:
+	\begin{lstlisting}[language=Bash, caption={Crear un contendor con privilegios en LXC, modo no interactivo}]
+sudo lxc-create --template download --name <NombreContenedor> -- --dist debian --release stretch --arch amd64
+	\end{lstlisting}
+
+	\noindent De esta manera, ya tendríamos creado nuestro contenedor. Para poder manejar dichos contenedores, es conveniente conocer los comandos disponibles por LXC. Algunos de los más importantes son los siguientes [\ref{bib: crear LXC}]:
+	\begin{itemize}
+		\item \texttt{sudo lxc-ls --fancy}. Lista los contenedores disponibles por el host.
+		\item \texttt{sudo lxc-info --name <NombreContenedor>}. Permite conocer la información de un contenedor específico.
+		\item \texttt{sudo lxc-attach --name <NombreContenedor>}. Nos conecta directamente con la shell de nuestro contenedor.
+		\item \texttt{sudo lxc-start --name <NombreContenedor> --daemon}. Permite arrancar el contenedor.
+		\item \texttt{sudo lxc-stop --name <NombreContendor>}. Permite parar un contenedor que esté en ejecución.
+		\item \texttt{sudo lxc-destroy --name <NombreContenedor>}. Elimina un contenedor, incluido su directorio \texttt{root}.
+	\end{itemize}
+	
+	\pagebreak
+	
+	\noindent Una vez creamos el contenedor, es interesante modificar su configuración para asignarle una interfaz de red. Esto lo haremos modificando el archivo config con ruta: 
+	\begin{verbatim}
+/var/lib/lxc/<NombreContenedor>/config
+	\end{verbatim}
+	\noindent Añadiremos la siguiente configuración para que utilice el \texttt{NAT bridge} que definimos con anterioridad, además de permitir la ejecución de aplicaciones tipo X11, utilizando xorg (aplicaciones con interfaz gráfica) [\ref{bib: xorg arch wiki}].
+	\begin{lstlisting}[language=Bash, caption={Configuración interfaz NAT bridge y aplicaciones X a un contenedor LXC}]
+# Network configuration (bridge)
+lxc.net.0.type = veth
+lxc.net.0.veth.pair = veth_containerLXC
+lxc.net.0.flags = up
+lxc.net.0.ipv4.address = 172.16.27.2/24
+
+## for xorg
+lxc.mount.entry = /dev/dri dev/dri none bind,optional,create=dir
+lxc.mount.entry = /dev/snd dev/snd none bind,optional,create=dir
+lxc.mount.entry = /tmp/.X11-unix tmp/.X11-unix none bind,optional,create=dir,ro
+lxc.mount.entry = /dev/video0 dev/video0 none bind,optional,create=file
+	\end{lstlisting}
+	
+	\noindent Ahora ya tenemos listo el contenedor para arrancarlo, solo nos quedaría asignar una IP válida al host, que también está dentro del \texttt{bridge} de LXC. Para ello, ejecutaremos:
+	\begin{lstlisting}[language=Bash, caption={Asignar IP al host LXC y arrancar un contenedor}]
+ip link add 172.16.27.1/24 dev veth_containerLXC
+sudo lxc-start --name <NombreContenedor>
+sudo lxc-attach --name <NombreContenedor>
+
+# Para ejecutar interfaz grafica
+startx
+	\end{lstlisting}
+
+	\vspace{20px}
+
+	\noindent \textbf{\large Crear un contenedor sin privilegios utilizando LXC}\\
+	
+	\noindent En el caso de optar por la opción más segura, que es la de crear un contenedor sin privilegios en el host. Tendremos que realizar una serie de configuraciones previas [\ref{bib: unprivileged LXC}]. La primera consistirá en crear un usuario sin privilegios para LXC:
+	\begin{verbatim}
+sudo useradd -s /bin/bash -c 'unprivileged lxc user' -m lxc_user
+sudo passwd lxc_user
+	\end{verbatim}
+
+	\noindent Ahora, necesitamos buscar los valores de grupo (subgid) e identificación (subuid) del usuario creado, para ello ejecutamos lo siguiente:
+	\begin{verbatim}
+sudo grep lxc_user /etc/sub{gid,uid}
+	\end{verbatim}
+
+	\noindent Obteniendo por consola una salida similar a la siguiente:
+	\begin{verbatim}
+/etc/subgid:lxc_user:100000:65536
+/etc/subuid:lxc_user:100000:65536
+	\end{verbatim}
+
+	\pagebreak
+	
+	\noindent Utilizando las mismas configuraciones de red que en el aparatado de contenedor con privilegios, procedemos a acceder al usuario asignado a LXC. Ejecutaremos el comando \texttt{id} para conocer los diferentes \texttt{uid} y \texttt{gid} asignados.
+	\begin{verbatim}
+su lxc_user
+id
+	\end{verbatim}
+
+	\noindent Tendremos una salida similar a:
+	\begin{verbatim}
+uid=1002(lxc_user) gid=1002(lxc_user) groups=1002(lxc_user)
+	\end{verbatim}
+
+	\noindent El siguiente paso sería crear los directorios de configuración de LXC, y copiar la configuración \textit{default} a dichos directorios.
+	\begin{verbatim}
+mkdir -p /home/lxc_user/.config/lxc
+cp /etc/lxc/default.conf /home/lxc_user/.config/lxc/default.conf
+	\end{verbatim}
+
+	\noindent Por último, tendríamos que modificar dicho archivo para realizar un ``mapeo de permisos''. Con el fin de asignar la ejecución del contenedor al usuario LXC que acabamos de crear. Al final del archivo \texttt{default.conf} que acabamos de copiar, añadimos lo siguiente:
+	\begin{lstlisting}[language=Bash, caption={Configuración para mapear UID y GID para un contenedor sin privilegios en LXC}]
+lxc.id_map = u 0 100000 65536
+lxc.id_map = g 0 100000 65536
+	\end{lstlisting}
+
+	\noindent Una vez realizados todos estos pasos, ya podríamos crear nuestro contenedor sin privilegios. Lo haríamos de manera similar que en el apartado anterior, es decir utilizando el comando \texttt{lxc-create}. Además, también será importante modificar el archivo \texttt{config} de nuestro contenedor para asignar la interfaz de red y permitir la ejecución de aplicaciones con interfaz gráfica.
 	
 	\pagebreak
 	
@@ -1562,6 +1661,21 @@ lxc.net.0.hwaddr = 00:16:3e:xx:xx:xx
 		\item
 		\label{bib: LXC arch}
 		\href{https://wiki.archlinux.org/title/Linux_Containers}{ArchLinux Wiki: Linux Containers}
+		
+		%40
+		\item
+		\label{bib: crear LXC}
+		\href{https://ubuntu.com/server/docs/containers-lxc}{Ubuntu LXC}
+		
+		%41
+		\item
+		\label{bib: xorg arch wiki}
+		\href{https://wiki.archlinux.org/title/xorg}{ArchLinux Wiki: Xorg}
+		
+		%42
+		\item
+		\label{bib: unprivileged LXC}
+		\href{https://www.cyberciti.biz/faq/how-to-create-unprivileged-linux-containers-on-ubuntu-linux/}{How to create unprivileged LXC container}
 		
 		% X
 		\item
