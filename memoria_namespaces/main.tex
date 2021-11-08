@@ -55,7 +55,7 @@
 	\author{Autor: Enrique Fernández Sánchez \\ Tutor: Josemaria Malgosa Sanahuja \\ \\Universidad Politécnica de Cartagena}
 	
 	%% EDITAR PARA SEGUIMIENTO DE VERSIONES
-	\date{Revisión Octubre 2021}
+	\date{Revisión Noviembre 2021}
 	
 	\maketitle
 	
@@ -1254,7 +1254,7 @@ $ umount /var/uts-h1
 	\pagebreak
 	
 	\subsection{Contenedores \texttt{LXC}}
-	\noindent En ese apartado vamos a comentar la aplicación de contenedores LXC, LinuX Containers. Como bien hemos comentado en el apartado anterior, LXC consiste en una virtualización a nivel de sistema operativo (virtualización ligera), creada por el proyecto \url{linuxcontainers.org}, con el objetivo de poder ejecutar diferentes espacios aislados (contenedores) utilizando un único host, lo llamaremos LXC host. Aunque pueda parecer que estamos ante una técnica de virtualización basada en máquinas virtuales, se trata de espacios virtuales, en los que cada uno dispone de su propia CPU, memoria, redes, etc. Esto lo consigue gracias al uso de los \texttt{namespaces} y los \texttt{cgroups} en el host LXC. [\ref{bib: LXC arch}]. Algunas de las características más destacables son:
+	\noindent En este apartado vamos a comentar la aplicación de contenedores LXC, LinuX Containers. Como bien hemos comentado en el apartado anterior, LXC consiste en una virtualización a nivel de sistema operativo (virtualización ligera), creada por el proyecto \url{linuxcontainers.org}, con el objetivo de poder ejecutar diferentes espacios aislados (contenedores) utilizando un único host, lo llamaremos LXC host. Aunque pueda parecer que estamos ante una técnica de virtualización basada en máquinas virtuales, se trata de espacios virtuales, en los que cada uno dispone de su propia CPU, memoria, redes, etc. Esto lo consigue gracias al uso de los \texttt{namespaces} y los \texttt{cgroups} en el host LXC. [\ref{bib: LXC arch}]. Algunas de las características más destacables son:
 	\begin{itemize}
 		\item Utiliza mount namespace para conseguir la estructura de directorios propia de una distribución de Linux.
 		\item El proceso asignado a cada namespaces es el \texttt{init}, por lo tanto tendremos un proceso de arranque del sistema.
@@ -1444,6 +1444,73 @@ lxc.id_map = g 0 100000 65536
 	\pagebreak
 	
 	\subsection{Contenedores \texttt{Docker}}
+	\noindent En este apartado vamos a profundizar en la herramienta \texttt{Docker}. Al igual que en el caso de \texttt{LXC}, \texttt{Docker} permite la creación y la gestiones de aplicaciones aisladas entre sí, utilizando virtualización ligera; es decir, nos permite gestionar facilmente un entorno de contenedores. \\
+	
+	\noindent Tal y como lo definen sus creadores [\ref{bib: docker info}], \texttt{Docker} es una plataforma de desarrollo, despliegue y ejecución de aplicaciones. \texttt{Docker} permite separar entre aplicaciones de tu infraestructura, permitiendo desplegar el software mucho más rápido. Uno de los objetivos que persigue esta plataforma es el de minimizar el tiempo entre programar y tener ejecutando la aplicación en producción. Algunas de las ventajas que nos aporta esta plataforma son:
+	\begin{itemize}
+		\item Ejecutar aplicaciones de manera aislada, uso de contenedores.
+		\item Desplegar un número elevado de contenedores en un mismo host.
+		\item Contenedores ligeros y que además, contienen todo lo necesario para ejecutar la aplicación. Independientemente del host.
+		\item Facilidad a la hora de compartir contenedores con otros compañeros.
+		\item Equivalencia entre despliegue local y despliegue en producción.
+	\end{itemize}
+
+	\vspace{5px}
+	\noindent \textbf{\large Arquitectura de \texttt{Docker}}\\
+	
+	\noindent \texttt{Docker} utiliza una arquitectura de cliente-servidor. El cliente de \texttt{Docker} se comunica con un ``demonio'' de la máquina host (servicio en ejecución en segundo plano), que tiene como funciones: crear, ejecutar y distribuir los contenedores \texttt{Docker}. Gracias a esta arquitectura, el cliente \texttt{Docker} puede estar en la misma máquina, o bien se puede conectar a un ``demonio'' remoto, esto se puede realizar utilizando una REST API (conectar a máquina remota) o bien UNIX sockets (conectar a máquina local)[\ref{bib: docker info}]. 
+	
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.675\textwidth]{img/architecture-docker.png}
+			\caption{Arquitectura Docker [\ref{bib_img: docker arch}]}
+		\end{center}
+	\end{figure}
+	
+	\pagebreak
+	
+	\noindent \textbf{\large Tecnología utilizada por \texttt{Docker}}\\
+	
+	\noindent \texttt{Docker} está desarrollado en el lenguaje de programación Go (\url{https://golang.org/}), y utiliza las ventajas aportadas por el kernel de Linux para desarrollar su funcionalidad. Estas tecnologías son, los \texttt{namespaces}, explicados en el apartado \ref{sect: espacio nombres}, que nos permiten aislar los diferentes espacios de trabajo de nuestras aplicaciones; especialmente utilizarán \texttt{cgroups} para aplicar reglas a la hora de ejecutar cada contenedor. [\ref{bib: docker info}]
+	
+	\vspace{10px}
+	
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.6\textwidth]{img/docker_logo.png}
+			\caption{Logotipo de Docker [\ref{bib_img: docker logo}]}
+		\end{center}
+	\end{figure}
+	
+	\vspace{10px}
+	\noindent \textbf{\large Primeros pasos en \texttt{Docker}}\\
+	
+	\noindent Lo primero que tendremos que hacer para utilizar \texttt{Docker}, es proceder a instalar dicha herramienta. Para ello, tendríamos que seguir los pasos que se nos especifican en \url{https://docs.docker.com/get-docker/}. \\
+	
+	\noindent Una vez instalado, podemos comprobar que el ``demonio'' está funcionando si ejecutamos los siguientes comandos desde el cliente de docker.
+	\begin{verbatim}
+sudo docker version
+	\end{verbatim}
+
+	\noindent El comando nos devovlerá información sobre el cliente de docker e intentará conectar con el ``demonio''. En el caso de que nos responda como en la imagen (\ref{img: docker version}), tendremos que ejecutar el comando:
+	\begin{verbatim}
+sudo systemctl start docker.service
+	\end{verbatim}
+	
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.9\textwidth]{img/docker_version.jpg}
+			\caption{Ejecución comando \texttt{docker version} sin ``demonio'' en funcionamiento}
+			\label{img: docker version}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
+	
+	
+	
+	
+	
 	
 	\pagebreak
 
@@ -1677,10 +1744,17 @@ lxc.id_map = g 0 100000 65536
 		\label{bib: unprivileged LXC}
 		\href{https://www.cyberciti.biz/faq/how-to-create-unprivileged-linux-containers-on-ubuntu-linux/}{How to create unprivileged LXC container}
 		
+		
+		%43
+		\item
+		\label{bib: docker info}
+		\href{https://docs.docker.com/get-started/overview/}{Docker overview}
+		
 		% X
 		\item
 		\label{bib: docker works namespaces}
 		\href{https://www.youtube.com/watch?v=-YnMr1lj4Z8}{Youtube LiveOverflow: How Docker Works - Intro to Namespaces}
+		
 		
 		% X
 		%\item
@@ -1732,6 +1806,16 @@ lxc.id_map = g 0 100000 65536
 		\item
 		\label{bib_img: lxc logo}
 		\href{https://linuxcontainers.org/}{Linux Containers Logotipo}
+		
+		%8
+		\item
+		\label{bib_img: docker arch}
+		\href{https://docs.docker.com/get-started/overview/}{Imagen Docker Architecture}
+		
+		%9
+		\item
+		\label{bib_img: docker logo}
+		\href{https://commons.wikimedia.org/wiki/File:Docker_(container_engine)_logo.png}{Logotipo \texttt{Docker}}
 		
 		%\item 
 		%\label{bib:img2}\href{https://twitter.com/b0rk/status/1240364585766576128}{How containers work.}
