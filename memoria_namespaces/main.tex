@@ -1469,7 +1469,7 @@ lxc.id_map = g 0 100000 65536
 	
 	\pagebreak
 	
-	\noindent \textbf{\large Tecnología utilizada por \texttt{Docker}}\\
+	\noindent \textbf{\large Tecnologías utilizadas por \texttt{Docker}}\\
 	
 	\noindent \texttt{Docker} está desarrollado en el lenguaje de programación Go (\url{https://golang.org/}), y utiliza las ventajas aportadas por el kernel de Linux para desarrollar su funcionalidad. Estas tecnologías son, los \texttt{namespaces}, explicados en el apartado \ref{sect: espacio nombres}, que nos permiten aislar los diferentes espacios de trabajo de nuestras aplicaciones; especialmente utilizarán \texttt{cgroups} para aplicar reglas a la hora de ejecutar cada contenedor. [\ref{bib: docker info}]
 	
@@ -1492,7 +1492,7 @@ lxc.id_map = g 0 100000 65536
 sudo docker version
 	\end{verbatim}
 
-	\noindent El comando nos devovlerá información sobre el cliente de docker e intentará conectar con el ``demonio''. En el caso de que nos responda como en la imagen (\ref{img: docker version}), tendremos que ejecutar el comando:
+	\noindent El comando nos devolverá información sobre el cliente de docker e intentará conectar con el ``demonio''. En el caso de que nos responda como en la imagen (\ref{img: docker version}), tendremos que ejecutar el comando:
 	\begin{verbatim}
 sudo systemctl start docker.service
 	\end{verbatim}
@@ -1506,6 +1506,51 @@ sudo systemctl start docker.service
 	\end{figure}
 
 	\pagebreak
+	
+	\noindent Una vez comprobado que tenemos conexión con el ``daemon''. Lo siguiente, será ejecutar nuestro primer contenedor. En este caso, haremos uso de un contenedor ``especial" que nos verifica la instalación de docker en nuestros host. Para ello, ejecutamos el siguiente comando:
+	\begin{verbatim}
+docker run hello-world
+	\end{verbatim}
+
+	\noindent Una vez termina de ejecutarse el comando, la salida por consola que obtendremos sería equivalente a la siguiente figura:
+	
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.8\textwidth]{img/docker_hello-world.png}
+			\caption{Ejecución comando \texttt{docker run hello-world} para comprobar instalación}
+			\label{img: docker hello world}
+		\end{center}
+	\end{figure}
+
+	\noindent Como podemos ver en la figura \ref{img: docker hello world}, el contenedor nos muestra por consola los pasos que ha seguido para completar su ejecución. Antes de comentar los pasos seguidos, es importante aclarar el concepto de ``imagen''. \\
+	
+	\noindent Llamamos imagen de Docker a un archivo de sistema, compuesto por diferentes capas de información, que es utilizado para desplegar un contenedor de Docker. Entendemos estas imágenes como la plantilla base desde la que partimos para crear nuevos contenedores para ejecutar aplicaciones, o bien para crear una nueva imagen.\\
+	
+	\pagebreak
+	
+	\noindent Una vez estamos familiarizados con el concepto de imagen, podemos proceder a comentar los pasos realizados por Docker para mostrarnos el mensaje de la figura \ref{img: docker hello world}. Dichos pasos serían los siguientes:
+	\begin{enumerate}
+		\item El cliente de docker contacta con el ``daemon'' de docker.
+		\item El ``daemon'' descarga la imagen  ``hello-world'' del respositorio público de imagenes de docker (Docker Hub).
+		\item El ``daemon'' crea un nuevo contenedor a partir de esa imagen, que correrá un ejecutable que producen la salida que hemos obtenido.
+		\item El ``daemon'' envia la información de salida del contendor al cliente de docker, permitiendo al usuario ver la salida en su terminal.
+	\end{enumerate}
+
+	\noindent Por otro lado, en esa misma ejecutión del contendor ``hello-world'', se nos invita a ejecutar lo siguiente:
+	\begin{verbatim}
+docker run -it ubuntu bash
+	\end{verbatim}
+
+	\noindent Si analizamos la sintaxis del comando anterior, podemos diferenciar entre cinco elementos diferentes:
+	\begin{itemize}
+		\item \texttt{docker}. Binario de la máquina linux, corresponde con el cliente de docker.
+		\item \texttt{run}. Argumento del cliente de docker, permite crear y ejecutar un contenedor.
+		\item \texttt{-it}. Opciones del argumento \texttt{run}. En este caso, tenemos configurado que sea de tipo interactivo (\texttt{-i}), es decir que nos muestre por consola la salida del comando; y además, hemos seleccionado que configure el terminal como un terminal dentro del contenedor que vamos a crear (\texttt{-t}).
+		\item \texttt{ubuntu}. Imagen que hemos elegido para nuestro contenedor. Primero la buscará localmente, y si no la encuentra, comprobará en el repositorio público de imágenes (Docker Hub).
+		\item \texttt{bash}. Binario a ejecutar dentro del contenedor, en este caso corresponde con una consola shell.
+	\end{itemize}
+
+	\noindent Una vez ejecutamos dicho comando, automáticamente se crea un contendor con una imagen de \texttt{ubuntu} y se nos ejecuta una consola, en la que podemos navegar y trabajar de manera aislada a nuestra máquina host. 
 	
 	
 	
