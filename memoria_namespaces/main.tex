@@ -1550,12 +1550,126 @@ docker run -it ubuntu bash
 		\item \texttt{bash}. Binario a ejecutar dentro del contenedor, en este caso corresponde con una consola shell.
 	\end{itemize}
 
-	\noindent Una vez ejecutamos dicho comando, automáticamente se crea un contendor con una imagen de \texttt{ubuntu} y se nos ejecuta una consola, en la que podemos navegar y trabajar de manera aislada a nuestra máquina host. 
+	\noindent Una vez ejecutamos dicho comando, automáticamente se crea un contendor con una imagen de \texttt{ubuntu} y se nos ejecuta una consola, en la que podemos navegar y trabajar de manera aislada a nuestra máquina host. (ver Figuras \ref{img: docker ubuntu} e \ref{img: docker ubuntu ver}).
 	
+	\pagebreak
 	
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.9\textwidth]{img/docker_ubuntu.png}
+			\caption{Ejecución comando \texttt{docker run -it ubuntu bash} para levantar un contenedor ubuntu}
+			\label{img: docker ubuntu}
+		\end{center}
+	\end{figure}
+
+
+	\noindent Para comprobar que estamos en una distribución ubuntu, y además ver la versión que el docker ``daemon'' ha descargado, ejecutamos el comando siguiente. Como podemos comprobar, el contenedor está utilizando la última versión LTS (Long Term Support, versiones más estables y probadas que tendrán soporte durante un largo periodo de tiempo) disponible hasta la fecha.
 	
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.9\textwidth]{img/docker_ubuntu_ver.png}
+			\caption{Comprobación de la versión de ubuntu del contenedor desplegado}
+			\label{img: docker ubuntu ver}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
+
+	%\vspace{10px}
+	\noindent \textbf{\large Concepto de \texttt{Dockerfile}. Primer contenedor}\\
 	
+	\noindent En este apartado, a modo de ejemplo, vamos a crear nuestro propio contenedor en el que correremos una aplicación de Python muy sencilla [\ref{bib: docker dockerfile}]. Para ello, primero vamos a crear una carpeta en nuestro ordenador, en ella crearemos dos archivos:
+	\begin{itemize}
+		\item Uno se llamará \texttt{main.py} y contendrá el código que será ejecutado en el contenedor.
+		\item Otro llamado \texttt{Dockerfile}, en el que detallaremos las instrucciones que tiene que seguir docker para crear nuestro contenedor.
+	\end{itemize}
+
+	\noindent Por lo tanto, la carpeta nos quedaría tal que así (ver Figura [\ref{img: docker file folder}]):
 	
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.7\textwidth]{img/dockerfile_folder.png}
+			\caption{Comprobación de la versión de ubuntu del contenedor desplegado}
+			\label{img: docker file folder}
+		\end{center}
+	\end{figure}
+	
+	\begin{enumerate}
+		\item Primero procedemos a editar el archivo Python \texttt{main.py}, para ello utilizamos el siguiente código:
+		\begin{lstlisting}[language=Python, caption=Codigo Python de ejemplo para crear un Dockerfile]
+#!/usr/bin/env python3
+
+print("Saludos desde tu contendor!!")
+		\end{lstlisting}
+	
+		\item Ahora procederemos a la parte de modificar el \texttt{Dockerfile}. \\
+		
+		\noindent Lo primero que tenemos que tener claro es lo que queremos que haga nuestro contenedor. En este caso sería que ejecutase el código Python de \texttt{main.py}, en otro caso podría ser que quisiéramos desplegar otro tipo de aplicación. Para hacer esto, primero tenemos que buscar una imagen que nos sirva de base para construir nuestro contenedor. En el caso de Python, nos podría servir un \texttt{ubuntu}, ya que viene con Python preinstalado, sin embargo, vamos a buscar una imagen mucho más especifica. Para ello, nos dirigimos a la página de \texttt{DockerHub} \url{https://hub.docker.com/} y buscamos Python en el buscador (ver Figura \ref{img: dockerhub python}).
+	
+	\pagebreak
+	
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.9\textwidth]{img/dockerhub_python.png}
+			\caption{Búsqueda en \texttt{DockerHub} de una imagen base para nuestro contenedor.}
+			\label{img: dockerhub python}
+		\end{center}
+	\end{figure}
+	
+	\noindent El primer resultado que obtenemos es el de una imagen de contenedor que nos permite ejecutar código Python. Además, podemos ver como es muy apoyada por la comunidad (dato importante de cara a al estabilidad y seguridad de nuestro contenedor). Por lo tanto, usaremos la imagen \texttt{python} para utilizarla como base de nuestro contenedor. Ahora, procedemos a editar el archivo \texttt{Dockerfile} tal que así:
+	\begin{lstlisting}[language=bash, caption={Contenido del archivo Dockerfile para crear contenedor con código Python}]
+		# Un Dockerfile siempre necesita importar una imagen como base
+		# Para ello utilizamos 'FROM'
+		# Elegimos 'python' para la imagen y 'latest' como version de esa imagen
+		FROM python:latest
+		
+		# Para ejecutar nuestro codigo Python, lo copiamos dentro del contenedor
+		# Para ello utilizamos 'COPY'
+		# El primer parametro 'main.py' es la ruta origen del archivo en el host
+		# El segundo parametro '/' es la ruta destino del archivo dentro del contenedor
+		# En este caso, ponemos el archivo en el root del sistema
+		COPY main.py /
+		
+		# Definimos el comando a ejecutar cuando iniciemos el contenedor
+		# Para ello utilizamos 'CMD'
+		# Para ejecutar la aplicacion utilizariamos "python ./main.py".
+		CMD [ "python", "./main.py" ]
+	\end{lstlisting}
+	
+	\pagebreak
+	
+	\item Una vez tenemos los dos archivos, ya podemos crear la imagen de nuestro contenedor (ver Figura \ref{img: dockerfile python build}). Para ello, tenemos que ejecutar el siguiente comando:
+	\begin{verbatim}
+$ docker build -t python-hello_world .
+	\end{verbatim}
+
+	\noindent La opción \texttt{-t} nos permite asignar un nombre a nuestra imagen, en nuestro caso hemos elegido \texttt{python-hello\_world}.
+	
+	\item Ya tenemos nuestra imagen creada, por lo que podemos ejecutar nuestro contenedor y comprobar que nuestro código Python se ejecuta correctamente. Para lanzar el contenedor ejecutamos el siguiente comando:
+	\begin{verbatim}
+$ docker run python-hello_world
+	\end{verbatim}
+
+	\noindent En la terminal deberíamos comprobar el código se ha ejecutado correctamente (ver Figura \ref{img: dockerfile python run}).
+	
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.82\textwidth]{img/dockerfile_build.png}
+			\caption{Creación de imagen Docker para aplicación Python de pruebas}
+			\label{img: dockerfile python build}
+		\end{center}
+	\end{figure}
+
+	\begin{figure}[h]
+		\begin{center}
+			\includegraphics[width=0.85\textwidth]{img/dockerfile_run.png}
+			\caption{Ejecución de la imagen Docker creada, utilizando \texttt{Dockerfile}}
+			\label{img: dockerfile python run}
+		\end{center}
+	\end{figure}
+	
+
+	\end{enumerate}
 	
 	\pagebreak
 
@@ -1794,6 +1908,11 @@ docker run -it ubuntu bash
 		\item
 		\label{bib: docker info}
 		\href{https://docs.docker.com/get-started/overview/}{Docker overview}
+		
+		%44
+		\item
+		\label{bib: docker dockerfile}
+		\href{https://www.freecodecamp.org/news/a-beginners-guide-to-docker-how-to-create-your-first-docker-application-cc03de9b639f/}{A beginner's guide to Docker - how to create your first Docker application}
 		
 		% X
 		\item
