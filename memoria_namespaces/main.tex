@@ -798,6 +798,12 @@ $ hostname			# original hostname
 	\pagebreak
 	
 	\subsubsection{Mount namespace}
+	\noindent Este \texttt{namespace} fue el primero en aparecer en el Kernel de Linux, apareció en la versión 2.4.19, en 2002. El objetivo era restringir la visualización de la jerarquía global de archivos, dando lugar a que cada namespace tenga su propio ``set'' de puntos de montaje (directorio, archivo o enlace simbólico, que al crearse forma parte del sistema de archivos del sistema). [\ref{bib: mount namespace info 1}][\ref{bib: mount namespace info 2}] \\
+	
+	\noindent Una vez iniciamos el sistema, solo existe un único \texttt{mount namespace}, al que llamamos ``namespace inicial''. Los nuevos \texttt{mount namespaces} que creemos los haremos utilizando las siguientes llamadas al sistema: \texttt{clone()}, para crear un nuevo proceso asociado en el nuevo namespaces; o bien utilizando \texttt{unshare()}, para mover un proceso dentro del nuevo namespace. Cuando creamos un nuevo \texttt{mount namespace}, este recibe una copia del punto de montaje inicial, replicado por el \texttt{namespace} que lo llamada. [\ref{bib: mount namespace info 2}] \\
+	
+	\noindent Un concepto importante es que los \texttt{mount namespaces}, por defecto tienen activado la funcionalidad del kernel llamada \texttt{shared subtree}. Esto permite que cada punto de montaje que tengamos en nuestra máquina pueda tener su propio tipo de propagación asociado. Esta información permite que nuevos puntos de montaje en ciertas rutas se propagen a otros puntos de montaje. A modo de ejemplo, si conectamos un USB a nuestro sistema, y este se monta automáticamente en la ruta \texttt{/MI\_USB}, el contenido solo estará visible en otros \texttt{namespaces} si la propagación está configurada correctamente. [\ref{bib: mount namespace redhat}] \\
+	
 	\par \noindent Un \textit{mount namespace (mnt)} supone otro tipo de espacio de nombres, en este caso relacionado con los \textit{mounts} de nuestro sistema. Lo primero es entender a que nos referimos cuando hablamos de \textit{mount}. \textit{Mount}, o montaje, hace referencia a conectar un sistema de archivos adicional que sea accesible para el sistema de archivos actual de un ordenador. Un \texttt{mount}, tiene asignado lo que se llama \textit{mount point}, que corresponde con el directorio en el que está accesible el sistema de archivo que previamente hemos montado.\\
 	
 	\par \noindent Por lo tanto, un namespace de tipo \textit{mount} nos permite modificar un sistema de archivos en concreto, sin que el host pueda ver y/o acceder a dicho sistema de archivos. Un ejemplo básico de esta funcionalidad podría ser la siguiente:
@@ -1721,7 +1727,7 @@ $ docker run python-hello_world
 		
 		%7
 		\item
-		\label{bib:link7} \href{https://www.redhat.com/sysadmin/mount-namespaces}{\textit{Build a container by hand: the mount namespace}}
+		\label{bib: mount namespace redhat} \href{https://www.redhat.com/sysadmin/mount-namespaces}{\textit{Build a container by hand: the mount namespace}}
 		
 		
 		%8
@@ -1913,6 +1919,16 @@ $ docker run python-hello_world
 		\item
 		\label{bib: docker dockerfile}
 		\href{https://www.freecodecamp.org/news/a-beginners-guide-to-docker-how-to-create-your-first-docker-application-cc03de9b639f/}{A beginner's guide to Docker - how to create your first Docker application}
+		
+		%45
+		\item
+		\label{bib: mount namespace info 1}
+		\href{https://www.schutzwerk.com/en/43/posts/namespaces_02_mnt/}{Linux containers primitives: mount namespaces and information leaks}
+		
+		%46
+		\item
+		\label{bib: mount namespace info 2}
+		\href{https://lwn.net/Articles/689856/}{Mount namespaces and shared subtrees}
 		
 		% X
 		\item
