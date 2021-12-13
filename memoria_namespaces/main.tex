@@ -800,17 +800,20 @@ $ hostname			# original hostname
 	\subsubsection{Mount namespace}
 	\noindent Este \texttt{namespace} fue el primero en aparecer en el Kernel de Linux, apareció en la versión 2.4.19, en 2002. El objetivo era restringir la visualización de la jerarquía global de archivos, dando lugar a que cada namespace tenga su propio ``set'' de puntos de montaje (directorio, archivo o enlace simbólico, que al crearse forma parte del sistema de archivos del sistema). [\ref{bib: mount namespace info 1}][\ref{bib: mount namespace info 2}] \\
 	
-	\noindent Una vez iniciamos el sistema, solo existe un único \texttt{mount namespace}, al que llamamos ``namespace inicial''. Los nuevos \texttt{mount namespaces} que creemos los haremos utilizando las siguientes llamadas al sistema: \texttt{clone()}, para crear un nuevo proceso asociado en el nuevo namespaces; o bien utilizando \texttt{unshare()}, para mover un proceso dentro del nuevo namespace. Cuando creamos un nuevo \texttt{mount namespace}, este recibe una copia del punto de montaje inicial, replicado por el \texttt{namespace} que lo llamada. [\ref{bib: mount namespace info 2}] \\
+	\noindent Una vez iniciamos el sistema, solo existe un único \texttt{mount namespace}, al que llamamos ``namespace inicial'' (\textit{default}). Los nuevos \texttt{mount namespaces} que creemos los haremos utilizando las siguientes llamadas al sistema: \texttt{clone()}, para crear un nuevo proceso asociado en el nuevo namespaces; o bien utilizando \texttt{unshare()}, para mover un proceso dentro del nuevo namespace. Cuando creamos un nuevo \texttt{mount namespace}, este recibe una copia del punto de montaje inicial, replicado por el \texttt{namespace} que lo llamada. [\ref{bib: mount namespace info 2}] \\
 	
 	\noindent Un concepto importante es que los \texttt{mount namespaces}, por defecto tienen activado la funcionalidad del kernel llamada \texttt{shared subtree}. Esto permite que cada punto de montaje que tengamos en nuestra máquina pueda tener su propio tipo de propagación asociado. Esta información permite que nuevos puntos de montaje en ciertas rutas se propagen a otros puntos de montaje. A modo de ejemplo, si conectamos un USB a nuestro sistema, y este se monta automáticamente en la ruta \texttt{/MI\_USB}, el contenido solo estará visible en otros \texttt{namespaces} si la propagación está configurada correctamente. [\ref{bib: mount namespace redhat}] \\
 	
-	\par \noindent Un \textit{mount namespace (mnt)} supone otro tipo de espacio de nombres, en este caso relacionado con los \textit{mounts} de nuestro sistema. Lo primero es entender a que nos referimos cuando hablamos de \textit{mount}. \textit{Mount}, o montaje, hace referencia a conectar un sistema de archivos adicional que sea accesible para el sistema de archivos actual de un ordenador. Un \texttt{mount}, tiene asignado lo que se llama \textit{mount point}, que corresponde con el directorio en el que está accesible el sistema de archivo que previamente hemos montado.\\
+	%\par \noindent Un \textit{mount namespace (mnt)} supone otro tipo de espacio de nombres, en este caso relacionado con los \textit{mounts} de nuestro sistema. Lo primero es entender a que nos referimos cuando hablamos de \textit{mount}. \textit{Mount}, o montaje, hace referencia a conectar un sistema de archivos adicional que sea accesible para el sistema de archivos actual de un ordenador. Un \texttt{mount}, tiene asignado lo que se llama \textit{mount point}, que corresponde con el directorio en el que está accesible el sistema de archivo que previamente hemos montado.\\
 	
-	\par \noindent Por lo tanto, un namespace de tipo \textit{mount} nos permite modificar un sistema de archivos en concreto, sin que el host pueda ver y/o acceder a dicho sistema de archivos. Un ejemplo básico de esta funcionalidad podría ser la siguiente:
+	\par \noindent Por lo tanto, un namespace de tipo \textit{mount} nos permite modificar un sistema de archivos en concreto, sin que el host, o en otros namespaces, pueda ver y/o acceder a dicho sistema de archivos. Podríamos concluir que el objetivo de este espacio de nombres es el de permitir que diferentes procesos puedan tener ``vistas'' diferentes de los puntos del montaje de nuestro sistema. \\
+	
+	
+	\noindent Un ejemplo básico de esta funcionalidad podría ser la siguiente:
 	
 	\addvspace{10px}
 	
-	\begin{lstlisting}[language=bash, caption=Example of usage mount namespace]
+	\begin{lstlisting}[language=bash, caption=Uso de \texttt{mount namespace} con ``bind'']
 $ sudo su		# run a shell in a new mount namespace
 $ unshare -m /bin/sh
 $ mount --bind /usr/bin/ /mnt/
@@ -824,6 +827,40 @@ $ ls /mnt/cp
 	\addvspace{10px}
 	
 	\par \noindent Como vemos en el ejemplo, dentro del namespaces lo que hacemos es crear un \textit{mount} de tipo \textit{bind}, que tiene por función que un archivo de la máquina host se monte en un directorio en específico, en este caso, un directorio unicamente del programa que hemos asignado al namespace. Otro ejemplo de uso de estos namespaces es crear un sistema de archivos temporal que solo sea visible para ese proceso.
+	
+	\pagebreak
+	
+	\noindent \textbf{\large \texttt{tmpfs}}\\
+	
+	\noindent De cara al siguiente ejemplo, es interesante que repasemos la funcionalidad del kernel del linux llamada \texttt{tmpfs}. Dicha funcionalidad permite crear un sistema de archivos temporal dentro de nuestro sistema. El sistema de archivo creado reside completamente en la memoria y/o ``swap'' de nuestro sistema. Este tipo de montajes suele ser muy interesante cuando necesitamos agilizar el acceso a ciertos archivos, ya que al estar en la memoria RAM, la lectura es mucho más rápida que si lo comparamos con un disco duro e incluso un disco duro de estado solido. Sin embargo, el inconveniente que tiene es que el contenido de dicho sistema de archivos se elimina una vez reiniciemos el sistema, ya que este está almacenado en la memoria RAM de nuestro dispositivo. [\ref{bib: tmpfs arch linux}] \\
+	
+	\noindent Este tipo de archivos es comunmente utilizado en los siguientes directorios: \texttt{/tmp}, \texttt{/var/lock}, \texttt{/var/run}, entre otros muchos. Sin embargo, tiene una utilidad muy importante para nuestra propuesta de sistema de archivos dentro de un \texttt{mount namespace}, ya que además de poder comprobar el aislamiento entre los montajes del \texttt{mount namespace} \textit{default}, nos permite crear un montaje que puede ser heredado entre los diferentes \textit{namespaces} que creemos, aprovechando la funcionalidad de \texttt{shared tree}. \\
+	
+	\noindent Un ejemplo de esto podría ser el siguiente: [\ref{bib: mount namespaces containerlabs}]
+	\begin{lstlisting}[language=bash, caption={Uso de \texttt{mount namespaces} con ``tmpfs''}]
+# Creamos un directorio para nuestro sistema de archivos
+$ mkdir /tmp/mount_ns
+
+# Creamos el mount namespaces usando unshare
+$ unshare -m /bin/bash
+
+# Utilizamos tmpfs para crear un punto de montaje dentro del namespaces
+$ mount -n -t tmpfs tmpfs /tmp/mount_ns
+
+# Comprobamos que el montaje se ha creado correctamente
+$ df -h | grep mount_ns
+> tmpfs		7.8G	0	7.8G	0%	/tmp/mount_ns
+$ cat /proc/mounts | grep mount_ns
+> tmpfs		/tmp/mount_ns	tmpfs	rw,relatime		0	0
+
+# En una terminal aparte (fuera del namespaces creado)
+$ cat /proc/mounts | grep mount_ns
+>
+$ df -h | grep mount_ns
+>
+# Comprobamos que en el default namespace no tenemos acceso 
+# al montaje tmpfs que hemos creado
+	\end{lstlisting}
 	
 	% TODO
 	% Ejemplo: limitar un USB a que solo lo vea un namespace
@@ -898,7 +935,7 @@ $ ip netns exec <network-namespace> <command>
 
 	\pagebreak
 	
-	\noindent \textbf{\large Ejemplo práctico}\\
+	\noindent \textbf{\large Ejemplo práctico de \texttt{network namespaces} con NAT}\\
 	\par \noindent Una de las problemáticas que supone el uso de los network namespaces, es que solo podemos asignar \textbf{una interfaz real} a \textbf{un namespace}. Suponiendo el caso en el que el usuario root tenga asignada la interfaz eth0 (identificador de una interfaz de red física), significaría que solo los programas en el namespace de root podrán acceder a dicha interfaz. En el caso de que eth0 sea la salida a Internet de nuestro sistema, pues eso conllevaría que no podríamos tener conexión a Internet en nuestros namespaces. La solución para esto reside en los \textbf{veth-pair}.
 	
 	\addvspace{10px}
@@ -1929,6 +1966,16 @@ $ docker run python-hello_world
 		\item
 		\label{bib: mount namespace info 2}
 		\href{https://lwn.net/Articles/689856/}{Mount namespaces and shared subtrees}
+		
+		%47
+		\item
+		\label{bib: tmpfs arch linux}
+		\href{https://wiki.archlinux.org/title/Tmpfs}{Arch Linux Wiki: Tmpfs}
+		
+		%49
+		\item
+		\label{bib: mount namespaces containerlabs}
+		\href{https://www.containerlabs.kubedaily.com/LXC/Linux%20Containers/Mount-namespaces.html}{CloudNativeLab: Mount namespaces}
 		
 		% X
 		\item
