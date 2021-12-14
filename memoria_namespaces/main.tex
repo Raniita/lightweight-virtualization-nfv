@@ -867,6 +867,86 @@ $ df -h | grep mount_ns
 	
 	\pagebreak
 	
+	\noindent \textbf{\large \texttt{shared subtrees}}\\
+	
+	\noindent Supongamos que un proceso quiere clonar su propio namespace, pero quiere mantener el acceso a un USB que previamente hemos montado en nuestro sistema. Para satisfacer esta situación, podemos utilizar la funcionalidad \texttt{shared subtrees}, ya que nos permite las opciones necesarias para acceder al sistema de archivos, y configurarlo específicamente para cada namespace. [\ref{bib: mount namespaces shared subtree}] \\
+	
+	\noindent \texttt{shared subtrees} nos aporta cuatro maneras diferentes de realizar un montaje. Dichas opciones son las siguientes:
+	\begin{itemize}
+		\item \textbf{\texttt{shared mount}}. Un montaje de este tipo puede ser replicado en tantos puntos de montaje y todas las réplicas seguirán siendo exactamente iguales.
+		\item \textbf{\texttt{slave mount}}. Un montaje de tipo \textit{esclavo} funciona como un montaje compartido, menos para los eventos asociados al montaje y desmontaje, que solo se propagarán hacia él.
+		\item \textbf{\texttt{private mount}}. Un montaje de tipo \textit{privado} no permite realizar ni recibir ningún tipo de propagación.
+		\item \textbf{\texttt{unbindeable mount}}. Un montaje de tipo \textit{privado} que no permite ser asociado/vinculable.
+	\end{itemize}
+
+	\noindent Si quisiéramos asignar alguno de estos tipos de montajes a nuestro dispositivo, tendríamos que hacer uso del comando \texttt{mount} con los siguientes parámetros de estado:
+	\begin{itemize}
+		\item \textbf{\texttt{shared mount}} $\rightarrow$ \texttt{mount --make-shared /mnt}
+		\item \textbf{\texttt{slave mount}} $\rightarrow$ \texttt{mount --make-slave /mnt}
+		\item \textbf{\texttt{private mount}} $\rightarrow$ \texttt{mount --make-private /mnt}
+		\item \textbf{\texttt{unbindeable mount}} $\rightarrow$ \texttt{mount --make-unbindeable /mnt}
+	\end{itemize}
+
+	\noindent Por otro lado, si quisiéramos aplicar los cambios anteriores de manera recursiva para que se cambie el tipo de montaje para todos los montajes por debajo de la jerarquía (\textit{recursivo}) del directorio que determinemos, tendríamos que utilizar los comandos siguientes: [\ref{bib: mount namespaces shared subtree 2}]
+	\begin{itemize}
+		\item \textbf{\texttt{shared mount}} recursivo $\rightarrow$ \texttt{mount --make-\textbf{r}shared /mnt}
+		\item \textbf{\texttt{slave mount}} recursivo $\rightarrow$ \texttt{mount --make-\textbf{r}slave /mnt}
+		\item \textbf{\texttt{private mount}} recursivo $\rightarrow$ \texttt{mount --make-\textbf{r}private /mnt}
+		\item \textbf{\texttt{unbindeable mount}} recursivo $\rightarrow$ \texttt{mount --make-\textbf{r}unbindeable /mnt}
+	\end{itemize}
+
+	\pagebreak
+	
+	\noindent \textbf{\large Casos de uso de \texttt{shared subtrees}}
+	
+	\begin{enumerate}
+		\item Supongamos un proceso que quiere crear un \texttt{namespace}, pero quiere mantener el acceso a un disco duro extraible que previamente estaba montado en el sistema. [\ref{bib: mount namespaces shared subtree}]
+		
+		\begin{lstlisting}[language=bash, caption={Caso de uso de \texttt{shared subtree}}]
+# El administrador del sistema realiza el montaje del usb con 
+# permisos de 'shared'
+$ mount --bind /mnt/usb /mnt/usb
+$ mount --make-shared /mnt/usb
+			
+# Cualquier namespace que se cree tendra acceso a /mnt/usb
+# Por lo tanto, cuando un USB se conecte y se monte, dicho 
+# montaje se propagara a todos los namespaces creados
+		\end{lstlisting}
+	
+		\item Supongamos que un proceso quiere que su montaje sea invisible para otros procesos, pero que a la vez pueda ver el resto de montajes del sistema. [\ref{bib: mount namespaces shared subtree}]
+		
+		\begin{lstlisting}[language=bash, caption={Caso de uso de \texttt{slave mount}}]
+# El administrador permite que todo el sistema sea un subtree de tipo shared
+$ mount --make-rshared /
+			
+# Un proceso puede clonar el sistema de archivos. En un momento, 
+# marca parte de sus archivos como subtree tipo slave
+$ mount --make-rslave /mitreeprivado
+			
+# Por lo tanto, cualquier montaje realizado en /mitreeprivado no aparecera en 
+# el resto de namespaces. Sin embargo, los montajes que se realicen en 
+# ese directorio pero desde el namespaces default si que se progaran 
+# al proceso asociado
+		\end{lstlisting}
+	
+		\item Supongamos que queremos realizar un montaje en el que podamos ``vincular'' dos directorios, de modo que todo lo que hagamos en un directorio se refleje en el otro. [\ref{bib: mount namespaces shared subtree}]
+		
+		\begin{lstlisting}[language=bash, caption={Caso de uso de \texttt{bind} y \texttt{shared subtree}}]
+# El administrador permite que un directorio pueda ser replicado utilizando el tipo shared
+$ mount --make-shared /mnt
+
+# Asignamos un montaje tipo bind a dicho montaje, y lo dirigimos a otro directorio
+$ mount --bind /mnt /tmp
+
+# Los montajes /mnt y /tmp se compartiran mutuamente. Cualquier montaje 
+# o desmontaje que realicemos dentro de esos directorios se veran
+# reflejados en el resto de montajes
+		\end{lstlisting}
+
+	\end{enumerate}
+
+	\pagebreak
+	
 	\subsubsection{Process ID namespace}
 	\par \noindent Para entender en que consiste este namespace, primero tenemos que conocer la definición de \textit{process id} dentro del Kernel. En este caso, \textit{process id} hace referencia a un número entero que utiliza el Kernel para identificar los procesos de manera unívoca. [\ref{bib:pid wikipedia}]\\
 	
@@ -1976,6 +2056,16 @@ $ docker run python-hello_world
 		\item
 		\label{bib: mount namespaces containerlabs}
 		\href{https://www.containerlabs.kubedaily.com/LXC/Linux%20Containers/Mount-namespaces.html}{CloudNativeLab: Mount namespaces}
+		
+		%50
+		\item
+		\label{bib: mount namespaces shared subtree}
+		\href{https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt}{Kernel.org: shared subtrees}
+		
+		%51
+		\item
+		\label{bib: mount namespaces shared subtree 2}
+		\href{https://man7.org/linux/man-pages/man8/mount.8.html}{Linux manual page: mount}
 		
 		% X
 		\item
