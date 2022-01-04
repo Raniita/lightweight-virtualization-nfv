@@ -19,6 +19,8 @@
 # Enable verbose output using:
 #   - sudo VERBOSE=1 ./runtime-exec <command>
 
+# On <application> not found error: 'export PATH=$PATH:/sbin:/usr/sbin:/bin' 
+
 set -e
 
 [[ -n "$VERBOSE" ]] && set -x

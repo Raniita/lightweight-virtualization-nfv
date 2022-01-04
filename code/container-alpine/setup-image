@@ -17,6 +17,8 @@
 # Enable verbose output using:
 #   - sudo VERBOSE=1 ./setup-image
 
+# On <application> not found error: 'export PATH=$PATH:/sbin:/usr/sbin:/bin' 
+
 set -e
 
 [[ -n "$VERBOSE" ]] && set -x
