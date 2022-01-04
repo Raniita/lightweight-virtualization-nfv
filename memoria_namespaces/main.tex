@@ -797,6 +797,9 @@ $ hostname			# original hostname
 	
 	\pagebreak
 	
+	
+	%% TODO: REVISION ENERO
+	%% Distinguir entre un device  (/dev) y una estructura de directorios que se emulan a modo de device
 	\subsubsection{Mount namespace}
 	\noindent Este \texttt{namespace} fue el primero en aparecer en el Kernel de Linux, apareció en la versión 2.4.19, en 2002. El objetivo era restringir la visualización de la jerarquía global de archivos, dando lugar a que cada namespace tenga su propio ``set'' de puntos de montaje (directorio, archivo o enlace simbólico, que al crearse forma parte del sistema de archivos del sistema). [\ref{bib: mount namespace info 1}][\ref{bib: mount namespace info 2}] \\
 	
@@ -1162,6 +1165,8 @@ mkdir /sys/fs/cgroup/memory/<NombreGrupo>
 
 	\pagebreak
 	
+	\noindent \textbf{\large Ejemplo: limitar uso de memoria RAM}\\
+	
 	\noindent Si quisiéramos establecer un límite en el uso de memoria, tendríamos que escribir en el archivo \texttt{memory.limit\_in\_bytes}, a modo de ejemplo, establecemos un límite de 50MB. Esto se haría tal que:
 	\begin{verbatim}
 echo 50000000 > /sys/fs/cgroup/memory/<NombreGrupo>/memory.limit_in_bytes
@@ -1204,7 +1209,13 @@ echo 62482 > /sys/fs/cgroup/memory/test_cg/cgroup.procs
 
 	\pagebreak
 	
-	\noindent Como podemos comprobar en las imágenes [\ref{img: cgroup python 1}] y [\ref{img: cgroup python 2}], la salida del programa no coincide. Esto es debido a que como el programa Python ha superado el límite establecido para su grupo, \texttt{cgroups} cerrado bruscamente dicho programa, por lo tanto no nos aparece la memoria consumida por el programa, solo se nos notifica que el proceso con PID 62482 ha pasado a estado ``\textit{killed}''.
+	\noindent Como podemos comprobar en las imágenes [\ref{img: cgroup python 1}] y [\ref{img: cgroup python 2}], la salida del programa no coincide. Esto es debido a que como el programa Python ha superado el límite establecido para su grupo, \texttt{cgroups} cerrado bruscamente dicho programa, por lo tanto no nos aparece la memoria consumida por el programa, solo se nos notifica que el proceso con PID 62482 ha pasado a estado ``\textit{killed}''. \\
+	
+	\noindent \textbf{\large Ejemplo: limitar uso de CPU}\\
+	
+	%% TODO REVISION ENERO
+	\noindent Por otro lado, si quisieramos limitar el uso de CPU de un programa, ...
+	
 	
 	\addvspace{60px}
 	
@@ -1373,6 +1384,8 @@ $ umount /var/uts-h1
 	\pagebreak
 	
 	\subsection{Creando nuestro propio ``contenedor''}
+	%% TODO
+	
 	
 	\pagebreak
 	
@@ -1562,7 +1575,11 @@ lxc.id_map = u 0 100000 65536
 lxc.id_map = g 0 100000 65536
 	\end{lstlisting}
 
-	\noindent Una vez realizados todos estos pasos, ya podríamos crear nuestro contenedor sin privilegios. Lo haríamos de manera similar que en el apartado anterior, es decir utilizando el comando \texttt{lxc-create}. Además, también será importante modificar el archivo \texttt{config} de nuestro contenedor para asignar la interfaz de red y permitir la ejecución de aplicaciones con interfaz gráfica.
+	\noindent Una vez realizados todos estos pasos, ya podríamos crear nuestro contenedor sin privilegios. Lo haríamos de manera similar que en el apartado anterior, es decir utilizando el comando \texttt{lxc-create}. Además, también será importante modificar el archivo \texttt{config} de nuestro contenedor para asignar la interfaz de red y permitir la ejecución de aplicaciones con interfaz gráfica. \\
+	
+	\noindent \textbf{\large Ejemplo: \texttt{namespaces} en un contenedor LXC de Ubuntu}\\
+	
+	%% TODO REVISION ENERO
 	
 	\pagebreak
 	
@@ -1797,6 +1814,20 @@ $ docker run python-hello_world
 	\pagebreak
 
 	\section{Caso práctico: Virtualización para simulación de redes}
+	\noindent En este apartado vamos a detallar los conceptos de virtualización de topologías de red para la evaluación y/o simulación de situaciones concretas de nuestras redes. Para ello, podemos modelar nuestros nodos de la red utilizando contenedores, siguiendo de esta manera el concepto de ``\textit{Virtual Network Function}'' que introdujimos en el primer apartado de este documento. \\
+	
+	\noindent Como bien hemos visto en el apartado anterior (referencia), un contenedor es una abstracción de alto nivel de un sistema aislado, utilizando ``\textit{namespaces}''. Por lo tanto, tenemos varias maneras de enfocar el camino hacia el objetivo de modelar los nodos de nuestra red. Dichos caminos radican en que metodología de contenedores vamos a utilizar. Por ejemplo, algunos de los caminos a seguir podrían ser los siguientes:
+	
+	\begin{itemize}
+		\item Crear un \textit{shell script} para desplegar los namespaces necesarios de nuestra topología, utilizando los comandos \texttt{nsenter} y \texttt{unshare}.
+		\item Desplegar e interconectar contendores LXC, en el que cada contenedor cumpla una función dentro de nuestra topología (host, switch, controller...)
+		\item Utilizar un simulador de red basado en ``namespaces'', dicho simulador se llama Mininet [\ref{bib: mininet home page}] y está creado en el lenguaje Python. El objetivo de este programa es el de crear una red virtual realista, utilizando un mismo kernel para todos los nodos de la red. Además, aporta las herramientas necesarias para interactuar con dicha topología.
+	\end{itemize}
+	
+	\noindent \textbf{\large Mininet}\\
+	
+	\noindent Profundizando en la última solución aportada, Mininet [\ref{bib: mininet home page}], destacamos sus ventajas en la customización de topologías, además de la facilidad de compartir y desplegar dichas topologías en un hardware consumidor utilizando un único comando. Es por esto por lo que Mininet es una herramienta muy útil para el desarrollo, la enseñanza y la investigación, siendo una herramienta muy importante para la experimentación en el campo del \textit{Software Defined Networking} (SDN) ya que permite utilizar controladores basados en OpenFlow y P4.
+	
 	\subsection{Interconexión física de diferentes red virtuales}
 	\subsection{Evaluación de prestaciones}
 	
@@ -2066,6 +2097,11 @@ $ docker run python-hello_world
 		\item
 		\label{bib: mount namespaces shared subtree 2}
 		\href{https://man7.org/linux/man-pages/man8/mount.8.html}{Linux manual page: mount}
+		
+		%52
+		\item
+		\label{bib: mininet home page}
+		\href{http://mininet.org/}{Mininet: An Instant Virtual Network on your Laptop (or other PC)}
 		
 		% X
 		\item
