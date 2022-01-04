@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# Copyright 2020 Nuvalence <https://github.com/Nuvalence/diy-container.git>
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#   http://www.apache.org/licenses/LICENSE-2.0
+#   https://github.com/Nuvalence/diy-container/blob/master/LICENSE
+#
+# Modified on Jan 2022 by: Enrique Ranii <https://github.com/Raniita/container-alpine.git>
+
+# Deploy a image of Alpine Linux inside a "container". Using rootfs as Union Filesystem
+# Installing apache2 for httpd test, and check on host that network link is enabled
+# Usage:
+#   - sudo ./setup-image
+# Enable verbose output using:
+#   - sudo VERBOSE=1 ./setup-image
+
+set -e
+
+[[ -n "$VERBOSE" ]] && set -x
+
+ROOTFS_URL="http://dl-cdn.alpinelinux.org/alpine/v3.15/releases/x86_64/alpine-minirootfs-3.15.0-x86_64.tar.gz"
+
+# Remove existing layers
+rm -rf layers *.tar.gz
+
+#
+# Layer 1 setup
+#
+
+echo "*** Configuring layer 1..."
+mkdir -p layers/1
+wget "$ROOTFS_URL"
+tar -zxf *.tar.gz -C layers/1
+rm -rf *.tar.gz
+
+# Asign permissions to devices on layer1
+mknod -m 622 layers/1/dev/console c 5 1
+mknod -m 666 layers/1/dev/null c 1 3
+mknod -m 666 layers/1/dev/zero c 1 5
+mknod -m 666 layers/1/dev/ptmx c 5 2
+mknod -m 666 layers/1/dev/tty c 5 0
+mknod -m 444 layers/1/dev/random c 1 8
+mknod -m 444 layers/1/dev/urandom c 1 9
+chown -v root:tty layers/1/dev/{console,ptmx,tty}
+
+#
+# Layer 2 setup
+#
+
+echo "*** Configuring layer 2..."
+mkdir -p layers/2/etc
+echo "nameserver 8.8.8.8" >> layers/2/etc/resolv.conf
+
+echo "*** Instal and configure apache2 {for httpd test}..."
+LOWER_DIR=layers/1 UPPER_DIR=layers/2 ./runtime-exec /bin/sh -c "apk update && apk add apache2"
+echo "ServerName localhost" >> layers/2/etc/apache2/httpd.conf
