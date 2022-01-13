@@ -1912,9 +1912,56 @@ lxc.id_map = g 0 100000 65536
 
 	\noindent Una vez realizados todos estos pasos, ya podríamos crear nuestro contenedor sin privilegios. Lo haríamos de manera similar que en el apartado anterior, es decir utilizando el comando \texttt{lxc-create}. Además, también será importante modificar el archivo \texttt{config} de nuestro contenedor para asignar la interfaz de red y permitir la ejecución de aplicaciones con interfaz gráfica. \\
 	
+	\vspace{10px}
+	
 	\noindent \textbf{\large Ejemplo: \texttt{namespaces} en un contenedor LXC de Ubuntu}\\
 	
-	%% TODO REVISION ENERO
+	\noindent A modo de ejemplo, vamos a crear un contenedor (con privilegios) paso a paso, y por último, vamos a verificar que namespaces está utilizando dicho contenedor. Para esto, vamos a crear un contenedor de Ubuntu 20.04.03 (Focal) utilizando el catálogo de imágenes de LXC.
+	
+	%https://www.alibabacloud.com/blog/how-to-install-and-configure-lxc-container-on-ubuntu-16-04_594090
+	\begin{enumerate}
+		\item Lo primero que tenemos que hacer es verificar que LXC está instalado correctamente en nuestro sistema, una manera fácil de comprobarlo es con el siguiente comando:
+		\begin{verbatim}
+			sudo lxc-checkconfig
+		\end{verbatim}
+	
+		\item Creamos el contenedor de Ubuntu siguiendo los pasos de la creación guiada de contenedores que hemos comentado en apartados anteriores.
+		\begin{verbatim}
+			sudo lxc-create --template download --name <NombreContenedor>
+		\end{verbatim}
+		
+		\noindent De manera interactiva, el programa nos preguntará por diferentes opciones para nuestro contenedor. Para elegir una distribución, podemos acceder a la siguiente web: \href{https://uk.lxd.images.canonical.com/}{imagenes LXC}, en las que aparecen todas las imagenes disponibles. En este caso, escribimos lo siguiente para cada una de ellas:
+		\begin{itemize}
+			\item \textit{Distribution}: \texttt{ubuntu}
+			\item \textit{Release}: \texttt{focal}
+			\item \textit{Architecture}: \texttt{amd64}
+		\end{itemize}
+	
+		\item Iniciamos el contenedor que acabamos de crear.
+		\begin{verbatim}
+			sudo lxc-start -n <NombreContenedor> -d
+		\end{verbatim}
+	
+		\item Accedemos a la terminal del contenedor que acabamos de iniciar.
+		\begin{verbatim}
+			sudo lxc-attach -n <NombreContenedor>
+		\end{verbatim}
+	
+		\item Una vez dentro del contenedor de Ubuntu, podemos comprobar con el siguiente comando que efectivamente se ha instalado la distribución que hemos elegido.
+		\begin{verbatim}
+			cat /etc/os-release
+		\end{verbatim}
+	
+		\item Por último, en otra terminal, procedemos a obtener el \texttt{PID} asociado a dicho contenedor. Para ello, podemos hacer uso del siguiente comando:
+		\begin{verbatim}
+			sudo lxc-info -p -n <NombreContenedor>
+		\end{verbatim}
+	
+		\noindent Una vez tenemos el PID, podemos utilizar el comando \texttt{lsns} los namespaces que están asociados a dicho PID. Para ello, ejecutamos lo siguiente:
+		\begin{verbatim}
+			sudo lsns | grep <PID_contenedor>
+		\end{verbatim}
+	\end{enumerate}
 	
 	\pagebreak
 	
@@ -2147,7 +2194,7 @@ $ docker run python-hello_world
 	
 	\pagebreak
 	
-	\noindent \textbf{\large Obtener \texttt{network namespace} asociado a un contenedor Docker}\\
+	\noindent \textbf{\large Ejemplo: \texttt{network namespace} asociado a un contenedor Docker}\\
 	
 	\noindent A modo de comprobación de que en efecto Docker utiliza namespaces para la creación de sus contenedores, vamos a profundizar en como obtener los namespaces asociados a un contenedor en específico. [\ref{bib: docker y namespaces}] \\
 	
@@ -2214,6 +2261,13 @@ $ docker exec -it docker-ns sh
 			\includegraphics[width=1\textwidth]{img/docker_ns4.png}
 			\caption{Comprobación de si un network namespaces pertenece a un contenedor Docker.}
 			\label{img: comprobacion ns docker}
+		\end{center}
+	\end{figure}
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.75\textwidth]{img/docker_ns5.png}
+			\caption{Namespaces asociados a un contenedor Docker.}
 		\end{center}
 	\end{figure}
 	
