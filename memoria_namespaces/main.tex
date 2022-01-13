@@ -1194,7 +1194,7 @@ print("RAM used: {}M".format(len(result)))
 
 	\noindent Sin embargo, ahora vamos a proceder a limitar ese mismo programa en memoria. Para ello, vamos a añadir el PID asociado a la ejecución de dicho programa al siguiente archivo (ejecutando el script \texttt{./test\_memory.py \&}, nos aparece el PID):
 	\begin{verbatim}
-echo 62482 > /sys/fs/cgroup/memory/test_cg/cgroup.procs
+echo 62482 > /sys/fs/cgroup/memory/<NombreGrupo>/cgroup.procs
 	\end{verbatim}
 	
 	\noindent De esta manera ya estaríamos limitando la memoria de ese programa en concreto. Al limitarlo, podemos comprobar como la salida en consola es tal que: 
@@ -1213,8 +1213,24 @@ echo 62482 > /sys/fs/cgroup/memory/test_cg/cgroup.procs
 	
 	\noindent \textbf{\large Ejemplo: limitar uso de CPU}\\
 	
-	%% TODO REVISION ENERO
-	\noindent Por otro lado, si quisieramos limitar el uso de CPU de un programa, ...
+	\noindent Por otro lado, si quisiéramos limitar el uso de CPU de un programa, tendríamos que escribir en los archivos \texttt{cpu.cfs\_quota\_us} o \texttt{cpu.cfs\_period\_us}, dentro de la rama de \texttt{cpu}. Estos parámetros hacen referencia al tiempo de ejecución asociado a un proceso. En este ejemplo, vamos a limitar el proceso a 1 ms (1000 us), esto sería tal que:
+	
+	\begin{verbatim}
+echo 1000 > /sys/fs/cgroup/cpu/<NombreGrupo>/cpu.cfs_quota_us
+	\end{verbatim}
+
+	\noindent Esto significa que cada 100ms de tiempo, el proceso está limitado por cgroups a utilizar solo 1ms del tiempo de CPU, dando lugar a utilizar solo el 1\% de la CPU. \\
+	
+	\noindent Para añadir un proceso al grupo asociado de cgroups, añadimos el PID del programa al siguiente archivo:
+	
+	\begin{verbatim}
+echo <PID> > /sys/fs/cgroup/cpu/<NombreGrupo>/tasks
+	\end{verbatim}
+
+	\noindent Para comprobar el funcionamiento, podemos utilizar el siguiente script en background que nos pone un núcleo de la CPU al 100\%:
+	\begin{verbatim}
+$ while : ; do : ; done &
+	\end{verbatim}
 	
 	
 	\addvspace{60px}
@@ -1385,7 +1401,326 @@ $ umount /var/uts-h1
 	
 	\subsection{Creando nuestro propio ``contenedor''}
 	%% TODO
+	\noindent En este apartado vamos a comentar las diferentes fases que deberíamos seguir si quisiéramos implementar nuestro propio contenedor. En este caso, las fases son muy similares a las que utiliza la tecnología de Docker, la cual comentaremos más en detalle en los apartados siguientes. \\
 	
+	\noindent Lo primero, es interesante comentar que aunque nos referimos a contenedores, muchas personas entienden contenedores como únicamente los \texttt{Docker Containers}, sin embargo existen otros \texttt{runtimes} para ejecutar contenedores en el host. En general, todos implementan las especificaciones realizadas por \textit{Linux Foundation's Container Initiative} (\texttt{OCI}) [\ref{bib: oci}], esta fundación recoge directivas tanto para la creación de imagenes de contenedores como de sus \texttt{runtimes}. Por lo tanto, existen diferentes \texttt{runtimes} en función de la solución que queramos realizar, y cada \texttt{runtime} trabaja a un nivel de profundidad diferente. Por ejemplo, los contenedores LXC [\ref{bib: LXC arch}], que entraremos en detalle en el siguiente apartado, se entienden como contenedores de bajo nivel, mientras que un ejemplo de contenedores de alto nivel podría ser \texttt{containerd} [\ref{bib: containerd}]. \\
+	
+	\noindent \textbf{\large Imágenes}\\
+	
+	\noindent Una imagen de un contenedor consiste en un sistema de archivos root, que nos aporta todas las dependencias necesarias por la aplicación a encapsular en un contenedor. Dichas imágenes consisten en capas, que se montan por el \texttt{runtime} utilizando un tipo de montaje de unión (manera de combinar múltiples directorios en uno único y que este contenga los contenidos de ambos directorios combinados) [\ref{bib: union mount}], normalmente se utiliza \texttt{overlayfs} [\ref{bib: overlayfs}]. Esto nos permite dividir nuestro sistema de archivos en capas, siendo el sistema de archivos más bajo inmutable (los directorios referidos al sistema y que no tienen nada que ver con la aplicación a encapsular), y otra capa superior en la que encontraremos todo lo referido a nuestra aplicación y que sí podremos modificar. \\
+	
+	\noindent A modo de ejemplo, comentamos el siguiente script de bash creado por el usuario \href{https://github.com/Nuvalence/diy-container}{Github: Nuvalence}, en donde detalla los diferentes pasos para implementar un contenedor utilizando namespaces, y además utilizando montajes de unión.
+	
+	\begin{lstlisting}[language=bash, caption={Creación de imagen para contenedor utilizando Alpine y union mounts}]
+#!/bin/bash
+
+# Copyright 2020 Nuvalence <https://github.com/Nuvalence/diy-container.git>
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#   http://www.apache.org/licenses/LICENSE-2.0
+#   https://github.com/Nuvalence/diy-container/blob/master/LICENSE
+#
+# Modified on Jan 2022 by: Enrique Ranii <https://github.com/Raniita/container-alpine.git>
+
+# Deploy a image of Alpine Linux inside a "container". Using rootfs as Union Filesystem
+# Installing apache2 for httpd test, and check on host that network link is enabled
+# Usage:
+#   - sudo ./setup-image
+# Enable verbose output using:
+#   - sudo VERBOSE=1 ./setup-image
+
+set -e
+
+[[ -n "$VERBOSE" ]] && set -x
+
+ROOTFS_URL="http://dl-cdn.alpinelinux.org/alpine/v3.15/releases/x86_64/alpine-minirootfs-3.15.0-x86_64.tar.gz"
+
+# Remove existing layers
+rm -rf layers *.tar.gz
+
+#
+# Layer 1 setup {inmutable}
+#
+
+echo "*** Configuring layer 1..."
+mkdir -p layers/1
+wget "$ROOTFS_URL"
+tar -zxf *.tar.gz -C layers/1
+rm -rf *.tar.gz
+
+# Asign permissions to devices on layer1
+mknod -m 622 layers/1/dev/console c 5 1
+mknod -m 666 layers/1/dev/null c 1 3
+mknod -m 666 layers/1/dev/zero c 1 5
+mknod -m 666 layers/1/dev/ptmx c 5 2
+mknod -m 666 layers/1/dev/tty c 5 0
+mknod -m 444 layers/1/dev/random c 1 8
+mknod -m 444 layers/1/dev/urandom c 1 9
+chown -v root:tty layers/1/dev/{console,ptmx,tty}
+
+#
+# Layer 2 setup {application layer}
+#
+
+echo "*** Configuring layer 2..."
+mkdir -p layers/2/etc
+echo "nameserver 8.8.8.8" >> layers/2/etc/resolv.conf
+
+echo "*** Instal and configure apache2 {for httpd test}..."
+LOWER_DIR=layers/1 UPPER_DIR=layers/2 ./runtime-exec /bin/sh -c "apk update && apk add apache2"
+echo "ServerName localhost" >> layers/2/etc/apache2/httpd.conf
+	\end{lstlisting}
+	
+	\pagebreak
+	
+	\noindent En dicho script identificamos las siguientes fases:
+	\begin{enumerate}
+		\item Descarga del \texttt{rootfs} de la distribución de Linux Alpine.
+		\item Eliminar instalaciones previas de la imagen a crear.
+		\item Extraer y modificar los permisos de lo que será la capa 1 inmutable de nuestro contenedor.
+		\item Configurar servidor DNS de dentro del contenedor e instalar dependencias del programa a ejecutar, en nuestro caso haremos las pruebas con el programa \texttt{httpd}
+	\end{enumerate}
+
+	\vspace{10px}
+
+	\noindent \textbf{\large \texttt{Runtime}}\\
+	
+	\noindent Una vez tenemos la imagen creada, el siguiente paso es el \texttt{runtime} encargado de ejecutarla. Para ello, creamos un ``contenedor'' utilizando los siguientes namespaces: 
+	\begin{enumerate}
+		\item Network. Utilizado para dotar de acceso a internet y acceso al host al contenedor. 
+		\item PID. Asignar un nuevo PID y GID al contendor.
+		\item IPC. Aislar ciertos recursos del host al contenedor.
+		\item UTS. Utilizado para asignar un hostname específico al contenedor
+		\item cgroup. Utilizado para la gestión de límites de recursos y monitorizar el contenedor.
+		\item mount. Sistema de archivos del contenedor.
+	\end{enumerate}
+
+	\noindent Al igual que en el caso anterior, comentamos el siguiente script de ejemplo creado por el usuario \href{https://github.com/Nuvalence/diy-container}{Github: Nuvalence}, en donde se nos detallan los diferentes pasos a realizar para tener el \texttt{runtime} de nuestro contenedor ejecutando la imagen que previamente hemos creado.
+	
+	\begin{lstlisting}[language=bash,caption={Ejecución de runtime basado en imagen de Alpine}]
+#!/bin/bash
+
+# Copyright 2020 Nuvalence <https://github.com/Nuvalence/diy-container.git>
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#   http://www.apache.org/licenses/LICENSE-2.0
+#   https://github.com/Nuvalence/diy-container/blob/master/LICENSE
+#
+# Modified on Jan 2022 by: Enrique Ranii <https://github.com/Raniita/container-alpine.git>
+
+# Requirements: Must run before -> sudo ./setup-image
+# Deploy a container that executes a application inside apline
+# Usage:
+#   - sudo ./runtime-exec <command>
+# Example:
+#   - sudo ./runtime-exec httpd -D FOREGROUND
+# Enable verbose output using:
+#   - sudo VERBOSE=1 ./runtime-exec <command>
+
+set -e
+
+[[ -n "$VERBOSE" ]] && set -x
+
+# Container IP
+CONTAINER_SUBNET_CIDR=10.178.61.1/24
+CONTAINER_IP=10.178.61.2
+
+#
+# Host network setup
+#
+
+echo "*** Configure Host network setup {iptables, bridge, network namespace}..."
+
+# Enable packet forwarding
+IP_FORWARD=$(cat /proc/sys/net/ipv4/ip_forward)
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# Allow forwarding of packets to and from the container subnet
+iptables -A FORWARD -s $CONTAINER_SUBNET_CIDR -j ACCEPT
+iptables -A FORWARD -d $CONTAINER_SUBNET_CIDR -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# Re-write the source address for packets originating from the container subnet
+iptables -t nat -A POSTROUTING -s $CONTAINER_SUBNET_CIDR -j MASQUERADE
+
+# Create a bridge device to act as a gateway for the container subnet
+ip link add dev br-container type bridge
+
+# Set the bridges's IP
+ip addr add $CONTAINER_SUBNET_CIDR dev br-container
+
+# Create two peered virtual ethernet adapters
+ip link add dev veth-host type veth peer name veth-container
+
+# Assign the host's virtual adapter to the bridge
+ip link set dev veth-host master br-container
+
+# Bring up devices
+ip link set dev veth-host up
+ip link set dev br-container up
+
+#
+# Network namespace setup
+#
+
+# Create a network namespace
+ip netns add container
+
+# Assign the container's virtual adapter to the namespace
+ip link set dev veth-container netns container
+
+# Set the container's IP
+ip netns exec container \
+ip addr add dev veth-container $CONTAINER_IP/$(basename $CONTAINER_SUBNET_CIDR)
+
+# Bring up the container's device
+ip netns exec container \
+ip link set dev veth-container up
+
+# Set the container's default route
+ip netns exec container \
+ip route add default via $(dirname $CONTAINER_SUBNET_CIDR)
+
+#
+# Container filesystem setup
+#
+
+echo "*** Mount container filesystem using rootfs..."
+
+# Create the upper, work, and rootfs directories
+mkdir upperdir workdir rootfs
+
+# Set directory defaults
+[[ -z "$LOWER_DIR" ]] && LOWER_DIR=layers/2:layers/1
+[[ -z "$UPPER_DIR" ]] && UPPER_DIR=upperdir
+
+# Create an overlay filesystem
+mount -t overlay overlay -o lowerdir=$LOWER_DIR,upperdir=$UPPER_DIR,workdir=workdir rootfs
+
+# Setup /sys
+mount --bind /sys rootfs/sys
+
+#
+# Define cleanup routine
+#
+
+function cleanup()
+{
+	echo "** Revert all configuration and shutdown..."
+	
+	# Revert host network setup
+	ip link del veth-host
+	ip link del br-container
+	iptables -t nat -D POSTROUTING -s $CONTAINER_SUBNET_CIDR -j MASQUERADE
+	iptables -D FORWARD -d $CONTAINER_SUBNET_CIDR -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+	iptables -D FORWARD -s $CONTAINER_SUBNET_CIDR -j ACCEPT
+	echo $IP_FORWARD > /proc/sys/net/ipv4/ip_forward
+	
+	# Cleanup the network namespace
+	ip netns del container
+	
+	# Cleanup the container filesystem
+	umount rootfs/sys rootfs
+	rm -rf upperdir workdir rootfs
+	
+	echo "*** Done."
+}
+
+# Call cleanup on exit
+trap cleanup EXIT
+
+#
+# Launch the container
+#
+
+echo "*** Starting the container and execute the command: $@"
+# Enter namespaces and exec the provided command
+ip netns exec container \
+unshare --pid --ipc --uts --cgroup --mount --root=rootfs --mount-proc --fork "$@"
+	\end{lstlisting}
+
+	\vspace{10px}
+
+	\noindent Para comprender mejor el código, vamos a detallar las siguientes fases por las que pasa la ejecución del \texttt{runtime}.
+	\begin{enumerate}
+		\item Configuración de la red. En el host se permite la redirección de paquetes y se activa la NAT para el contenedor
+		\item Se crea una interfaz virtual tipo bridge, se le asigna una dirección IP
+		\item Creamos una pareja de ethernets virtuales, uno será asignado al host y la otra al contenedor.
+		\item Se crea el network namespace utilizando el comando \texttt{ip netns add}, se le asigna el ethernet virtual y se le da una dirección IP. Además, configura la ruta \textit{default} de los paquetes IP.
+		\item Se realiza el montaje del sistema de archivos, diferenciando en dos capas. Una capa, llamada capa inferior, en la que se almacena todo lo necesario de la distribución a ejecutar y que será inmutable para la aplicación a encapsular, y otra capa en la que encontramos los directorios que si tendrá acceso dicha aplicación. En este caso, se utiliza un montaje de tipo \texttt{overlay}, a modo de ejemplo de los montajes de unión.
+		\item Se realiza un montaje de tipo \texttt{bind} para todos los recursos del sistema, que se encuentran en el directorio \texttt{/sys}.
+		\item Se define una función para revertir todos los cambios realizados al sistema.
+		\item Por último, se ejecuta el contenedor con el comando \texttt{unshare} y especificando los namespaces que vamos a utilizar, además le ponemos como punto de entrada al unshare la aplicación que el usuario haya especificado (por ejemplo: \texttt{sh} o \texttt{httpd}).
+	\end{enumerate}
+
+	\pagebreak
+	
+	\noindent \textbf{\large Ejemplo: ejecución de un contenedor basado en imagen Linux Alpine}
+	\begin{enumerate}
+		\item Primero ejecutamos el script llamado \texttt{setup-image} para configurar la imagen de nuestro contenedor, para ello ejecutamos dicho script con permisos de root.
+		
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=0.9\textwidth]{img/container_setup1.png}
+				\caption{Ejecución del script \texttt{setup-image} (1/2)}
+			\end{center}
+		\end{figure}
+	
+		\pagebreak
+	
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=0.9\textwidth]{img/container_setup2.png}
+				\caption{Ejecución del script \texttt{setup-image} (2/2)}
+			\end{center}
+		\end{figure}
+	
+		%\pagebreak
+		
+		\item Una vez tenemos la imagen creada, ya podemos ejecutar el \texttt{runtime} con el comando que nosotros queramos. Para ello, tendremos que ejecutar el comando \texttt{./runtime-exec <commando>}
+		
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=1\textwidth]{img/container_runtime1.png}
+				\caption{Ejecución del script \texttt{runtime-exec}}
+			\end{center}
+		\end{figure}
+	
+		\noindent Dado que ya estamos dentro de una shell del contenedor, podemos comprobar como solo podemos ver los procesos del contenedor, y solo tenemos la interfaz de red asignada al contenedor.
+		
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=0.85\textwidth]{img/container_runtime2.png}
+				\caption{Ejecución del script \texttt{runtime-exec}}
+			\end{center}
+		\end{figure}
+	
+		\item Ejecutamos el comando \texttt{httpd} y comprobamos que el host puede acceder al servicio. \\
+		
+		\noindent Como podemos comprobar en la siguiente imagen, el comando \texttt{httpd} se ejecuta correctamente en el contenedor. Por otro lado, utilizamos la herramienta \texttt{wget} para comprobar que tenemos acceso al servicio web que expone el comando \texttt{httpd}, el contenido del archivo \texttt{index.html} lo podemos ver también en las siguientes figuras.
+		
+		\pagebreak
+		
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=0.8\textwidth]{img/container_runtime3.png}
+				\caption{Ejecución del script \texttt{runtime-exec} con comando \texttt{httpd}}
+			\end{center}
+		\end{figure}
+	
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=0.75\textwidth]{img/container_runtime4.png}
+				\caption{Ejecución del script \texttt{runtime-exec} con comando \texttt{httpd}}
+			\end{center}
+		\end{figure}
+		
+		\noindent Por lo tanto, podemos concluir que este ejemplo es válido para demostrar el funcionamiento de un contenedor, basado en namespaces y en sistemas de montaje de capas.
+		
+	\end{enumerate}
 	
 	\pagebreak
 	
@@ -1808,8 +2143,79 @@ $ docker run python-hello_world
 		\end{center}
 	\end{figure}
 	
-
 	\end{enumerate}
+	
+	\pagebreak
+	
+	\noindent \textbf{\large Obtener \texttt{network namespace} asociado a un contenedor Docker}\\
+	
+	\noindent A modo de comprobación de que en efecto Docker utiliza namespaces para la creación de sus contenedores, vamos a profundizar en como obtener los namespaces asociados a un contenedor en específico. [\ref{bib: docker y namespaces}] \\
+	
+	\noindent Primero, vamos a iniciar un contenedor con la imagen de Docker Alpine:
+	
+	\begin{verbatim}
+$ docker pull alpine
+$ docker run -d --name docker-ns alpine sleep 3600d
+$ docker ps | grep alpine
+	\end{verbatim}
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.9\textwidth]{img/docker_ns1.png}
+			\caption{Ejecución contenedor Docker para ver sus namespaces asociados.}
+		\end{center}
+	\end{figure}
+
+	\noindent Si ejecutamos el comando \texttt{ip netns list}, podemos comprobar como nos devuelve una lista vacía. De primeras, podríamos entender esto como que Docker no utiliza network namespaces, sin embargo, esto pasa porque Docker ``esconde'' estos namespaces por defecto.
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.9\textwidth]{img/docker_ns2.png}
+			\caption{Resultado de comando \texttt{ip netns list} con contenedores Docker.}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
+	
+	\noindent Si queremos exponer los namespaces de un contenedor, tenemos que hacerlo manualmente. Para ello, utilizamos los siguientes comandos:
+	
+	\begin{verbatim}
+$ sudo docker inspect -f '{{.State.Pid}}' docker-ns
+
+$ ln -s /proc/<Pid>/ns/net /var/run/netns/<Pid>
+	\end{verbatim}
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.8\textwidth]{img/docker_ns3.png}
+			\caption{Network namespaces de un Docker container}
+		\end{center}
+	\end{figure}
+
+	\noindent Una vez ya nos aparece el network namespace dentro del comando \texttt{ip netns list}, podemos comprobar que en efecto es el namespace asociado a nuestro contenedor, para ello podemos ejecutar los siguientes comandos:
+	
+	\begin{verbatim}
+$ ip netns exec <ip netns output> ip address
+	\end{verbatim}
+
+	\noindent Que tiene que dar una salida equivalente a los siguientes comandos:
+	
+	\begin{verbatim}
+$ docker exec -it docker-ns sh
+/ ip address
+	\end{verbatim}
+
+	\noindent Tal y como podemos ver en la figura \ref{img: comprobacion ns docker}, ambos comandos dan el mismo resultado, por lo que quedaría comprobado que Docker utiliza network namespaces para dar conectividad a sus contenedores. Además, es interesante como ``esconde'' los identificadores de los namespaces que crea para dichos contenedores. Una vez conocemos el identificador, podríamos generar arquitecturas de red mucho más complejas, como por ejemplo añadir un ethernet virtual para hacer port mirroring al tráfico del contenedor, este ejemplo se ve más detallado en el siguiente recurso \href{https://arthurchiao.art/blog/traffic-mirror-with-ovs/}{Traffic mirror with OVS and Docker}
+
+	\pagebreak
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=1\textwidth]{img/docker_ns4.png}
+			\caption{Comprobación de si un network namespaces pertenece a un contenedor Docker.}
+			\label{img: comprobacion ns docker}
+		\end{center}
+	\end{figure}
 	
 	\pagebreak
 
@@ -2102,6 +2508,31 @@ $ docker run python-hello_world
 		\item
 		\label{bib: mininet home page}
 		\href{http://mininet.org/}{Mininet: An Instant Virtual Network on your Laptop (or other PC)}
+		
+		%53
+		\item
+		\label{bib: oci}
+		\href{https://opencontainers.org/}{Open Container Initiative}
+		
+		%54
+		\item
+		\label{bib: containerd}
+		\href{https://containerd.io/}{containerd}
+		
+		%55
+		\item
+		\label{bib: union mount}
+		\href{https://en.wikipedia.org/wiki/Union_mount}{Wikipedia: Union Mount}
+		
+		%56
+		\item
+		\label{bib: overlayfs}
+		\href{https://en.wikipedia.org/wiki/OverlayFS}{Wikipedia: Overlayfs}
+		
+		%57
+		\item
+		\label{bib: docker y namespaces}
+		\href{https://arthurchiao.art/blog/play-with-container-network-if/}{Play with Container Network Interface}
 		
 		% X
 		\item
