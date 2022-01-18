@@ -160,6 +160,7 @@
 	\pagebreak
 	
 	\section{Virtualización de Funciones de Red (\textit{NFV})}
+	\label{sec: nfv}
 	%% https://www.youtube.com/watch?v=3JEAK66wujg	
 	\noindent El punto de partida de ``virtualización de funciones de red'' surge a partir de las necesidades de las operadoras para solucionar problemas de gran escala de la red. Estos se puede resumir en los siguientes:
 	\begin{itemize}
@@ -1380,6 +1381,8 @@ $ umount /var/uts-h1
 	\pagebreak
 	
 	\section{Virtualización ligera y contenedores}
+	\label{sec: virt ligera y contenedores}
+	
 	\noindent En este capítulo vamos a trabajar el concepto de virtualización ligera, que ya introdujimos en el apartado \ref{sect: virt ligera}, pero esta vez aplicando los conceptos de \texttt{namespaces} del apartado anterior. Además, presentaremos el concepto de \textit{contenedor}, y como supone una de las piezas más importantes para la virtualización tal y como hoy día la conocemos. \\
 	
 	\noindent Recuperando la definición de \textbf{virtualización ligera}, entendemos este tipo de virtualización como aquella que \textbf{se realiza a nivel de sistema operativo}, permitiendo la coexistencia de diferentes espacios aislados entre sí. En dichos espacios, podremos ejecutar de manera aislada nuestras aplicaciones. Como punto en común, todos los espacios aislados que creemos, \textbf{utilizarán} como base \textbf{el mismo \texttt{kernel}}. La tecnología clave para realizar esta virtualización serán los diferentes \texttt{namespaces}, comentados en el apartado \ref{sect: espacio nombres}, que podremos combinar a nuestro gusto con el fin de crear un espacio aislado con todos los recursos necesarios para satisfacer las necesidades de nuestra aplicación. \\
@@ -2274,9 +2277,9 @@ $ docker exec -it docker-ns sh
 	\pagebreak
 
 	\section{Caso práctico: Virtualización para simulación de redes}
-	\noindent En este apartado vamos a detallar los conceptos de virtualización de topologías de red para la evaluación y/o simulación de situaciones concretas de nuestras redes. Para ello, podemos modelar nuestros nodos de la red utilizando contenedores, siguiendo de esta manera el concepto de ``\textit{Virtual Network Function}'' que introdujimos en el primer apartado de este documento. \\
+	\noindent En este apartado vamos a detallar los conceptos de virtualización de topologías de red para la evaluación y/o simulación de situaciones concretas de nuestras redes. Para ello, podemos modelar nuestros nodos de la red utilizando contenedores, siguiendo de esta manera el concepto de ``\textit{Virtual Network Function}'' que introdujimos en el segundo apartado de este documento. [\ref{sec: nfv}] \\
 	
-	\noindent Como bien hemos visto en el apartado anterior (referencia), un contenedor es una abstracción de alto nivel de un sistema aislado, utilizando ``\textit{namespaces}''. Por lo tanto, tenemos varias maneras de enfocar el camino hacia el objetivo de modelar los nodos de nuestra red. Dichos caminos radican en que metodología de contenedores vamos a utilizar. Por ejemplo, algunos de los caminos a seguir podrían ser los siguientes:
+	\noindent Como bien hemos visto en el apartado anterior [\ref{sec: virt ligera y contenedores}], un contenedor es una abstracción de alto nivel de un sistema aislado, utilizando ``\textit{namespaces}''. Por lo tanto, tenemos varias maneras de enfocar el camino hacia el objetivo de modelar los nodos de nuestra red. Dichos caminos radican en que metodología de contenedores vamos a utilizar. Por ejemplo, algunos de los caminos a seguir podrían ser los siguientes:
 	
 	\begin{itemize}
 		\item Crear un \textit{shell script} para desplegar los namespaces necesarios de nuestra topología, utilizando los comandos \texttt{nsenter} y \texttt{unshare}.
@@ -2284,9 +2287,55 @@ $ docker exec -it docker-ns sh
 		\item Utilizar un simulador de red basado en ``namespaces'', dicho simulador se llama Mininet [\ref{bib: mininet home page}] y está creado en el lenguaje Python. El objetivo de este programa es el de crear una red virtual realista, utilizando un mismo kernel para todos los nodos de la red. Además, aporta las herramientas necesarias para interactuar con dicha topología.
 	\end{itemize}
 	
-	\noindent \textbf{\large Mininet}\\
+	\vspace{10px}
+	
+	%\noindent \textbf{\large Mininet}\\
+	\subsection{\texttt{Mininet}: Simulador de redes}
 	
 	\noindent Profundizando en la última solución aportada, Mininet [\ref{bib: mininet home page}], destacamos sus ventajas en la customización de topologías, además de la facilidad de compartir y desplegar dichas topologías en un hardware consumidor utilizando un único comando. Es por esto por lo que Mininet es una herramienta muy útil para el desarrollo, la enseñanza y la investigación, siendo una herramienta muy importante para la experimentación en el campo del \textit{Software Defined Networking} (SDN) ya que permite utilizar controladores basados en OpenFlow y P4.
+	
+	\subsubsection{Primeros pasos}
+	\noindent Lo primero que tenemos que hacer para empezar a trabajar con este simulador, es proceder a su instalación. En la página web oficial, se nos detallan diferentes métodos para la instalación \href{http://mininet.org/download/}{Mininet: Download/Get Started with Mininet}, dichos métodos son: 
+	
+	\begin{itemize}
+		\item Máquina virtual \texttt{Mininet}, todo previamente instalado.
+		\item Instalación directamente del código fuente
+		\item Instalación utilizando paquetes de una distribución.
+	\end{itemize}
+
+	\pagebreak
+
+	\noindent Para nuestro ejemplo, vamos a suponer que deseamos realizar una instalación de \texttt{mininet} sobre nuestra distribución Linux. Para ello, en función de la distribución que estemos usando, instalamos el programa tal que:
+	
+	\begin{itemize}
+		\item Debian/Ubuntu: \texttt{sudo apt-get install mininet}
+		\item Fedora: \texttt{sudo dnf install mininet}
+		\item openSUSE: \texttt{zypper in mininet}
+		\item Arch Linux: \texttt{sudo pacman -S mininet}
+	\end{itemize}
+
+	\noindent Una vez instalado, podemos comprobar la versión ejecutando el siguiente comando en una terminal:
+	\begin{verbatim}
+		mn --version
+	\end{verbatim}
+
+	\noindent Por otro lado, Mininet permite utilizar diferentes switches y controladores para sus topologías. Para esta explicación, vamos a utilizar Open vSwitch como controlador, en el modo \textit{bridge/standalone}. Si queremos comprobar que Open vSwitch está instalado correctamente para mininet, podemos ejecutar el siguiente comando en una terminal:
+	\begin{verbatim}
+		mn --switch ovsbr --test pingall
+	\end{verbatim}
+
+	\noindent En el caso de que el comando anterior nos de un error, tendremos que instalar Open vSwitch para nuestra distribución y asegurarnos de que el servicio esté funcionando. Para iniciar el servicio de Open vSwitch, tendremos que hacer lo siguiente:
+	\begin{verbatim}
+		sudo systemctl start openvswitch.service
+	\end{verbatim}
+
+	\noindent En el caso de Arch Linux, sería tal que así:
+	\begin{verbatim}
+		sudo systemctl start ovs-vswitchd.service
+	\end{verbatim}
+
+	%% Ruta miniedit:
+	% /usr/lib/python3.10/site-packages/mininet/examples/miniedit.py
 	
 	\subsection{Interconexión física de diferentes red virtuales}
 	\subsection{Evaluación de prestaciones}
