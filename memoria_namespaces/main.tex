@@ -1187,7 +1187,7 @@ print("RAM used: {}M".format(len(result)))
 	
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.7\textwidth]{img/cgroup_python1.png}
+			\includegraphics[width=0.6\textwidth]{img/cgroup_python1.png}
 			\caption{Salida tras ejecutar el programa de Python sin limitar}
 			\label{img: cgroup python 1}
 		\end{center}
@@ -1202,7 +1202,7 @@ echo 62482 > /sys/fs/cgroup/memory/<NombreGrupo>/cgroup.procs
 	
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.7\textwidth]{img/cgroup_python2.png}
+			\includegraphics[width=0.6\textwidth]{img/cgroup_python2.png}
 			\caption{Salida tras ejecutar el programa de Python, una vez limitado}
 			\label{img: cgroup python 2}
 		\end{center}
@@ -1212,6 +1212,7 @@ echo 62482 > /sys/fs/cgroup/memory/<NombreGrupo>/cgroup.procs
 	
 	\noindent Como podemos comprobar en las imágenes [\ref{img: cgroup python 1}] y [\ref{img: cgroup python 2}], la salida del programa no coincide. Esto es debido a que como el programa Python ha superado el límite establecido para su grupo, \texttt{cgroups} cerrado bruscamente dicho programa, por lo tanto no nos aparece la memoria consumida por el programa, solo se nos notifica que el proceso con PID 62482 ha pasado a estado ``\textit{killed}''. \\
 	
+	\vspace{10px}
 	\noindent \textbf{\large Ejemplo: limitar uso de CPU}\\
 	
 	\noindent Por otro lado, si quisiéramos limitar el uso de CPU de un programa, tendríamos que escribir en los archivos \texttt{cpu.cfs\_quota\_us} o \texttt{cpu.cfs\_period\_us}, dentro de la rama de \texttt{cpu}. Estos parámetros hacen referencia al tiempo de ejecución asociado a un proceso. En este ejemplo, vamos a limitar el proceso a 1 ms (1000 us), esto sería tal que:
@@ -1221,18 +1222,25 @@ echo 1000 > /sys/fs/cgroup/cpu/<NombreGrupo>/cpu.cfs_quota_us
 	\end{verbatim}
 
 	\noindent Esto significa que cada 100ms de tiempo, el proceso está limitado por cgroups a utilizar solo 1ms del tiempo de CPU, dando lugar a utilizar solo el 1\% de la CPU. \\
-	
-	\noindent Para añadir un proceso al grupo asociado de cgroups, añadimos el PID del programa al siguiente archivo:
-	
+
+	\noindent Para comprobar el funcionamiento, podemos utilizar el siguiente \textit{script} en \textit{background} que nos pone un núcleo de la CPU al 100\%:
+	\begin{verbatim}
+$ while : ; do : ; done &
+	\end{verbatim}
+
+	\noindent Al ejecutar dicho comando, la tarea se quedará funcionando en \textit{background}. Podemos comprobarlo si utilizamos herramientas para ver el consumo de los procesos, como pueden ser \texttt{top} o \texttt{htop}. Una vez tenemos el PID asociado a la tarea de prueba, podemos proceder a añadirlo a los procesos que son limitados con el cgroup creado, en este caso únicamente para limitar la CPU.
 	\begin{verbatim}
 echo <PID> > /sys/fs/cgroup/cpu/<NombreGrupo>/tasks
 	\end{verbatim}
 
-	\noindent Para comprobar el funcionamiento, podemos utilizar el siguiente script en background que nos pone un núcleo de la CPU al 100\%:
-	\begin{verbatim}
-$ while : ; do : ; done &
-	\end{verbatim}
+	\noindent Una vez ejecutado, si volvemos a ejecutar \texttt{top} o \texttt{htop}, podemos ver como el tiempo asignado al recurso será mucho mejor, y estrictamente igual o inferior al límite que establecimos en la creación de la regla para nuestro cgroup.	\\
 	
+	\vspace{10px}
+	\noindent \textbf{\large Ejemplo: monitorización de un recurso}\\
+	
+	\noindent A modo de comentario, otra de las tareas importante que desempeña cgroups es la monitorización del consumo de recursos de ciertas aplicaciones. Por ejemplo, para el caso del \textit{runtime} de Docker (hablaremos más en profundidad en [\ref{sec: docker}]) para ejecutar contenedores basados en namespaces, utiliza cgroups para concretar el consumo (CPU, RAM, uso de disco, red...) que tiene un contenedor en concreto. De este modo, podemos discernir y aplicar limitaciones a un contenedor en específico, sin tener que afectar a otros contenedores que estén funcionando en ese momento en el host. \\
+	
+	\noindent Para estas tareas, limitación y monitorización de recursos en contenedores de Docker, este nos facilita una serie de comandos para facilitar la creación y asignación de contenedores a un cgroup en específico, facilitando en consecuencia el uso de cgroups para limitar los recursos de los contenedores que estemos utilizando.
 	
 	\addvspace{60px}
 	
@@ -1265,7 +1273,7 @@ $ while : ; do : ; done &
 	
 	\pagebreak
 	
-	\subsection{Ejemplo de uso de 'netns' usando comando \texttt{ip}}
+	\subsection{Ejemplo: despliegue topología de red usando comando \texttt{ip}}
 	\noindent En este apartado, vamos a detallar un ejemplo de como funciona el comando IP manejando los 'network namespaces'.\\
 	
 	\noindent Creamos los \textit{network namespaces}, en este caso, con nombre h1 y h2. El sistema no crea directamente el namespace, lo que en realidad hace es definirlos en el sistema. El \textit{network namespace} se crea cuando una aplicación se asocia a el.
@@ -1274,7 +1282,7 @@ $ ip netns add h1
 $ ip netns add h2
 	\end{verbatim}
 
-	\noindent Si utilizamos el comando \texttt{ip netns}, nos mostrará los netns existentes. Como es un sub-comando de \texttt{ip}, muestra los ns que el comando \texttt{lsns} no muestra. \\
+	\noindent Si utilizamos el comando \texttt{ip netns}, nos mostrará los network namespaces existentes. Como es un sub-comando de \texttt{ip}, muestra los ns que el comando \texttt{lsns} no muestra. \\
 	
 	\noindent Procedemos a asociar una aplicación a cada netns. Utilizamos \texttt{bash}.
 	\begin{verbatim}
@@ -1354,10 +1362,10 @@ $ ip netns del h2
 
 	\pagebreak
 
-	\subsection{Ejemplo de uso de 'netns' usando comando \texttt{unshare}}
-	\noindent En el ejemplo anterior, utilizabamos el comando \texttt{ip} para manejar los netns, sin embargo, eso nos limitaba los tipos namespaces que queriamos asignar a nuestro namespace. En contra partida a esto, el comando \texttt{unshare} nos da más libertad a la hora de crear los namespaces. \\
+	\subsection{Ejemplo: despliegue de topología de red usando comando \texttt{unshare}}
+	\noindent En el ejemplo anterior, utilizábamos el comando \texttt{ip} para manejar los network namespaces, sin embargo, eso nos limitaba los tipos namespaces que queríamos asignar a nuestro namespace. En contra partida a esto, el comando \texttt{unshare} nos da más libertad a la hora de crear los namespaces. \\
 	
-	\noindent Utilizando \texttt{unshare}, no podemos ponerle un nombre, pero sí que nos permite asociarlo a un archivo, que montará con tipo bind. Esto nos permitirá utilizar en namespace aunque no haya ningún proceso corriendo en el, para ello podemos utilizar el comando \texttt{nsenter}.
+	\noindent Utilizando \texttt{unshare}, no podemos ponerle un nombre, pero sí que nos permite asociarlo a un archivo, que montará con tipo \textit{bind}. Esto nos permitirá utilizar en namespace aunque no haya ningún proceso corriendo en el, para ello podemos utilizar el comando \texttt{nsenter}.
 	\begin{verbatim}
 $ touch /var/net-h1
 $ touch /var/uts-h1
@@ -1376,7 +1384,7 @@ $ umount /var/net-h1
 $ umount /var/uts-h1
 	\end{verbatim}
 
-	\noindent Como será común necesitar más de un namespace, de ahora en adelante tendremos que utilizar los comandos \texttt{unshare} y \texttt{nsenter}.
+	\noindent Como será común necesitar más de un namespace, en la mayoría de los casos tendremos que utilizar los comandos \texttt{unshare} y \texttt{nsenter}.
 
 	\pagebreak
 	
@@ -1915,7 +1923,8 @@ lxc.id_map = g 0 100000 65536
 
 	\noindent Una vez realizados todos estos pasos, ya podríamos crear nuestro contenedor sin privilegios. Lo haríamos de manera similar que en el apartado anterior, es decir utilizando el comando \texttt{lxc-create}. Además, también será importante modificar el archivo \texttt{config} de nuestro contenedor para asignar la interfaz de red y permitir la ejecución de aplicaciones con interfaz gráfica. \\
 	
-	\vspace{10px}
+	%\vspace{10px}
+	\pagebreak
 	
 	\noindent \textbf{\large Ejemplo: \texttt{namespaces} en un contenedor LXC de Ubuntu}\\
 	
@@ -1928,10 +1937,26 @@ lxc.id_map = g 0 100000 65536
 			sudo lxc-checkconfig
 		\end{verbatim}
 	
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=0.36\textwidth]{img/lxc_ns1.jpg}
+				\caption{Comprobación instalación de LXC usando \texttt{lxc-checkconfig}}
+			\end{center}
+		\end{figure}
+	
 		\item Creamos el contenedor de Ubuntu siguiendo los pasos de la creación guiada de contenedores que hemos comentado en apartados anteriores.
 		\begin{verbatim}
 			sudo lxc-create --template download --name <NombreContenedor>
 		\end{verbatim}
+		
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=0.7\textwidth]{img/lxc_ns2.png}
+				\caption{Instalación de contenedor LXC (1)}
+			\end{center}
+		\end{figure}
+		
+		\pagebreak
 		
 		\noindent De manera interactiva, el programa nos preguntará por diferentes opciones para nuestro contenedor. Para elegir una distribución, podemos acceder a la siguiente web: \href{https://uk.lxd.images.canonical.com/}{imagenes LXC}, en las que aparecen todas las imagenes disponibles. En este caso, escribimos lo siguiente para cada una de ellas:
 		\begin{itemize}
@@ -1939,6 +1964,13 @@ lxc.id_map = g 0 100000 65536
 			\item \textit{Release}: \texttt{focal}
 			\item \textit{Architecture}: \texttt{amd64}
 		\end{itemize}
+	
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=0.7\textwidth]{img/lxc_ns3.png}
+				\caption{Instalación de contenedor LXC (2)}
+			\end{center}
+		\end{figure}
 	
 		\item Iniciamos el contenedor que acabamos de crear.
 		\begin{verbatim}
@@ -1955,6 +1987,15 @@ lxc.id_map = g 0 100000 65536
 			cat /etc/os-release
 		\end{verbatim}
 	
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=0.85\textwidth]{img/lxc_ns4.png}
+				\caption{Comprobación de la versión de Ubuntu instalada en el contenedor LXC}
+			\end{center}
+		\end{figure}
+	
+		\pagebreak
+	
 		\item Por último, en otra terminal, procedemos a obtener el \texttt{PID} asociado a dicho contenedor. Para ello, podemos hacer uso del siguiente comando:
 		\begin{verbatim}
 			sudo lxc-info -p -n <NombreContenedor>
@@ -1964,11 +2005,19 @@ lxc.id_map = g 0 100000 65536
 		\begin{verbatim}
 			sudo lsns | grep <PID_contenedor>
 		\end{verbatim}
+	
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=0.7\textwidth]{img/lxc_ns5.png}
+				\caption{Namespaces asociados a un contenedor LXC ejecutado en el host}
+			\end{center}
+		\end{figure}
 	\end{enumerate}
 	
 	\pagebreak
 	
 	\subsection{Contenedores \texttt{Docker}}
+	\label{sec: docker}
 	\noindent En este apartado vamos a profundizar en la herramienta \texttt{Docker}. Al igual que en el caso de \texttt{LXC}, \texttt{Docker} permite la creación y la gestiones de aplicaciones aisladas entre sí, utilizando virtualización ligera; es decir, nos permite gestionar facilmente un entorno de contenedores. \\
 	
 	\noindent Tal y como lo definen sus creadores [\ref{bib: docker info}], \texttt{Docker} es una plataforma de desarrollo, despliegue y ejecución de aplicaciones. \texttt{Docker} permite separar entre aplicaciones de tu infraestructura, permitiendo desplegar el software mucho más rápido. Uno de los objetivos que persigue esta plataforma es el de minimizar el tiempo entre programar y tener ejecutando la aplicación en producción. Algunas de las ventajas que nos aporta esta plataforma son:
@@ -2222,7 +2271,7 @@ $ docker ps | grep alpine
 		\begin{center}
 			\includegraphics[width=0.9\textwidth]{img/docker_ns2.png}
 			\caption{Resultado de comando \texttt{ip netns list} con contenedores Docker.}
-		\end{center}
+			\end{center}
 	\end{figure}
 
 	\pagebreak
