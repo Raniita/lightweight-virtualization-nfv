@@ -10,6 +10,9 @@
 
 \usepackage[dvipsnames]{xcolor}
 
+% Portada Oficial
+\usepackage[export]{adjustbox}
+
 \renewcommand{\lstlistingname}{Ejemplo}
 \renewcommand{\lstlistlistingname}{Listado de ejemplos}
 
@@ -17,6 +20,22 @@
 \newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
+
+% Configuracion PDF metadata
+\hypersetup{
+	pdftitle= {Aplicación de técnicas de virtualización ligera para la evaluación de redes de comunicaciones},
+	pdfauthor = {Enrique Fernández Sánchez},
+	pdfsubject = {Simulación de redes utilizando namespaces},
+	pdfkeywords = {NFV, SDN, Linux, namespaces, containers, Docker, LXC, mininet, OpenSource}
+}
+
+% Configuracion colores hiperenlaces
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	%filecolor=magenta,      
+	urlcolor=cyan,
+}
 
 % Configure lstlisting
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -45,21 +64,73 @@
 
 \lstset{style=mystyle}
 
+% Configuracion encabezados y pies de pagina
+\usepackage{fancyhdr}
+\fancyhf{}
+\lhead[\leftmark]{\small TFE: Enrique Fernández Sánchez}
+\rhead[Nombre Autor]{\rightmark}
+\cfoot[\thepage]{}
+\cfoot[]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{
+	\fancyhf{}
+	\fancyhead[L]{}
+	\fancyfoot[C]{\thepage}
+	\renewcommand{\headrulewidth}{0pt}
+	\renewcommand{\footrulewidth}{0pt}
+}
+\pagestyle{fancy}
+
 \begin{document}
 	\selectlanguage{spanish}
 	
-	%%%% PORTADA
-	\title{\textbf{Aplicación de técnicas de virtualización ligera para la evaluación de redes de comunicaciones} \\ 
-	\addvspace{10px} \large \textit{Trabajo Final de Estudios} \\
-	\large Ingeniería Telemática}
-	\author{Autor: Enrique Fernández Sánchez \\ Tutor: Josemaria Malgosa Sanahuja \\ \\Universidad Politécnica de Cartagena}
+	%%%% PORTADA V1
+	%\title{\textbf{Aplicación de técnicas de virtualización ligera para la evaluación de redes de comunicaciones} \\ 
+	%\addvspace{10px} \large \textit{Trabajo Final de Estudios} \\
+	%\large Ingeniería Telemática}
+	%\author{Autor: Enrique Fernández Sánchez \\ Tutor: Josemaria Malgosa Sanahuja \\ \\Universidad Politécnica de Cartagena}
 	
 	%% EDITAR PARA SEGUIMIENTO DE VERSIONES
-	\date{Revisión Enero 2022}
+	%\date{Revisión Enero 2022}
 	
-	\maketitle
-	
+	%\maketitle
+	%\pagebreak
 	%%% END PORTADA
+	
+	%% PORTADA UPCT
+	\thispagestyle{empty}
+	
+	\newgeometry{left=0.01cm, bottom=0.01cm, top=0.01cm}
+
+	\begin{minipage}{0.2\textwidth}
+		\includegraphics[height=\textheight, left]{img/banda_etsit_90.png}
+	\end{minipage}
+	\centerline{\begin{minipage}[t][5cm][b]{0.5\textwidth}
+		\title{\textbf{Aplicación de técnicas de virtualización ligera para la evaluación de redes de comunicaciones}} 
+		
+		%% EDITAR PARA SEGUIMIENTO DE VERSIONES
+		\date{Revisión Enero 2022}
+		
+		\maketitle
+	
+		\vspace{0.5cm}
+	
+		\hspace{1.5cm} \textbf{TRABAJO FIN DE GRADO} \\
+	
+		\vspace{0.5cm}
+	
+		\hspace{1.8cm} Grado en Ingeniería Telemática \\
+	
+		\vspace{1cm}
+	
+		\textbf{Autor:}\author{ Enrique Fernández Sánchez}\\
+	
+		\textbf{Tutor:} Josemaria Malgosa Sanahuja
+	\end{minipage}}
+
+	\restoregeometry
+	%% END PORTADA UPCT	
 	
 	\pagebreak
 	
@@ -69,8 +140,10 @@
 	
 	\addcontentsline{toc}{section}{Índice de figuras}
 	\listoffigures
-	\addcontentsline{toc}{section}{Índice de tablas}
-	\listoftables
+	
+	%\addcontentsline{toc}{section}{Índice de tablas}
+	%\listoftables
+	
 	\addcontentsline{toc}{section}{Listado de ejemplos}
 	\lstlistoflistings
 	
@@ -203,7 +276,7 @@
 	
 	\pagebreak
 	
-\	\subsection{Tecnologías implicadas}
+	\subsection{Tecnologías implicadas}
 	\noindent Para que este cambio de paradigma se materialice, es decir, pase de ser ``papers'' con soluciones generalistas, y que de verdad estas se materialicen en una solución viable, tienen que realizarse una serie de desarrollos, los cuales provocan que aún a día de hoy sean soluciones experimentales, que aunque son utilizadas en entornos reales, todavía están en continuo desarrollo. Además, aunque estamos hablando de NFV, hay una tecnología extra que también aparece en la ecuación, esta tecnología es el SDN (\textit{Software Defined Networks}). En este caso particular, nos encontramos con que el NFV no puede existir sin el SDN, y viceversa [\ref{bib: sdn y nfv}]. Si tuviéramos que definir brevemente cada una de dichas tecnologías, podríamos resumirlo en lo siguiente:
 	\begin{itemize}
 		\item \textit{Software Defined Networks}. Suponen un punto de vista de las redes, en las que las propias redes utilizan una serie de controladores, basados en software o en API de control, con el fin de dirigir el tráfico de red y comunicarse con la infraestructura hardware de capas superiores. (ver Figura \ref{img: sdn + nfv})
