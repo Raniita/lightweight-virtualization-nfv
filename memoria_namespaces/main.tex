@@ -423,6 +423,7 @@ $ ip link add link eth0.1000 eth0.1000.1000 type vlan proto 802.1q id 1000
 	\pagebreak
 	
 	\subsection{Pares VETH.}
+	\label{sec: veth}
 	\noindent Los \texttt{veth} (Ethernet virtuales) son un dispositivo virtual que forman un túnel local ethernet. El dispositivo se crea en parejas. [\ref{bib:virtual interface list}]\\
 	
 	\noindent Los paquetes transmitidos por un extremo del ethernet virtual se reciben inmediatamente en el otro extremo. Si alguno de ellos se encuentra apagado, decimos que el link de la pareja esta también apagado. A modo de ejemplo, nos fijamos una estructura básica en la que dos aplicaciones se comunican utilizando \texttt{veth}, tal y como vemos en la figura (\ref{ej1 veth})\\
@@ -1346,7 +1347,7 @@ echo <PID> > /sys/fs/cgroup/cpu/<NombreGrupo>/tasks
 	
 	\pagebreak
 	
-	\subsection{Ejemplo: despliegue topología de red usando comando \texttt{ip}}
+	\subsection{Ejemplo: topología de red usando comando \texttt{ip}}
 	\noindent En este apartado, vamos a detallar un ejemplo de como funciona el comando IP manejando los 'network namespaces'.\\
 	
 	\noindent Creamos los \textit{network namespaces}, en este caso, con nombre h1 y h2. El sistema no crea directamente el namespace, lo que en realidad hace es definirlos en el sistema. El \textit{network namespace} se crea cuando una aplicación se asocia a el.
@@ -1435,7 +1436,7 @@ $ ip netns del h2
 
 	\pagebreak
 
-	\subsection{Ejemplo: despliegue de topología de red usando comando \texttt{unshare}}
+	\subsection{Ejemplo: topología de red usando comando \texttt{unshare}}
 	\noindent En el ejemplo anterior, utilizábamos el comando \texttt{ip} para manejar los network namespaces, sin embargo, eso nos limitaba los tipos namespaces que queríamos asignar a nuestro namespace. En contra partida a esto, el comando \texttt{unshare} nos da más libertad a la hora de crear los namespaces. \\
 	
 	\noindent Utilizando \texttt{unshare}, no podemos ponerle un nombre, pero sí que nos permite asociarlo a un archivo, que montará con tipo \textit{bind}. Esto nos permitirá utilizar en namespace aunque no haya ningún proceso corriendo en el, para ello podemos utilizar el comando \texttt{nsenter}.
@@ -1769,7 +1770,7 @@ unshare --pid --ipc --uts --cgroup --mount --root=rootfs --mount-proc --fork "$@
 		\begin{figure}[h!]
 			\begin{center}
 				\includegraphics[width=1\textwidth]{img/container_runtime1.png}
-				\caption{Ejecución del script \texttt{runtime-exec}}
+				\caption{Ejecución del script \texttt{runtime-exec} (1/2)}
 			\end{center}
 		\end{figure}
 	
@@ -1778,7 +1779,7 @@ unshare --pid --ipc --uts --cgroup --mount --root=rootfs --mount-proc --fork "$@
 		\begin{figure}[h!]
 			\begin{center}
 				\includegraphics[width=0.85\textwidth]{img/container_runtime2.png}
-				\caption{Ejecución del script \texttt{runtime-exec}}
+				\caption{Ejecución del script \texttt{runtime-exec} (2/2)}
 			\end{center}
 		\end{figure}
 	
@@ -2441,7 +2442,7 @@ $ docker exec -it docker-ns sh
 		mn --version
 	\end{verbatim}
 
-	\noindent Por otro lado, Mininet permite utilizar diferentes switches y controladores para sus topologías. Para esta explicación, vamos a utilizar Open vSwitch como controlador, en el modo \textit{bridge/standalone}. Si queremos comprobar que Open vSwitch está instalado correctamente para mininet, podemos ejecutar el siguiente comando en una terminal:
+	\noindent Por otro lado, Mininet permite utilizar diferentes switches y controladores para sus topologías. Para esta explicación, vamos a utilizar Open vSwitch [\ref{bib: open vswitch}] como controlador, en el modo \textit{bridge/standalone}. Si queremos comprobar que Open vSwitch está instalado correctamente para mininet, podemos ejecutar el siguiente comando en una terminal:
 	\begin{verbatim}
 		mn --switch ovsbr --test pingall
 	\end{verbatim}
@@ -2458,6 +2459,154 @@ $ docker exec -it docker-ns sh
 
 	%% Ruta miniedit:
 	% /usr/lib/python3.10/site-packages/mininet/examples/miniedit.py
+	
+	\pagebreak
+	
+	\subsubsection{Implementación topología simple}
+	
+	\noindent En este apartado, vamos a trabajar la dualidad entre implementar una topología utilizando únicamente namespaces, a implementar esa misma topología utilizando mininet. Para ello, vamos a trabajar con una red formada por dos hosts, conectados entre sí mediante un conmutador de paquetes (\textit{switch}), que será manejado por un controlador. \\
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.6\textwidth]{img/ns_mn_single.png}
+			\caption{Diagrama de la topología simple a implementar.}
+		\end{center}
+	\end{figure}
+	
+	\noindent \textbf{\large Ejemplo: topología simple sin usar \texttt{mininet}}\\
+	
+	\noindent Primero, accedemos a nuestra máquina Host, en la que desplegaremos los namespaces asociados a la topología. Una vez estamos dentro de la cuenta \texttt{root}, procedemos a crear los \texttt{network namespaces} de cada host. 
+	
+	\begin{verbatim}
+$ ip netns add host-1
+$ ip netns add host-2
+	\end{verbatim}
+
+	\noindent Con los \texttt{network namespaces} ya creados, lo siguiente es crear el conmutador de paquetes. En este caso, vamos a utilizar Open vSwitch [\ref{bib: open vswitch}], que previamente hemos instalado en conjunto con mininet. Para crear dicho switch, ejecutamos el siguiente comando:
+	
+	\begin{verbatim}
+$ ovs-vsctl add-br switch-1
+	\end{verbatim}
+
+	\noindent Para interconectar los hosts con el conmutador, utilizaremos interfaces de red virtuales de tipo pares de ethernet (\texttt{veth pairs}) (explicados en [\ref{sec: veth}]). Por eso mismo, utilizamos los siguientes comando para establecer los enlaces punto a punto:
+	
+	\begin{verbatim}
+$ ip link add host-1-veth1 type veth peer name switch-1-veth1
+$ ip link add host-2-veth2 type veth peer name switch-1-veth2
+	\end{verbatim}
+
+	\pagebreak
+
+	\noindent En este punto, tendremos que asociar las interfaces a los \texttt{network namespaces}.
+	
+	\begin{verbatim}
+$ ip link set host-1-veth1 netns host-1
+$ ip link set host-2-veth2 netns host-2
+	\end{verbatim}
+
+	\noindent Por otro lado, también será necesario que añadamos el otro extremo de las interfaces al switch.
+	
+	\begin{verbatim}
+$ ovs-vsctl add-port switch-1 switch-1-veth1
+$ ovs-vsctl add-port switch-1 switch-1-veth2
+	\end{verbatim}
+
+	\noindent Ahora es el momento de configurar el switch para que funcione como un conmutador. Para ello, utilizamos el controlador Open vSwitch (tal y como pudimos ver en los ejemplos asociados a pares ethernet [\ref{sec: veth}]). Por lo tanto, para hacerlo funcionar en nuestra topología, tendremos que ejecutar los siguientes comandos:
+	
+	\begin{verbatim}
+$ ovs-vsctl set-controller switch-1 tcp:127.0.0.1
+$ ovs-testcontroller ptcp: &
+	\end{verbatim}
+
+	\noindent Si queremos comprobar que hemos creado correctamente el switch virtual, podemos utilizar el siguiente comando:
+	
+	\begin{verbatim}
+$ ovs-vsctl show
+	\end{verbatim}
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.6\textwidth]{img/ns_single_1.png}
+			\caption{Captura de la configuración del switch usando Open vSwitch.}
+		\end{center}
+	\end{figure}
+	
+	\noindent Una vez tenemos todos los dispositivos configurados, lo que tendremos que hacer es asignar direcciones IP a cada host, y pondremos en funcionamiento las interfaces asociadas.
+	
+	\begin{verbatim}
+$ ip netns exec host-1 ip addr add 10.0.0.1/24 dev host-1-veth1
+$ ip netns exec host-2 ip addr add 10.0.0.2/24 dev host-2-veth2
+$ ip netns exec host-1 ip link set host-1-veth1 up
+$ ip netns exec host-1 ip link set lo up
+$ ip netns exec host-2 ip link set host-2-veth2 up
+$ ip netns exec host-2 ip link set lo up
+$ ip link set switch-1-veth1 up
+$ ip link set switch-1-veth2 up
+	\end{verbatim}
+
+	\pagebreak
+
+	\noindent En este punto, ya deberíamos tener conectividad entre ambos hosts. Para ello, lo que podemos hacer es realizar un ping entre \texttt{host-1} (IP: 10.0.0.1) y \texttt{host-2} (IP: 10.0.0.2).
+	
+	\begin{verbatim}
+$ ip netns exec host-1 ping 10.0.0.2
+	\end{verbatim}
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.65\textwidth]{img/ns_single_2.png}
+			\caption{Ejecución ping entre \texttt{host1} y \texttt{host2}.}
+		\end{center}
+	\end{figure}
+	
+	\vspace{10px}
+	%\pagebreak
+	
+	\noindent \textbf{\large Ejemplo: topología simple utilizando \texttt{mininet}}\\
+	
+	\noindent En este caso, vamos a replicar la misma topología del ejemplo anterior, pero esta vez utilizando mininet. Dado que es una topología sencilla, podemos ejecutarla con un único comando. 
+	
+	\begin{verbatim}
+$ mn --topo single,2 --controller=ovsc
+	\end{verbatim}
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.55\textwidth]{img/mn_single_1.png}
+			\caption{Ejecución topología simple en \texttt{mininet}.}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
+	
+	\noindent Como podemos comprobar en la captura anterior, una vez ejecutamos el comando, la topología se crea automáticamente. Si quisiéramos comprobar la conectividad entre los diferentes hosts, solo tendríamos que ejecutar el siguiente comando dentro de la terminal de mininet.
+	
+	\begin{verbatim}
+mininet> h1 ping h2
+	\end{verbatim}
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.65\textwidth]{img/mn_single_2.png}
+			\caption{Ping entre hosts de topología simple en \texttt{mininet}.}
+		\end{center}
+	\end{figure}
+
+	%\pagebreak
+	
+	\noindent Mientras tenemos activa la topología de mininet, podemos comprobar qué namespaces ha creado para dicha topología. 
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.8\textwidth]{img/mn_single_3.png}
+			\caption{Comprobación de namespaces utilizados por topología en \texttt{mininet}.}
+			\label{img: lsns mininet 1}	
+		\end{center}
+	\end{figure}
+
+	\noindent Como bien podemos ver en la imagen (\ref{img: lsns mininet 1}), \texttt{mininet} solo está utilizando los namespaces \texttt{mount} y \texttt{network} para el despliegue de la topología. 
+	
+	\pagebreak
 	
 	\subsection{Interconexión física de diferentes red virtuales}
 	\subsection{Evaluación de prestaciones}
