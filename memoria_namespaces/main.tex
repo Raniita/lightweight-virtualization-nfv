@@ -297,7 +297,7 @@
 	\subsection{Virtualización ligera}
 	\label{sect: virt ligera}
 	
-	\noindent Entendemos la virtualización ligera como un tipo de virtualización de un sistema. Dicha virtualización se hace a nivel de sistema operativo, aportando que existan diferentes espacios de usuarios aislados entre sí, sin embargo, a diferencia del concepto `\textit{máquina virtual}' (virtualización dura), en la virtualización ligera todos los sistemas virtualizados dependen del \texttt{kernel} de la máquina host, mientras que en el caso de una máquina virtual, cada instancia tendría su propio \texttt{kernel} (ver Figura \ref{img: virtualization comparative}). [\ref{bib: virt ligera}]\\
+	\noindent Entendemos la virtualización ligera como un tipo de virtualización de un sistema. Dicha virtualización se hace a nivel de sistema operativo, aportando que existan diferentes espacios de usuarios aislados entre sí, sin embargo, a diferencia del concepto ``\textit{máquina virtual}'' (virtualización dura), en la virtualización ligera todos los sistemas virtualizados dependen del \texttt{kernel} de la máquina host, mientras que en el caso de una máquina virtual, cada instancia tendría su propio \texttt{kernel} (ver Figura \ref{img: virtualization comparative}). [\ref{bib: virt ligera}]\\
 	
 	\noindent Por lo tanto, las ventajas destacables sobre la virtualización ligera frente a la virtualización ligera serían:
 	\begin{itemize}
@@ -2415,7 +2415,7 @@ $ docker exec -it docker-ns sh
 	%\noindent \textbf{\large Mininet}\\
 	\subsection{\texttt{Mininet}: Simulador de redes}
 	
-	\noindent Profundizando en la última solución aportada, Mininet [\ref{bib: mininet home page}], destacamos sus ventajas en la customización de topologías, además de la facilidad de compartir y desplegar dichas topologías en un hardware consumidor utilizando un único comando. Es por esto por lo que Mininet es una herramienta muy útil para el desarrollo, la enseñanza y la investigación, siendo una herramienta muy importante para la experimentación en el campo del \textit{Software Defined Networking} (SDN) ya que permite utilizar controladores basados en OpenFlow y P4.
+	\noindent Profundizando en la última solución aportada, \texttt{mininet} [\ref{bib: mininet home page}], destacamos sus ventajas en la customización de topologías, además de la facilidad de compartir y desplegar dichas topologías en un hardware de uso general utilizando un único comando. Es por esto por lo que \texttt{mininet} es una herramienta muy útil para el desarrollo, la enseñanza y la investigación, siendo una herramienta muy determinante para la experimentación en el campo del \textit{Software Defined Networking} (SDN) ya que permite utilizar controladores basados en OpenFlow y P4.
 	
 	\subsubsection{Primeros pasos}
 	\noindent Lo primero que tenemos que hacer para empezar a trabajar con este simulador, es proceder a su instalación. En la página web oficial, se nos detallan diferentes métodos para la instalación \href{http://mininet.org/download/}{Mininet: Download/Get Started with Mininet}, dichos métodos son: 
@@ -2428,7 +2428,9 @@ $ docker exec -it docker-ns sh
 
 	\pagebreak
 
-	\noindent La opción de utilizar una máquina virtual preconfigurada es mucho más rápida, sin embargo, para nuestro ejemplo, vamos a suponer que deseamos realizar una instalación de \texttt{mininet} sobre nuestra distribución Linux. Para ello, en función de la distribución que estemos usando, instalamos el programa tal que:
+	\noindent La opción de utilizar una máquina virtual preconfigurada es mucho más rápida, ya que solo tendremos que descargar la última versión del enlace que encontramos en la web oficial del proyecto \href{https://github.com/mininet/mininet/releases/}{Github: mininet releases}. Una vez descargada, importamos dicha imagen en nuestro hipervisor, por ejemplo: \textit{VirtualBox}. Ejecutamos la máquina virtual recién importada y accedemos al sistema con el usuario: \texttt{mininet}/\texttt{mininet}. \\
+	
+	 \noindent Sin embargo, si deseamos realizar una instalación de \texttt{mininet} sobre nuestra distribución Linux. Podemos instalar el programa en función de la distribución que estemos usando:
 	
 	\begin{itemize}
 		\item Debian/Ubuntu: \texttt{sudo apt-get install mininet}
@@ -2604,7 +2606,9 @@ mininet> h1 ping h2
 		\end{center}
 	\end{figure}
 
-	\noindent Como bien podemos ver en la imagen (\ref{img: lsns mininet 1}), \texttt{mininet} solo está utilizando los namespaces \texttt{mount} y \texttt{network} para el despliegue de la topología. 
+	\noindent Como bien podemos ver en la imagen (\ref{img: lsns mininet 1}), \texttt{mininet} solo está utilizando los namespaces \texttt{mount} y \texttt{network} para el despliegue de la topología. \\
+	
+	\noindent Si quisiéramos implementar esta topología simple utilizando la API Python que está incluida en \texttt{mininet}, podemos ejecutar el código del Anexo 4 [\ref{sec: anexo 4}] (ver código \ref{lst: topo simple})
 	
 	\pagebreak
 	
@@ -3085,4 +3089,33 @@ sudo pacman -S ansible
 	\pagebreak
 	\subsection*{Anexo 3. Playbooks \texttt{ansible}}
 	\addcontentsline{toc}{subsection}{Anexo 3. Playbooks \texttt{ansible}}
+	
+	\pagebreak
+	
+	\subsection*{Anexo 4. Topologías de \texttt{mininet}}
+	\label{sec: anexo 4}
+	\addcontentsline{toc}{subsection}{Anexo 4. Topologías de \texttt{mininet}}
+	
+	\vspace{10px}
+	\noindent \textbf{\large Topología simple}\\
+	
+	\begin{lstlisting}[language=Python, caption={Implementación topología simple utilizando mininet}, label={lst: topo simple}]
+from mininet.net import Mininet
+from mininet.topo import Topo
+
+topo = Topo()				# Empty topology
+topo.addSwitch("s1")		# Adding switch
+topo.addHost("h1")			# Add Host
+topo.addHost("h2")			# Add Host
+topo.addLink("h1", "s1")	# Link host to switch
+topo.addLink("h2", "s2")
+
+net = Mininet(topo)			# Start Mininet
+net.start()
+net.pingAll()
+net.iperf()
+net.stop()
+	\end{lstlisting}
+	
+	
 \end{document}
