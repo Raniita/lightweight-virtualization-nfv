@@ -2428,7 +2428,7 @@ $ docker exec -it docker-ns sh
 
 	\pagebreak
 
-	\noindent Para nuestro ejemplo, vamos a suponer que deseamos realizar una instalación de \texttt{mininet} sobre nuestra distribución Linux. Para ello, en función de la distribución que estemos usando, instalamos el programa tal que:
+	\noindent La opción de utilizar una máquina virtual preconfigurada es mucho más rápida, sin embargo, para nuestro ejemplo, vamos a suponer que deseamos realizar una instalación de \texttt{mininet} sobre nuestra distribución Linux. Para ello, en función de la distribución que estemos usando, instalamos el programa tal que:
 	
 	\begin{itemize}
 		\item Debian/Ubuntu: \texttt{sudo apt-get install mininet}
@@ -2607,6 +2607,19 @@ mininet> h1 ping h2
 	\noindent Como bien podemos ver en la imagen (\ref{img: lsns mininet 1}), \texttt{mininet} solo está utilizando los namespaces \texttt{mount} y \texttt{network} para el despliegue de la topología. 
 	
 	\pagebreak
+	
+	\noindent \textbf{\large Ejemplo: limitación de recursos usando \texttt{mininet}}\\
+	
+	\noindent En este ejemplo, vamos a profundizar sobre como aplicar limitaciones de recursos a una topología desplegada con \texttt{mininet}. Algunos de los recursos más importantes a tener en cuenta, son los siguientes:
+	
+	\begin{itemize}
+		\item \textit{CPU}. Nos permite asignar el máximo uso de CPU de un dispositivo de la tecnología. Esto nos permitirá ajustar nuestra simulación a un entorno más real, además de permitirnos gestionar más los recursos disponibles.
+		\item \textit{Latencia}. Permite establecer una latencia máxima a un enlace entre dispositivos.
+		\item \textit{Ancho de banda}. Permite establecer un máximo de ancho de banda para un enlace entre dispositivos.
+	\end{itemize}
+	
+	\noindent Por lo tanto, a modo de ejemplo, vamos a utilizar la topología anterior, pero aplicando una limitación de ancho de banda, latencia y CPU a uno de los enlaces que conectan un host con el switch.
+	
 	
 	\subsection{Interconexión física de diferentes red virtuales}
 	\subsection{Evaluación de prestaciones}
