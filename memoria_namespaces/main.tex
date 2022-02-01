@@ -2660,8 +2660,102 @@ mininet> h1 ping h2
 	\pagebreak
 	
 	\subsubsection{Primeros pasos}
+	\noindent Lo primero que tenemos que hacer para trabajar con este simulador es proceder a su instalación. Para ello, nos vamos a guiar por los pasos que están detallados en la documentación del proyecto en \href{https://containernet.github.io/#installation}{Github: containernet}. Lo primero que podemos comprobar es que se nos aportan dos opciones de instalación:
+	\begin{itemize}
+		\item ``Bare-metal installation''. Hace referencia a una instalación sobre la distribución Ubuntu 20.04 LTS con Python3.
+		
+		\item ``Nested Docker deployment''. Utiliza un contenedor Docker con privilegios para desplegar en su interior otro entorno Docker en el que ejecutar las topologias de \texttt{containernet}. Esta opción tiene deshabilitado la característica de limitación de recursos.
+	\end{itemize}
+
+	\noindent Para nuestro entorno de pruebas, hemos elegido instalar \texttt{containernet} en una máquina virtual en \textit{VirtualBox}, utilizando Ubuntu 20.04 LTS, tal y como leemos en su documentación. Para ello, seguimos las instrucciones tal que:
+	
+	\begin{enumerate}
+		\item Instalación de \texttt{Ansible}
+		\begin{verbatim}
+sudo apt-get install ansible
+		\end{verbatim}
+	
+		\item Clonamos el repositorio de Github:
+		\begin{verbatim}
+git clone https://github.com/containernet/containernet.git
+		\end{verbatim}
+	
+		\item Ejecutamos el ``playbook'' de \texttt{Ansible}, el cual instalará todas las dependencias y posteriormente \texttt{containernet}.
+		\begin{verbatim}
+sudo ansible-playbook -i "localhost," -c local containernet/
+ansible/install.yml
+		\end{verbatim}
+	
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=0.75\textwidth]{img/cn_install1.png}
+				\caption{Instalación \texttt{containernet} en Ubuntu 20.04 LTS (1/2)}	
+			\end{center}
+		\end{figure}
+	\end{enumerate}
+	
+	\pagebreak
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.75\textwidth]{img/cn_install2.png}
+			\caption{Instalación \texttt{containernet} en Ubuntu 20.04 LTS (2/2)}
+			\label{img: containernet install}
+		\end{center}
+	\end{figure}
+	
+	\noindent Si la instalación es satisfactoria, la salida de la consola debería ser muy similar a la que vemos en la imagen \ref{img: containernet install}. Al final de la ejecución del ``playbook'' de \texttt{Ansible}, se nos muestra un resumen de las tareas ejecutadas, y cuales de ellas se han realizado correctamente, o bien, cuales han dado error al ejecutarse. En nuestro caso, se ha instalado correctamente.
 	
 	\subsubsection{Implementación topología simple}
+	\noindent En este apartado vamos a comentar como desplegar una topología simple dentro de \texttt{containernet}. Dado que la filosofía de este programa es extender la funcionalidad de \texttt{mininet} hacia la posibilidad de que los hosts sean contenedores de Docker, lo que tendremos como topología son varios contenedores Docker, interconectados cada uno con un switch. Como podemos ver, el diagrama de la red es muy parecido al que utilizamos como topología simple en \texttt{mininet}.
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.6\textwidth]{img/cn_simple_diag.png}
+			\caption{Diagrama topología simple utilizando \texttt{containernet}}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.9\textwidth]{img/cn_example1.png}
+			\caption{Topologia simple (1/5)}
+		\end{center}
+	\end{figure}
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{img/cn_example2.png}
+			\caption{Topologia simple (2/5)}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.8\textwidth]{img/cn_example3.png}
+			\caption{Topologia simple (3/5)}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.9\textwidth]{img/cn_example4.png}
+			\caption{Topologia simple (4/5)}
+		\end{center}
+	\end{figure}
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{img/cn_example5.png}
+			\caption{Topologia simple (5/5)}
+		\end{center}
+	\end{figure}
 	
 	%\subsection{Interconexión física de diferentes red virtuales}
 	%\subsection{Evaluación de prestaciones}
