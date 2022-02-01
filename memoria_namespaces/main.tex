@@ -2624,9 +2624,47 @@ mininet> h1 ping h2
 	
 	\noindent Por lo tanto, a modo de ejemplo, vamos a utilizar la topología anterior, pero aplicando una limitación de ancho de banda, latencia y CPU a uno de los enlaces que conectan un host con el switch.
 	
+	\pagebreak
 	
-	\subsection{Interconexión física de diferentes red virtuales}
-	\subsection{Evaluación de prestaciones}
+	\subsection{\texttt{Containernet}: Simulador de redes}
+	
+	\noindent Por otro lado, existen otras implementaciones de simuladores que extienden la funcionalidad de \texttt{mininet}, permitiendo abarcar muchas más situaciones a simular. A modo de ejemplo, destacamos \texttt{containernet} [\ref{bib: containernet github}], siendo un simulador de red basado en \texttt{mininet} que permite utilizar contenedores de \texttt{Docker} como hosts en una red emulada. Esta funcionalidad permite construir entornos de simulación para redes de tipo \textit{cloud}. \\
+	
+	\noindent Además, es un proyecto muy activo por la comunidad investigadora, ya que permite evaluar topologias de \textit{cloud computing}, \textit{network function virtualization} (NFV) o \textit{multi-access edge computing} (MEC). Un ejemplo de esto es el emulador \href{https://github.com/containernet/vim-emu}{vim-emu: A NFV multi-PoP emulation Platform}, desarrollado por \href{https://www.sonata-nfv.eu/}{SONATA project}, y que está basado en \texttt{containernet}.
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.3\textwidth]{img/containernet_logo.png}
+			\caption{Logotipo del projecto \texttt{containernet} [\ref{bib_img: containernet logo}]}	
+		\end{center}
+	\end{figure}
+
+	\vspace{10px}
+	
+	\noindent \textbf{\large Características}\\
+	
+	\noindent Algunas de las características más importantes que nos aporta \texttt{containernet}, son las siguientes:
+	
+	\begin{itemize}
+		\item Añadir y eliminar contenedores \texttt{Docker} a topologias de \texttt{mininet}. Interconectar dichos contenedores con la topología.
+		
+		\item Ejecutar comandos dentro de los contenedores, utilizando \texttt{mininet CLI}.
+		
+		\item Cambios dinámicos en las topologías. Permite añadir o eliminar contenedores a topologias que estén en ejecución.
+		
+		\item Limitar recursos de los contenedores \texttt{Docker}, de forma individual.
+		
+		\item Permite configurar los enlaces en base a: \textit{delay}, \textit{bandwidth}, \textit{loss} o \textit{jitter}.
+	\end{itemize}
+	
+	\pagebreak
+	
+	\subsubsection{Primeros pasos}
+	
+	\subsubsection{Implementación topología simple}
+	
+	%\subsection{Interconexión física de diferentes red virtuales}
+	%\subsection{Evaluación de prestaciones}
 	
 	\pagebreak
 	
@@ -2925,6 +2963,11 @@ mininet> h1 ping h2
 		\label{bib: docker y namespaces}
 		\href{https://arthurchiao.art/blog/play-with-container-network-if/}{Play with Container Network Interface}
 		
+		%58
+		\item 
+		\label{bib: containernet github}
+		\href{https://github.com/containernet/containernet}{Github: containernet}
+		
 		% X
 		\item
 		\label{bib: docker works namespaces}
@@ -2991,6 +3034,11 @@ mininet> h1 ping h2
 		\item
 		\label{bib_img: docker logo}
 		\href{https://commons.wikimedia.org/wiki/File:Docker_(container_engine)_logo.png}{Logotipo \texttt{Docker}}
+		
+		%10
+		\item 
+		\label{bib_img: containernet logo}
+		\href{https://github.com/containernet/containernet}{Logotipo \texttt{containernet}}
 		
 		%\item 
 		%\label{bib:img2}\href{https://twitter.com/b0rk/status/1240364585766576128}{How containers work.}
