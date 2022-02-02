@@ -110,7 +110,7 @@
 		\title{\textbf{Aplicación de técnicas de virtualización ligera para la evaluación de redes de comunicaciones}} 
 		
 		%% EDITAR PARA SEGUIMIENTO DE VERSIONES
-		\date{Revisión Enero 2022}
+		\date{Revisión Febrero 2022}
 		
 		\maketitle
 	
@@ -2718,42 +2718,76 @@ ansible/install.yml
 
 	\pagebreak
 	
+	\noindent Esta topología que podemos ver en el diagrama, está ubicada en la carpeta de \texttt{examples} dentro de \texttt{containernet}. Con esta topología podemos ver las bases del simulador, y comprobar como puede trabajar con las características de \texttt{mininet}, a la vez de implementar los hosts como contenedores Docker. El código Python utilizado para ejecutar el ejemplo lo encontramos en el Anexo 4 [\ref{sec: anexo 4}] (ver código \ref{lst: topo simple containernet}). \\
+	
+	\noindent Para ejecutar el ejemplo, tendremos que lanzar el siguiente comando:
+	\begin{verbatim}
+sudo python3 containernet_example.py
+	\end{verbatim}
+
+	\noindent La salida por consola será muy similar a la que obtendríamos en \texttt{mininet}, sin embargo, podemos comprobar como aparece la información respectiva de nuestros contenedores Docker que van a tener la función de host en la topología. Todo esto lo podemos ver en la figura \ref{img: cn simple 1}.
+	
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.9\textwidth]{img/cn_example1.png}
-			\caption{Topologia simple (1/5)}
+			\includegraphics[width=1\textwidth]{img/cn_example1.png}
+			\caption{Ejecución de topología simple en \texttt{containernet} (1/5)}
+			\label{img: cn simple 1}
 		\end{center}
 	\end{figure}
 
-	\begin{figure}[h!]
-		\begin{center}
-			\includegraphics[width=0.5\textwidth]{img/cn_example2.png}
-			\caption{Topologia simple (2/5)}
-		\end{center}
-	\end{figure}
+	\noindent Una vez se termina de ejecutar la topología, nos deja activa la \texttt{CLI} para que podamos interactuar con la misma. En nuestro caso, vamos a comprobar cual es la configuración de red asociada al host 1, para ver como ha gestionado las interfaces del contenedor de Docker. Para ello, ejecutamos el siguiente comando:
+	\begin{verbatim}
+containernet> d1 ifconfig
+	\end{verbatim}
+
+	\noindent Como podemos comprobar en la figura \ref{img: cn simple 2}, el host 1 tiene una interfaz (\texttt{d1-eth0}) que es la que estará en uso para nuestra topología de \texttt{containernet}, además dispone de otra interfaz (\texttt{eth0}) que será la que utilice para comunicarse con el controlador de Docker. Por lo tanto, podemos ver como \texttt{containernet} no manda su tráfico por el \texttt{bridge} que crea Docker, sino que añade una interfaz específica (un extremo de un par ethernet virtual, \textit{veth}) por el que encaminará el tráfico de la simulación.
 
 	\pagebreak
 
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.8\textwidth]{img/cn_example3.png}
-			\caption{Topologia simple (3/5)}
+			\includegraphics[width=0.55\textwidth]{img/cn_example2.png}
+			\caption{Ejecución de topología simple en \texttt{containernet} (2/5)}
+			\label{img: cn simple 2}
+		\end{center}
+	\end{figure}
+
+	\noindent Por otro lado, mientras tenemos la topología ejecutandose, podemos comprobar como aparecen los contendores Docker en nuestro sistema. Además, también podemos acceder a una \textit{shell} de uno de los contendores (hosts de \texttt{containernet}) y comprobar que efectivamente el resultado es el mismo que si accedemos desde la \texttt{CLI} de \texttt{containernet}. Para ello, hemos comprobado la configuración de red del mismo host que vimos en la figura \ref{img: cn simple 2}, esto lo podemos ver en la figura \ref{img: cn simple 3}
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.85\textwidth]{img/cn_example3.png}
+			\caption{Ejecución de topología simple en \texttt{containernet} (3/5)}
+			\label{img: cn simple 3}
 		\end{center}
 	\end{figure}
 
 	\pagebreak
 
+	\noindent Al igual que hacíamos en \texttt{mininet}, podemos comprobar conectividad entre dos hosts utilizando el comando \texttt{ping}, para ello podemos ejecutar en la \texttt{CLI} el siguiente comando:
+	\begin{verbatim}
+containernet> d1 ping -c4 d2
+	\end{verbatim}
+
+	\noindent Una vez ejecutado, observamos como la salida nos muestra el \texttt{ping} que se ha ejecutado, y como efectivamente hay conectividad entre los dos hosts. Este resultado lo podemos ver en la figura \ref{img: cn simple 4}.
+
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.9\textwidth]{img/cn_example4.png}
-			\caption{Topologia simple (4/5)}
+			\includegraphics[width=1\textwidth]{img/cn_example4.png}
+			\caption{Ejecución de topología simple en \texttt{containernet} (4/5)}
+			\label{img: cn simple 4}
 		\end{center}
 	\end{figure}
+
+	\noindent Por último, si ya no queremos seguir ejecutando la topología, tendremos que ejecutar el comando \texttt{exit}. Este comando nos permitirá revertir la configuración asociada a la topología, además de apagar y eliminar los contenedores Docker que estaban ejerciendo como hosts. El resultado de la ejecución de este comando lo podemos ver en la figura \ref{img: cn simple 5}.
+
+	\pagebreak
 
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=0.5\textwidth]{img/cn_example5.png}
-			\caption{Topologia simple (5/5)}
+			\caption{Ejecución de topología simple en \texttt{containernet} (5/5)}
+			\label{img: cn simple 5}
 		\end{center}
 	\end{figure}
 	
@@ -2771,8 +2805,9 @@ ansible/install.yml
 
 	%%% Bibliography
 	\pagebreak
-	\section*{Bibliografía}
-	\addcontentsline{toc}{section}{Bibliografía}
+	\section{Bibliografía}
+	%\addcontentsline{toc}{section}{Bibliografía}
+	
 	\subsection*{Enlaces y referencias}
 	\addcontentsline{toc}{subsection}{Enlaces y referencias}
 	%%\hyperref[bib:link1]{\emph{Reference of bibliography}}
@@ -3142,9 +3177,9 @@ ansible/install.yml
 
 	\pagebreak
 	
-	\pagebreak
-	\section*{Anexos}
-	\addcontentsline{toc}{section}{Anexos}
+	\section{Anexos}
+	%\addcontentsline{toc}{section}{Anexos}
+	
 	\subsection*{Anexo 1. Instalación de \texttt{ansible} para automatizar una VM}
 	\addcontentsline{toc}{subsection}{Anexo 1. Instalación \texttt{ansible}}
 	\noindent En el caso de que queramos utilizar la herramienta ansible para configurar una VM, tendremos que seguir los siguientes pasos.
@@ -3229,16 +3264,17 @@ sudo pacman -S ansible
 	\end{enumerate}
 	
 	\pagebreak
+	
 	\subsection*{Anexo 3. Playbooks \texttt{ansible}}
 	\addcontentsline{toc}{subsection}{Anexo 3. Playbooks \texttt{ansible}}
 	
 	\pagebreak
 	
-	\subsection*{Anexo 4. Topologías de \texttt{mininet}}
+	\subsection*{Anexo 4. Código asociado a topologías de red}
 	\label{sec: anexo 4}
 	\addcontentsline{toc}{subsection}{Anexo 4. Topologías de \texttt{mininet}}
 	
-	\vspace{10px}
+	\vspace{20px}
 	\noindent \textbf{\large Topología simple}\\
 	
 	\begin{lstlisting}[language=Python, caption={Implementación topología simple utilizando mininet}, label={lst: topo simple}]
@@ -3256,6 +3292,44 @@ net = Mininet(topo)			# Start Mininet
 net.start()
 net.pingAll()
 net.iperf()
+net.stop()
+	\end{lstlisting}
+
+
+	\vspace{20px}
+	\noindent \textbf{\large Topología simple en \texttt{containernet}}\\
+		\begin{lstlisting}[language=Python, caption={Código topologia simple en \texttt{containernet}}, label={lst: topo simple containernet}]
+#!/usr/bin/python
+"""
+This is the most simple example to showcase Containernet.
+"""
+from mininet.net import Containernet
+from mininet.node import Controller
+from mininet.cli import CLI
+from mininet.link import TCLink
+from mininet.log import info, setLogLevel
+setLogLevel('info')
+		
+net = Containernet(controller=Controller)
+info('*** Adding controller\n')
+net.addController('c0')
+info('*** Adding docker containers\n')
+d1 = net.addDocker('d1', ip='10.0.0.251', dimage="ubuntu:trusty")
+d2 = net.addDocker('d2', ip='10.0.0.252', dimage="ubuntu:trusty")
+info('*** Adding switches\n')
+s1 = net.addSwitch('s1')
+s2 = net.addSwitch('s2')
+info('*** Creating links\n')
+net.addLink(d1, s1)
+net.addLink(s1, s2, cls=TCLink, delay='100ms', bw=1)
+net.addLink(s2, d2)
+info('*** Starting network\n')
+net.start()
+info('*** Testing connectivity\n')
+net.ping([d1, d2])
+info('*** Running CLI\n')
+CLI(net)
+info('*** Stopping network')
 net.stop()
 	\end{lstlisting}
 	
