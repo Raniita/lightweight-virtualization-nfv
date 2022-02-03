@@ -2591,6 +2591,7 @@ mininet> h1 ping h2
 		\begin{center}
 			\includegraphics[width=0.65\textwidth]{img/mn_single_2.png}
 			\caption{Ping entre hosts de topología simple en \texttt{mininet}.}
+			\label{img: ping mn simple}
 		\end{center}
 	\end{figure}
 
@@ -2612,6 +2613,17 @@ mininet> h1 ping h2
 	
 	\pagebreak
 	
+	\noindent Ejecutando el código implementado, podemos comprobar como al iniciar la topología se realizan comprobaciones tanto de conectividad, utilizando \texttt{ping}, como de velocidades, utilizando \texttt{iperf}. En la figura \ref{img: iperf mn simple} podemos comprobar cual es el rendimiento de los enlaces al ejecutar dicha topología.
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.8\textwidth]{img/mn_single_4.png}
+			\caption{Ejecución de \texttt{iperf} sobre topología simple en \texttt{mininet}.}
+			\label{img: iperf mn simple}	
+		\end{center}
+	\end{figure}
+	
+	
 	\noindent \textbf{\large Ejemplo: limitación de recursos usando \texttt{mininet}}\\
 	
 	\noindent En este ejemplo, vamos a profundizar sobre como aplicar limitaciones de recursos a una topología desplegada con \texttt{mininet}. Algunos de los recursos más importantes a tener en cuenta, son los siguientes:
@@ -2622,7 +2634,38 @@ mininet> h1 ping h2
 		\item \textit{Ancho de banda}. Permite establecer un máximo de ancho de banda para un enlace entre dispositivos.
 	\end{itemize}
 	
-	\noindent Por lo tanto, a modo de ejemplo, vamos a utilizar la topología anterior, pero aplicando una limitación de ancho de banda, latencia y CPU a uno de los enlaces que conectan un host con el switch.
+	\noindent Por lo tanto, a modo de ejemplo, vamos a utilizar la topología anterior, pero aplicando una limitación de ancho de banda, latencia y CPU a uno de los enlaces que conectan un host con el switch. El código utilizado para este ejemplo lo podemos encontrar en el Anexo 4 [\ref{sec: anexo 4}] (ver código \ref{lst: topo simple cpu mn}).
+	
+	\noindent Para ejecutar la topología, utilizamos el siguiente comando:
+	\begin{verbatim}
+sudo python limit.py	
+	\end{verbatim}
+
+	\noindent Como podemos comprobar en la figura \ref{img: mn limit 1}, al ejecutar la topología, vemos como en consola nos aparece un aviso de que se ha limitado un enlace a 5 Mbit de ancho de banda y 80 ms de latencia. Por otro lado, una vez la topología esta funcionando, se procede a una comprobación de conectividad entre ambos host, seguidamente, se ejecuta la herramienta \texttt{iperf} para comprobar cual es el ancho de banda máximo entre ambos hosts.
+	
+	\pagebreak
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.75\textwidth]{img/mn_limit_1.png}
+			\caption{Ejecución topología simple limitada en \texttt{mininet}. (1/2)}
+			\label{img: mn limit 1}	
+		\end{center}
+	\end{figure}
+
+	\noindent Comparando los resultados obtenidos entre la topología sin limitar (ver figura \ref{img: iperf mn simple}) y la topología limitada tanto en CPU como en los enlaces (ver figura \ref{img: mn limit 1}), podemos comprobar que efectivamente el ancho de banda que obtenemos de la herramienta \texttt{iperf} se ve claramente reducido, pasando de 20 Gbits/sec a 4.58 Mbits/sec. Por lo tanto, podemos concluir que efectivamente se están aplicando correctamente la limitación de ancho de banda. \\
+	
+	\noindent Por otro lado, otra medida interesante a comparar es el tiempo que tarda un paquete entre que es enviado a un host y la respuesta vuelve al host emisor. Esto lo podemos comprobar con la herramienta \texttt{ping}. Dado que hemos fijado la latencia de uno de los enlaces (fijado a 80 ms), deberíamos obtener un valor del campo \texttt{time} mayor que al que obtenemos en la topología simple sin limitar. Ver figura \ref{img: mn limit 2}.
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.65\textwidth]{img/mn_limit_2.png}
+			\caption{Ejecución topología simple limitada en \texttt{mininet}. (2/2)}
+			\label{img: mn limit 2}	
+		\end{center}
+	\end{figure}
+
+	\noindent Al igual que para el ancho de banda, los resultados de la topología sin limitar (ver figura \ref{img: ping mn simple}) y la topología limitada (ver figura \ref{img: mn limit 2}), son totalmente diferentes. Estas limitaciones son muy interesantes para modelar una topología con características lo más cercanas a un despliegue real. Por lo tanto, para simular una red, deberemos configurar estos valores de ancho de banda y latencia para cada uno de los enlaces de la topología.
 	
 	\pagebreak
 	
@@ -3277,7 +3320,7 @@ sudo pacman -S ansible
 	\vspace{20px}
 	\noindent \textbf{\large Topología simple}\\
 	
-	\begin{lstlisting}[language=Python, caption={Implementación topología simple utilizando mininet}, label={lst: topo simple}]
+	\begin{lstlisting}[language=Python, caption={Implementación topología simple utilizando \texttt{mininet} (\texttt{basic.py})}, label={lst: topo simple}]
 from mininet.net import Mininet
 from mininet.topo import Topo
 
@@ -3286,7 +3329,7 @@ topo.addSwitch("s1")		# Adding switch
 topo.addHost("h1")			# Add Host
 topo.addHost("h2")			# Add Host
 topo.addLink("h1", "s1")	# Link host to switch
-topo.addLink("h2", "s2")
+topo.addLink("h2", "s1")
 
 net = Mininet(topo)			# Start Mininet
 net.start()
@@ -3295,10 +3338,44 @@ net.iperf()
 net.stop()
 	\end{lstlisting}
 
+	\vspace{20px}
+	\noindent \textbf{\large Topología simple con limitación de recursos en \texttt{mininet}}\\
+	\begin{lstlisting}[language=Python, caption={Código topología simple con limitación de recursos en \texttt{mininet} (\texttt{limit.py})}, label={lst: topo simple cpu mn}]
+from mininet.net import Mininet
+from mininet.log import setLogLevel
+from mininet.cli import CLI
+from mininet.node import CPULimitedHost
+from mininet.link import TCLink
+
+def limit_perfTest():
+net = Mininet()
+
+# Host 1: CPU at 10%
+h1 = net.addHost('h1', cls=CPULimitedHost, cpu=0.1)		
+h2 = net.addHost('h2')
+
+s1 = net.addSwitch('s1')
+c0 = net.addController('c0')
+
+# Link h1<->s1: BW 5mbps & delay 80ms
+net.addLink(h1,s1, cls=TCLink, bw=5, delay='80ms')
+net.addLink(h2,s1)
+
+net.start()
+net.pingAll()
+net.iperf()
+CLI(net)
+net.stop()
+
+if __name__ == '__main__':
+setLogLevel('info')
+limit_perfTest()
+	\end{lstlisting}
+
 
 	\vspace{20px}
 	\noindent \textbf{\large Topología simple en \texttt{containernet}}\\
-		\begin{lstlisting}[language=Python, caption={Código topologia simple en \texttt{containernet}}, label={lst: topo simple containernet}]
+		\begin{lstlisting}[language=Python, caption={Código topologia simple en \texttt{containernet} (\texttt{containernet\_example.py})}, label={lst: topo simple containernet}]
 #!/usr/bin/python
 """
 This is the most simple example to showcase Containernet.
