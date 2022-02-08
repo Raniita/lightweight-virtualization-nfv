@@ -908,6 +908,34 @@ $ ls /mnt/cp
 	
 	\pagebreak
 	
+	\noindent \textbf{\large ¿Qué es un montaje tipo \texttt{bind}?}\\
+	
+	\noindent Para comprender correctamente como funciona un mount namespaces, es interesante entender que es exactamente un montaje tipo \texttt{bind} y sus diferencias respecto \texttt{chroot} o \texttt{mount namespace}. [\ref{bib: what is bind}] \\
+	
+	\noindent En primer lugar, para trabajar respecto a montajes del sistema de archivos, utilizamos el comando de Linux \texttt{mount}. De manera primigenia, se utilizaba para ``montar'' dispositivos de almacenamiento físicos a un lugar específico del \texttt{tree} de nuestro sistema. Por ejemplo, suponemos que tenemos un disco duro conectado via interfaz \textit{SATA}. Utilizando el comando \texttt{fdisk -l}, determinamos que queremos montar la partición 1 del dispositivo físico con etiqueta \texttt{/dev/sda}. Por lo tanto, queremos realizar un punto de montaje de \texttt{/dev/sda1} en un lugar específico de nuestro sistema de archivos (\texttt{tree}). Para ello, podemos ejecutar el siguiente comando:
+	\begin{verbatim}
+mount /dev/sda1 /mnt/MI_USB
+	\end{verbatim}
+
+	\noindent Sin embargo, también podemos trabajar con el comando \texttt{mount} sin tener involucrados dispositivos físicos que queramos montar. Para ello, aparece el argumento \texttt{--bind} del comando \texttt{mount}, que nos permite ``vincular'' una parte del \texttt{tree} a otro emplazamiento diferente del \texttt{tree}. Esto lo podemos hacer tanto con directorios completos, como con archivos en específico.
+	
+	\begin{verbatim}
+mount --bind /mnt/MI_USB /home/user/MI_USB
+	\end{verbatim}
+
+	\noindent Además, permite otras opciones interesantes. Lo primero, es que a diferencia de la herramienta \texttt{chroot}, si utilizamos \texttt{bind}, todos los puntos de montaje asociados al \texttt{tree} al que queremos aplicar el \texttt{bind} se verán también afectados, cosa que con \texttt{chroot} no sucede ya que está limitado a un único \texttt{subtree}. Por otro lado, un montaje \texttt{bind} es utilizado para aplicar una modificación sobre los permisos, o opciones del montaje, de una parte del \texttt{tree} en específico. Esto lo podemos ver con un ejemplo: queremos que ciertas carpetas de nuestra aplicación tengan permisos de solo lectura, para ello podemos ejecutar los siguientes comandos:
+	
+	\begin{verbatim}
+mount --bind /mnt/MI_USB /home/user/MI_USB
+mount -o remount,ro,bind /home/user/MI_USB
+	\end{verbatim}
+
+	\noindent En resumen, un montaje tipo \texttt{bind} expone una vista de un directorio (porción del \texttt{tree}) en una localización diferente. Se encarga de exponer los mismos archivos, pero con la posibilidad de diferentes opciones de montaje, diferentes ``ownership'' o permisos. Estos sistemas de archivos que muestran una vista alterada del sistema de archivos original se suelen llamar \textit{overlay filesystems}, y son comúnmente utilizados en soluciones de contenedores, algún ejemplo podría ser: \texttt{overlayfs} [\ref{bib: overlayfs}], utilizado por Docker, y que permite tener múltiples sistemas de archivos dentro de un mismo directorio (\texttt{union mounts}). \\
+
+	\noindent Por lo tanto, una de las ventajas que nos aporta la opción \texttt{bind} es la de utilizar parte de nuestro sistema de archivos actual para destinarlo a nuestro \texttt{mount namespace}. Si bien es cierto que podemos utilizar un \texttt{mount namespace} vacío (creándolo con la herramienta \texttt{unshare}, por ejemplo), pero tendríamos que realizar un montaje dentro del namespace para cada directorio que queramos utilizar.
+	
+	\pagebreak
+	
 	\noindent \textbf{\large \texttt{tmpfs}}\\
 	
 	\noindent De cara al siguiente ejemplo, es interesante que repasemos la funcionalidad del kernel del linux llamada \texttt{tmpfs}. Dicha funcionalidad permite crear un sistema de archivos temporal dentro de nuestro sistema. El sistema de archivo creado reside completamente en la memoria y/o ``swap'' de nuestro sistema. Este tipo de montajes suele ser muy interesante cuando necesitamos agilizar el acceso a ciertos archivos, ya que al estar en la memoria RAM, la lectura es mucho más rápida que si lo comparamos con un disco duro e incluso un disco duro de estado solido. Sin embargo, el inconveniente que tiene es que el contenido de dicho sistema de archivos se elimina una vez reiniciemos el sistema, ya que este está almacenado en la memoria RAM de nuestro dispositivo. [\ref{bib: tmpfs arch linux}] \\
@@ -939,9 +967,6 @@ $ df -h | grep mount_ns
 # Comprobamos que en el default namespace no tenemos acceso 
 # al montaje tmpfs que hemos creado
 	\end{lstlisting}
-	
-	% TODO
-	% Ejemplo: limitar un USB a que solo lo vea un namespace
 	
 	\pagebreak
 	
@@ -983,6 +1008,7 @@ $ df -h | grep mount_ns
 		\begin{lstlisting}[language=bash, caption={Caso de uso de \texttt{shared subtree}}]
 # El administrador del sistema realiza el montaje del usb con 
 # permisos de 'shared'
+# mount sobre mismo directorio: modificar opciones de montaje
 $ mount --bind /mnt/usb /mnt/usb
 $ mount --make-shared /mnt/usb
 			
@@ -3139,6 +3165,10 @@ containernet> d1 ping -c4 d2
 		\item 
 		\label{bib: containernet github}
 		\href{https://github.com/containernet/containernet}{Github: containernet}
+		
+		\item 
+		\label{bib: what is bind}
+		\href{https://unix.stackexchange.com/questions/198590/what-is-a-bind-mount}{Stackexchange: what is a bind mount?}
 		
 		% X
 		\item
