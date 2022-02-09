@@ -75,10 +75,10 @@
 \renewcommand{\footrulewidth}{0pt}
 \fancypagestyle{plain}{
 	\fancyhf{}
-	\fancyhead[L]{}
+	\fancyhead[L]{\small TFE: Enrique Fernández Sánchez}
 	\fancyfoot[C]{\thepage}
-	\renewcommand{\headrulewidth}{0pt}
-	\renewcommand{\footrulewidth}{0pt}
+	%\renewcommand{\headrulewidth}{0pt}		% Sirve para eliminar linea
+	%\renewcommand{\footrulewidth}{0pt}		% Sirve para eliminar linea
 }
 \pagestyle{fancy}
 
@@ -141,6 +141,8 @@
 	\addcontentsline{toc}{section}{Índice de figuras}
 	\listoffigures
 	
+	\pagebreak
+	
 	%\addcontentsline{toc}{section}{Índice de tablas}
 	%\listoftables
 	
@@ -153,6 +155,7 @@
 	\pagebreak
 	\section*{Glosario de términos}
 	\addcontentsline{toc}{section}{Glosario de términos}
+	\thispagestyle{plain}
 	
 	\noindent{\large \textbf{NFV} (\textit{Network Function Virtualization})}. \textit{Network Function Virtualization}, o bien, Virtualización de funciones de red.\\
 		 
@@ -184,14 +187,16 @@
 	%%% TODO
 	\section*{Agradecimientos}
 	\addcontentsline{toc}{section}{Agradecimientos}
+	\thispagestyle{plain}
 	
 	\pagebreak
 	
-	%%% TODO
 	\section{Introducción}
 	\noindent Con el fin de concluir los estudios de grado en ingeniería telemática, es necesaria la investigación y el posterior desarrollo del \textit{Trabajo Fin de Estudios} (TFE). Dicho trabajo, tiene como objetivo enfrentar al alumno a un proceso de investigación en el que pueda aplicar los conceptos que ha ido aprendiendo durante su paso por el grado, además pudiendo añadir puntos de innovación, y aportar soluciones nuevas a un proyecto en específico.\\
 	
-	\noindent En este documento, recojo lo que sería mi memoria en relación al TFE. En dicho documento detallaremos las diferentes investigaciones realizadas sobre el concepto de virtualización en sistemas Linux, como funcionan los contenedores y como utilizar la virtualización ligera para la evaluación de redes de comunicaciones, en nuestro caso, de conmutación de paquetes.
+	\noindent En este documento, recojo lo que sería mi memoria en relación al TFE. En dicho documento detallaremos las diferentes investigaciones realizadas sobre el concepto de virtualización en sistemas Linux, como funcionan los contenedores y como utilizar la virtualización ligera para la evaluación de redes de comunicaciones, en nuestro caso, de conmutación de paquetes. \\
+	
+	\noindent Además, toda documentación y códigos utilizados en este proyectos se ha liberado en un repositorio de \textit{GitHub} (\url{https://github.com/}). En dicho repositorio, encontraremos toda la información recopilada para este trabajo, además de los códigos fuente de la memoria, y las pruebas realizadas. La dirección del repositorio es la siguiente: \url{https://github.com/Raniita/lightweight-virtualization-nfv/}
 	
 	\subsection{Contexto del trabajo}
 	\noindent Este proyecto nace con el objetivo de profundizar en conceptos novedosos para el ámbito de red, como por ejemplo podría ser NFV. Definimos NFV (Network Function Virtualization) como la virtualización de hardware físico de red, con el fin de solucionar problemas de escalabilidad y de optimización.\\
@@ -213,7 +218,7 @@
 		\item Estudiar, dentro del sistema operativo Linux, las diferentes tecnologías que nos permiten adoptar soluciones NFV.
 		\item Definir que es \textit{espacio de nombres} y como podemos aplicarlo para virtualizar redes.
 		\item Profundizar en el concepto de \textit{interfaces virtuales} en Linux.
-		\item Desgranar el concepto amplio de contenedor, relacionandolo con los \textit{espacios de nombres}.
+		\item Desgranar el concepto amplio de contenedor, relacionándolo con los \textit{espacios de nombres}.
 		\item Desarrollar una aplicación conceptual para la evaluación de un sistema en concreto, utilizando virtualización ligera.
 	\end{itemize}
 
@@ -522,6 +527,7 @@ $ ip netns exec app2 ip link set lo up
 	\vspace{5px}
 
 	\noindent \textbf{\large TUN (Capa 3)}\\
+	
 	\noindent Las interfaces TUN (\texttt{IFF\_TUN}) transportan paquetes PDU (\textit{Protocol Data Units}) de la capa 3 [\ref{bib: tun vs tap}]:
 	\begin{itemize}
 		\item En la práctica, transporta paquetes IPv4 y/o paquetes IPv6.
@@ -534,7 +540,8 @@ $ ip netns exec app2 ip link set lo up
 	\pagebreak
 	
 	\noindent \textbf{\large TAP (Capa 2)}\\
-	\noindent Las interfaces TAP (\texttt{IFF\_TAP}) transportan paquetes de capa 2 \ref{bib: tun vs tap}: 
+	
+	\noindent Las interfaces TAP (\texttt{IFF\_TAP}) transportan paquetes de capa 2 [\ref{bib: tun vs tap}]: 
 	\begin{itemize}
 		\item En la práctica, transporta \textit{frames Ethernet}, por lo tanto, actuaría como si fuera un adaptador virtual de Ethernet (``bridge virtual'').
 		\item La función \texttt{read()} devuelve un paquete de capa L2, un \textit{frame Ethernet}.
@@ -562,7 +569,7 @@ $ ip netns exec app2 ip link set lo up
 	\vspace{10px}
 	
 	% Ejemplo 1: Creacion de tun/tap utilizando la linea de comandos
-	\begin{lstlisting}[language=Bash, label=lst: ej1 tunctl, caption=Ejemplo de uso de \texttt{tunctl} para controlar interfaces TUN/TAP [\ref{bib: tunctl + ip}]]
+	\begin{lstlisting}[language=Bash, label=lst: ej1 tunctl, caption=Ejemplo de uso de \texttt{tunctl} para controlar interfaces TUN/TAP (\ref{bib: tunctl + ip})]
 # Create the tap interface by default
 tunctl 
 # equivalent to
@@ -586,7 +593,7 @@ tunctl -d tap0
 	\vspace{10px}
 
 	% Ejemplo 1.1: Creacion tun/tap pero usando comando ip
-	\begin{lstlisting}[language=Bash, label=lst: ej2 tuntap ip, caption=Ejemplo de uso de \texttt{ip} para controlar interfaces TUN/TAP [\ref{bib: tunctl + ip}]]
+	\begin{lstlisting}[language=Bash, label=lst: ej2 tuntap ip, caption=Ejemplo de uso de \texttt{ip} para controlar interfaces TUN/TAP (\ref{bib: tunctl + ip})]
 # Show help
 ip tuntap help
 
@@ -608,7 +615,7 @@ ip tuntap del dev tun0 mod tun		# delete tun
 	\noindent El código utilizado sería el que vemos en [\ref{lst:tuntap.c}]. Es importante comentar que en la linea 80 podemos modificar el tipo de interfaz que vamos a crear, usaremos \texttt{IFF\_TUN} para crear un TUN y \texttt{IFF\_TAP} para crear un TAP.
 	% Ejemplo: 2 Apps en C que se comunican utilizan TAP
 	\vspace{10px}
-	\begin{lstlisting}[language=C, label=lst:tuntap.c, caption=Aplicación de ejemplo para crear tun/tap (tuntap.c) [\ref{bib: code tuntap.c}]]
+	\begin{lstlisting}[language=C, label=lst:tuntap.c, caption=Aplicación de ejemplo para crear tun/tap (\texttt{tuntap.c}) (\ref{bib: code tuntap.c})]
 /**
 Receive incoming packages over tun/tap device. 
 stdout -> size of received package
@@ -682,7 +689,7 @@ int main()
 	\pagebreak
 
 	\noindent Los pasos para realizar este ejemplo serían los siguientes:
-	\begin{lstlisting}[language=Bash, label=lst: instr tuntap.c , caption=Instrucciones para realizar las pruebas con el código [\ref{lst:tuntap.c}]]
+	\begin{lstlisting}[language=Bash, label=lst: instr tuntap.c , caption=Instrucciones para realizar las pruebas con el código (\ref{lst:tuntap.c})]
 # Guardamos el codigo anterior en tuntap.c
 # Compilamos el programa
 gcc tuntap.c -o tun
@@ -834,7 +841,7 @@ umount /root/ns-uts 			# Eliminamos el namespace definitivamente
 	
 	\pagebreak
 	
-	\subsubsection{UTS namespace}
+	\subsection{UTS namespace}
 	\label{sect: uts namespace}
 	\par \noindent El tipo más sencillo de todos los namespaces. La funcionalidad consiste en controlar el hostname asociado del ordenador, en este caso, del proceso o procesos asignados al namespace. Existen tres diferentes rutinas que nos permiten obtener y modifcar el hostname: 
 	\begin{itemize}
@@ -872,10 +879,7 @@ $ hostname			# original hostname
 	
 	\pagebreak
 	
-	
-	%% TODO: REVISION ENERO
-	%% Distinguir entre un device  (/dev) y una estructura de directorios que se emulan a modo de device
-	\subsubsection{Mount namespace}
+	\subsection{Mount namespace}
 	\noindent Este \texttt{namespace} fue el primero en aparecer en el Kernel de Linux, apareció en la versión 2.4.19, en 2002. El objetivo era restringir la visualización de la jerarquía global de archivos, dando lugar a que cada namespace tenga su propio ``set'' de puntos de montaje (directorio, archivo o enlace simbólico, que al crearse forma parte del sistema de archivos del sistema). [\ref{bib: mount namespace info 1}][\ref{bib: mount namespace info 2}] \\
 	
 	\noindent Una vez iniciamos el sistema, solo existe un único \texttt{mount namespace}, al que llamamos ``namespace inicial'' (\textit{default}). Los nuevos \texttt{mount namespaces} que creemos los haremos utilizando las siguientes llamadas al sistema: \texttt{clone()}, para crear un nuevo proceso asociado en el nuevo namespaces; o bien utilizando \texttt{unshare()}, para mover un proceso dentro del nuevo namespace. Cuando creamos un nuevo \texttt{mount namespace}, este recibe una copia del punto de montaje inicial, replicado por el \texttt{namespace} que lo llamada. [\ref{bib: mount namespace info 2}] \\
@@ -1051,7 +1055,7 @@ $ mount --bind /mnt /tmp
 
 	\pagebreak
 	
-	\subsubsection{Process ID namespace}
+	\subsection{Process ID namespace}
 	\par \noindent Para entender en que consiste este namespace, primero tenemos que conocer la definición de \textit{process id} dentro del Kernel. En este caso, \textit{process id} hace referencia a un número entero que utiliza el Kernel para identificar los procesos de manera unívoca. [\ref{bib:pid wikipedia}]\\
 	
 	\par \noindent Concretando, aísla el namespace de la ID del proceso asignado, dando lugar a que, por ejemplo, otros namespaces puedan tener el mismo PID. Esto nos lleva a la situación de que un proceso dentro de un \textit{PID namespace} piense que tiene asignado el ID "1", mientras que en la realidad (en la máquina host) tiene otro ID asignado.
@@ -1079,7 +1083,7 @@ $ exit
 	
 	\pagebreak
 	
-	\subsubsection{Network namespace (netns)}
+	\subsection{Network namespace (netns)}
 	\par \noindent Este namespaces nos permite aislar la parte red de una aplicación o proceso que nosotros elijamos. Con esto conseguimos que el \textit{stack} de red de la máquina host sea diferente al que tenemos en nuestro namespace. Debido a esto, el namespace crea una interfaz virtual, conjunto con el resto de necesidades para conformar un stack de red completo (tabla de enrutamiento, tabla ARP, etc...).\\
 	
 	\par \noindent Para crear un \textit{namespace} de tipo \textit{network}, y que este sea persistente, utilizamos la \textit{tool} ip (del \textit{package} iproute2).
@@ -1205,7 +1209,7 @@ $ ip netns exec ns1 /bin/bash
 	% https://blogs.igalia.com/dpino/2016/04/10/network-namespaces/
 	
 	\pagebreak
-	\subsubsection{User ID (user)}
+	\subsection{User ID (user)}
 	\par \noindent Cada sistema dispone de una manera de monitorizar que usuario es el dueño de cada archivo. Esto permite al sistema restringir el acceso a aquellos archivos que consideramos sensibles. Además, bloquea el acceso entre diferentes usuarios dentro del mismo sistema. Para el usuario, este identificador de usuarios se muestra como el usuario que en ese momento está conectado, sin embargo, para nuestro sistema, el identificador de usuario esta compuesto por una combinación arbitraria de caracteres alfanuméricos. Con el fin de mantener el monitoreo correctamente, hay un proceso encargado de transformar esos caracteres a un número específico de identificación (UID), como por ejemplo sería 1000. Es este valor el que se asocia con los archivos creados por este usuario. Esto nos aporta la ventaja de que, si un usuario cambia su nombre, no es necesario reconstruir el sistema de archivos, ya que su UID sigue siendo 1000.\\
 	
 	\par \noindent Si por ejemplo queremos ver el UID del usuario que estamos usando en este momento, podemos ejecutar: \textit{echo \$UID}, el cual nos devolverá el número asociado a nuestro usuario, en mi caso es el 1000.\\
@@ -1234,12 +1238,12 @@ $ exit
 	
 	%\pagebreak
 	
-	\subsubsection{Interprocess Communication namespace (IPC)}
+	\subsection{Interprocess Communication namespace (IPC)}
 	\par \noindent Este namespace supone uno de los más técnicos, complicados de entender y explicar. IPC (Interprocess comunication) controla la comunicación entre procesos, utilizando zonas de la memoría que están compartidas, colas de mensajes, y semáforos. La aplicación más común para este tipo de gestión es el uso en bases de datos.
 	
 	\pagebreak
 	
-	\subsubsection{Control group (cgroup)}
+	\subsection{Control group (cgroup)}
 	\par \noindent Los grupos de control, o \texttt{cgroups}, de Linux suponen un mecanismo para controlar los diferentes recursos de nuestro sistema. Cuando un \texttt{cgroup} está activo, puede controlar la cantidad de CPU, RAM, acceso I/O, o cualquier faceta que un proceso puede consumir. Además, permiten definir jerarquías en las que se agrupan, de manera en la que el administrador del sistema puede definir como se asignan los recursos o llevar la contabilidad de los mismos. Cgroups permite las siguientes funcionalidades [\ref{bib: cgroups}]: 
 	\begin{itemize}
 		\item \textbf{Limitar recursos}. Podemos configurar un grupo para limitar un recurso (o varios de ellos) para cada proceso que asignemos.
@@ -1342,7 +1346,19 @@ echo <PID> > /sys/fs/cgroup/cpu/<NombreGrupo>/tasks
 	
 	\noindent Para estas tareas, limitación y monitorización de recursos en contenedores de Docker, este nos facilita una serie de comandos para facilitar la creación y asignación de contenedores a un cgroup en específico, facilitando en consecuencia el uso de cgroups para limitar los recursos de los contenedores que estemos utilizando.
 	
-	\addvspace{60px}
+	%\addvspace{60px}
+	
+	\pagebreak
+	
+	\subsection{Time}
+	\par \noindent Por último, nos queda el namespaces asociado al tiempo. Este namespace fue propuesto para que se incorporara al kernel de Linux en 2018 y en enero de 2020 fue añadido a la versión mainline de Linux. Apareció en la release 5.6 del kernel de Linux. \\
+	
+	\par \noindent El namespace time, permite que por cada namespace que tengamos, podamos crear desfases entre los relojes monotónicos (CLOCK\_MONOTONIC) y de boot (CLOCK\_BOOTTIME), de la máquina host. Esto permite que dentro de los contendores se nos permita cambiar la fecha y la hora, sin tener que modificar la hora del sistema host. Además, supone una capa más de seguridad, ya que no estamos vinculando directamente la hora a los relojes físicos de nuestro sistema. [\ref{bib:time ns kernel}]\\
+	
+	\par \noindent Un namespace de tipo time, es muy similar al namespace de tipo PID en la manera de como lo creamos. Utilizamos el comando unshare -T, y mediante una systemcall se nos creará un nuevo time namespace, pero no lo asocia directamente con el proceso. Tenemos que utilizar setns para asociar un proceso a un namespace, además todos los procesos dependientes también tendrán asignado dicho namespace. 
+	
+	%\addvspace{80px}
+	\vspace{80px}
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -1351,17 +1367,6 @@ echo <PID> > /sys/fs/cgroup/cpu/<NombreGrupo>/tasks
 			\caption{Diferentes namespaces en Linux y su API de acceso. (\ref{bib:img1})}
 		\end{center}
 	\end{figure}
-	
-	
-	\pagebreak
-	\subsubsection{Time}
-	\par \noindent Por último, nos queda el namespaces asociado al tiempo. Este namespace fue propuesto para que se incorporara al kernel de Linux en 2018 y en enero de 2020 fue añadido a la versión mainline de Linux. Apareció en la release 5.6 del kernel de Linux. \\
-	
-	\par \noindent El namespace time, permite que por cada namespace que tengamos, podamos crear desfases entre los relojes monotónicos (CLOCK\_MONOTONIC) y de boot (CLOCK\_BOOTTIME), de la máquina host. Esto permite que dentro de los contendores se nos permita cambiar la fecha y la hora, sin tener que modificar la hora del sistema host. Además, supone una capa más de seguridad, ya que no estamos vinculando directamente la hora a los relojes físicos de nuestro sistema. [\ref{bib:time ns kernel}]\\
-	
-	\par \noindent Un namespace de tipo time, es muy similar al namespace de tipo PID en la manera de como lo creamos. Utilizamos el comando unshare -T, y mediante una systemcall se nos creará un nuevo time namespace, pero no lo asocia directamente con el proceso. Tenemos que utilizar setns para asociar un proceso a un namespace, además todos los procesos dependientes también tendrán asignado dicho namespace. 
-	
-	\addvspace{80px}
 	
 	%\begin{figure}[h]
 	%	\begin{center}
@@ -2224,7 +2229,7 @@ docker run -it ubuntu bash
 		\item \texttt{bash}. Binario a ejecutar dentro del contenedor, en este caso corresponde con una consola shell.
 	\end{itemize}
 
-	\noindent Una vez ejecutamos dicho comando, automáticamente se crea un contendor con una imagen de \texttt{ubuntu} y se nos ejecuta una consola, en la que podemos navegar y trabajar de manera aislada a nuestra máquina host. (ver Figuras \ref{img: docker ubuntu} e \ref{img: docker ubuntu ver}).
+	\noindent Una vez ejecutamos dicho comando, automáticamente se crea un contendor con una imagen de \texttt{ubuntu} y se nos ejecuta una consola, en la que podemos navegar y trabajar de manera aislada a nuestra máquina host. (ver Figuras \ref{img: docker ubuntu} y \ref{img: docker ubuntu ver}).
 	
 	\pagebreak
 	
@@ -3250,11 +3255,15 @@ containernet> d1 ping -c4 d2
 
 	\pagebreak
 	
+	\appendix
+	
 	\section{Anexos}
 	%\addcontentsline{toc}{section}{Anexos}
 	
-	\subsection*{Anexo 1. Instalación de \texttt{ansible} para automatizar una VM}
-	\addcontentsline{toc}{subsection}{Anexo 1. Instalación \texttt{ansible}}
+	\subsection{Instalación de \texttt{ansible} para automatizar una VM}
+	%\subsection{Anexo 1. Instalación de \texttt{ansible} para automatizar una VM}
+	%\addcontentsline{toc}{subsection}{Anexo 1. Instalación \texttt{ansible}}
+	
 	\noindent En el caso de que queramos utilizar la herramienta ansible para configurar una VM, tendremos que seguir los siguientes pasos.
 	\begin{enumerate}
 		\item Asegurarnos de que tenemos instalado el programa en el host. La principal dependencia de \texttt{ansible} es \texttt{Python}. \\
@@ -3320,8 +3329,10 @@ sudo pacman -S ansible
 	
 	\pagebreak
 	
-	\subsection*{Anexo 2. Configuración de \textit{Guest Network} para comunicar con la VM}
-	\addcontentsline{toc}{subsection}{Anexo 2. Configuración de \textit{Guest Network} para comunicar con la VM}
+	\subsection{Configuración de \textit{Guest Network} para comunicar con la VM}
+	%\subsection{Anexo 2. Configuración de \textit{Guest Network} para comunicar con la VM}
+	%\addcontentsline{toc}{subsection}{Anexo 2. Configuración de \textit{Guest Network} para comunicar con la VM}
+	
 	\noindent Para comunicar nuestra máquina host [\ref{bib:configure host-only}], con una \textit{virtual machine} es necesario que estén en una misma red, es por esto por lo que vamos a crear una red en especifico para ello. En el programa \textit{Virtualbox}, esta funcionalidad recibe el nombre de \textit{Host-only}.\\
 	
 	\noindent Es importante que cuando queramos configurar una máquina virtual con esta funcionalidad que siempre pongamos el adaptador de red 1 como el que tendrá la comunicación \textit{guest}, mientras que el adaptador 2 será el que tendrá la conexión a internet via \textit{NAT}.\\
@@ -3338,16 +3349,18 @@ sudo pacman -S ansible
 	
 	\pagebreak
 	
-	\subsection*{Anexo 3. Playbooks \texttt{ansible}}
-	\addcontentsline{toc}{subsection}{Anexo 3. Playbooks \texttt{ansible}}
+	\subsection{Playbooks \texttt{ansible}}
+	%\subsection{Anexo 3. Playbooks \texttt{ansible}}
+	%\addcontentsline{toc}{subsection}{Anexo 3. Playbooks \texttt{ansible}}
 	
 	\pagebreak
 	
-	\subsection*{Anexo 4. Código asociado a topologías de red}
+	\subsection{Código asociado a topologías de red}
+	%\subsection*{Anexo 4. Código asociado a topologías de red}
 	\label{sec: anexo 4}
-	\addcontentsline{toc}{subsection}{Anexo 4. Topologías de \texttt{mininet}}
+	%\addcontentsline{toc}{subsection}{Anexo 4. Topologías de \texttt{mininet}}
 	
-	\vspace{20px}
+	\vspace{10px}
 	\noindent \textbf{\large Topología simple}\\
 	
 	\begin{lstlisting}[language=Python, caption={Implementación topología simple utilizando \texttt{mininet} (\texttt{basic.py})}, label={lst: topo simple}]
