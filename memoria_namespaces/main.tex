@@ -157,13 +157,13 @@
 	\addcontentsline{toc}{section}{Glosario de términos}
 	\thispagestyle{plain}
 	
-	\noindent{\large \textbf{NFV} (\textit{Network Function Virtualization})}. \textit{Network Function Virtualization}, o bien, Virtualización de funciones de red.\\
+	%\noindent{\large \textbf{NFV}} (\textit{Network Function Virtualization}). Virtualización de funciones de red.\\
 		 
-	\noindent{\large \textbf{SDN} (\textit{Software Defined Networks})}\\
+	%\noindent{\large \textbf{SDN}} (\textit{Software Defined Networks})\\
 		 
-	\noindent{\large \textbf{Namespace}}. \textit{Espacio de nombres}\\
+	%\noindent{\large \textbf{Namespace}}. \textit{Espacio de nombres}\\
 		 
-	\noindent{\large \textbf{NS} (\textit{Network namespace})}. Tipo de espacio de nombres en Linux que tiene por función aislar la parte de red de la máquina host.\\
+	%\noindent{\large \textbf{NS}} (\textit{Network namespace}). Tipo de espacio de nombres en Linux que tiene por función aislar la parte de red de la máquina host.\\
 	
 	\noindent{\large \textbf{Linux}}. Sistema operativo tipo UNIX, de codigo abierto, multiplataforma, multiusuario y multitarea.\\
 	
@@ -171,15 +171,17 @@
 		 
 	\noindent{\large \textbf{Kernel de Linux}}. Núcleo del sistema operativo Linux.\\
 		 
-	\noindent{\large \textbf{PID} (\textit{Process Identifier})}. Identificador de procesos que están ejecutándose bajo un sistema tipo Linux.\\
+	\noindent{\large \textbf{PID}} (\textit{Process Identifier}). Identificador de procesos que están ejecutándose bajo un sistema tipo Linux.\\
 	
-	\noindent{\large \textbf{UID} (\textit{User identifier})}. Encontrado normalmente como un número o palabra, supone un identificador de usuario dentro del sistema Linux.\\
+	\noindent{\large \textbf{UID}} (\textit{User identifier}). Encontrado normalmente como un número o palabra, supone un identificador de usuario dentro del sistema Linux.\\
 	
-	\noindent{\large \textbf{GID} (\textit{Group Identifier})}. Al igual que sucede con el UID, suele aparecer como un número o palabra y hace referencia al identificador de grupo dentro del sistema de Linux.\\
+	\noindent{\large \textbf{GID}} (\textit{Group Identifier}). Al igual que sucede con el UID, suele aparecer como un número o palabra y hace referencia al identificador de grupo dentro del sistema de Linux.\\
 		 
 	\noindent{\large \textbf{root}}. Cuenta superusuario del sistema operativo Linux.\\
 		 
-	\noindent{\large \textbf{veth-pair} (\textit{Virtual Ethernet Pair})}. Tipo de interfaz virtual. Funcionan de dos en parejas.\\
+	%\noindent{\large \textbf{veth-pair}} (\textit{Virtual Ethernet Pair}). Tipo de interfaz virtual. Funcionan de dos en parejas.\\
+	
+	\noindent{\large \textbf{NAT}} (\textit{Network Address Translation}). Traducción de direcciones de red, mecanismo utilizado por router para cambiar paquetes entre redes con direcciones IP diferentes.\\
 		 
 	
 	\pagebreak
@@ -916,7 +918,7 @@ $ ls /mnt/cp
 	
 	\noindent Para comprender correctamente como funciona un mount namespaces, es interesante entender que es exactamente un montaje tipo \texttt{bind} y sus diferencias respecto \texttt{chroot} o \texttt{mount namespace}. [\ref{bib: what is bind}] \\
 	
-	\noindent En primer lugar, para trabajar respecto a montajes del sistema de archivos, utilizamos el comando de Linux \texttt{mount}. De manera primigenia, se utilizaba para ``montar'' dispositivos de almacenamiento físicos a un lugar específico del \texttt{tree} de nuestro sistema. Por ejemplo, suponemos que tenemos un disco duro conectado via interfaz \textit{SATA}. Utilizando el comando \texttt{fdisk -l}, determinamos que queremos montar la partición 1 del dispositivo físico con etiqueta \texttt{/dev/sda}. Por lo tanto, queremos realizar un punto de montaje de \texttt{/dev/sda1} en un lugar específico de nuestro sistema de archivos (\texttt{tree}). Para ello, podemos ejecutar el siguiente comando:
+	\noindent En primer lugar, para trabajar respecto a montajes del sistema de archivos, utilizamos el comando de Linux \texttt{mount}. De manera primigenia, se utilizaba para ``montar'' dispositivos de almacenamiento físicos a un lugar específico del \texttt{tree} de nuestro sistema. Por ejemplo, suponemos que tenemos un disco duro conectado via interfaz \textit{SATA}. Utilizando el comando \texttt{lsblk}, determinamos que queremos montar la partición 1 del dispositivo físico con etiqueta \texttt{/dev/sda}. Por lo tanto, queremos realizar un punto de montaje de \texttt{/dev/sda1} en un lugar específico de nuestro sistema de archivos (\texttt{tree}). Para ello, podemos ejecutar el siguiente comando:
 	\begin{verbatim}
 mount /dev/sda1 /mnt/MI_USB
 	\end{verbatim}
@@ -933,6 +935,16 @@ mount --bind /mnt/MI_USB /home/user/MI_USB
 mount --bind /mnt/MI_USB /home/user/MI_USB
 mount -o remount,ro,bind /home/user/MI_USB
 	\end{verbatim}
+
+	\noindent Por otro lado, un tercer uso del montaje tipo \texttt{bind}, es la posibilidad realizar un montaje sobre un mismo directorio. Por ejemplo, lo realizamos sobre el directorio \texttt{/mnt/MI\_USB}:
+	
+	\begin{verbatim}
+mount --bind /mnt/MI_USB /mnt/MI_USB
+	\end{verbatim}
+
+	\noindent Al ejecutar dicho comando, lo que estamos haciendo es convertir un directorio del \texttt{tree} en un \texttt{device} o dispositivo de nuestro sistema, es decir, a partir de ahora (mientras esté montado) la ruta \texttt{/mnt/MI\_USB} será tratado como un dispositivo montado sobre ese directorio. Esto mismo nos aporta cierta ventajas, ya que podemos aplicar las opciones que hemos comentado anteriormente, tales como modificar los permisos de escritura o lectura, o cambiar las opciones de montaje.
+
+	\pagebreak
 
 	\noindent En resumen, un montaje tipo \texttt{bind} expone una vista de un directorio (porción del \texttt{tree}) en una localización diferente. Se encarga de exponer los mismos archivos, pero con la posibilidad de diferentes opciones de montaje, diferentes ``ownership'' o permisos. Estos sistemas de archivos que muestran una vista alterada del sistema de archivos original se suelen llamar \textit{overlay filesystems}, y son comúnmente utilizados en soluciones de contenedores, algún ejemplo podría ser: \texttt{overlayfs} [\ref{bib: overlayfs}], utilizado por Docker, y que permite tener múltiples sistemas de archivos dentro de un mismo directorio (\texttt{union mounts}). \\
 
@@ -1123,7 +1135,7 @@ $ ip netns exec <network-namespace> <command>
 
 	\pagebreak
 	
-	\noindent \textbf{\large Ejemplo práctico de \texttt{network namespaces} con NAT}\\
+	\noindent \textbf{\large Ejemplo: topología de red usando \texttt{network namespaces} y NAT}\\
 	\par \noindent Una de las problemáticas que supone el uso de los network namespaces, es que solo podemos asignar \textbf{una interfaz real} a \textbf{un namespace}. Suponiendo el caso en el que el usuario root tenga asignada la interfaz eth0 (identificador de una interfaz de red física), significaría que solo los programas en el namespace de root podrán acceder a dicha interfaz. En el caso de que eth0 sea la salida a Internet de nuestro sistema, pues eso conllevaría que no podríamos tener conexión a Internet en nuestros namespaces. La solución para esto reside en los \textbf{veth-pair}.
 	
 	\addvspace{10px}

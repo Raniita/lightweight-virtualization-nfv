@@ -2,6 +2,8 @@
 *.vdi
 *.txt
 
+.vscode
+
 # Tex and TexStudio things
 *.aux
 *.glo
