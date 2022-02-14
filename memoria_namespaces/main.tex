@@ -227,13 +227,21 @@
 	\subsection{Descripción de los capítulos restantes de la memoria}
 	\noindent En este apartado se comentará brevemente la distribución de capítulos de la memoria. Además, se mencionará que temas se han abordado en cada uno de ellos.
 	\begin{itemize}
-		\item \textbf{Capítulo 1}: Introducción.
-		\item \textbf{Capítulo 2}: Virtualización de funciones de red.
-		\item \textbf{Capítulo 3}: Interfaces de red virtuales en Linux.
-		\item \textbf{Capítulo 4}: Espacio de nombres en Linux.
-		\item \textbf{Capítulo 5}: Virtualización ligera y contenedores.
-		\item \textbf{Capítulo 6}: Caso práctico: Virtualización para la simulación de redes.
-		\item \textbf{Capítulo 7}: Conclusiones.
+		\item \textbf{Capítulo 1}: \textit{Introducción}. Comienzo del proyecto. Se exponen introducción, objetivos y el contexto del trabajo. \\
+		
+		\item \textbf{Capítulo 2}: \textit{Virtualización de funciones de red}. Se pretende contextualizar el porqué es importante la virtualización de las redes. Además, se comenta sobre las tecnologías involucradas para dar lugar a la virtualización. \\
+		
+		\item \textbf{Capítulo 3}: \textit{Interfaces de red virtuales en Linux}. Se comentará las diferentes interfaces de red virtuales que nos ofrece Linux. Se evaluarán sus ventajas y como nos pueden ser útiles para implementar topologías de red virtualizadas. \\
+		
+		\item \textbf{Capítulo 4}: \textit{Espacio de nombres en Linux}. Se estudiará el concepto de espacio de nombres. Se aportará una explicación de cada espacio de nombres disponibles, además de ejemplos de aplicación de los más importantes. \\
+		
+		\item \textbf{Capítulo 5}: \textit{Virtualización ligera y contenedores}. Se profundiza en diferentes técnicas de virtualización ligera, además de proponer ejemplos y primeros pasos para cada una de las soluciones propuestas. \\
+		
+		\pagebreak
+		
+		\item \textbf{Capítulo 6}: \textit{Caso práctico: Virtualización para la simulación de redes}. Se proponen varios ejemplos de \textit{software} en el que se utiliza virtualización ligera para la simulación de redes. \\
+		
+		\item \textbf{Capítulo 7}: \textit{Conclusiones}. Se muestran las conclusiones obtenidas, tanto de puntos en especifico, como de la totalidad del trabajo. Además, se proponen lineas de investigación futuras. \\
 	\end{itemize}
 	
 	
@@ -329,15 +337,15 @@
 	
 	\section{Interfaces de red virtuales en \textit{Linux}}
 	\label{sect: interfaces virtuales}
-	\noindent En este capítulo, vamos a profundizar en el concepto de interfaces de red virtuales, pero las específicas al sistema operativo basados en el kernel de Linux. Hacemos esto ya que los servidores utilizados a gran escala, la mayoría hacen uso de distribuciones de Linux. \\ % TODO
+	\noindent En este capítulo, vamos a profundizar en el concepto de interfaces de red virtuales, pero las específicas al sistema operativo basados en el kernel de Linux. \\
 	
 	\noindent Linux dispone de una selección muy diferente de interfaces de red que nos permiten, de manera sencilla, el uso de máquinas virtuales o contenedores. En este apartado vamos a mencionar las interfaces más relevantes de cara a la virtualización ligera que proponemos para el despliegue de una red virtualizada. Para obtener una lista completa de las interfaces disponibles, podemos ejecutar el siguiente comando \texttt{ip link help}.\\
 	
 	\par \noindent En este trabajo, vamos a comentar la siguientes interfaces [\ref{bib:virtual interface list}]:
 	\begin{itemize}
-		\item MAC compartida: eth0:\{0,1,2...\}
-		\item VLAN 802.1q: eth0.\{0,1,2...\}
-		\item VLAN 802.1ad: eth0.\{0,1,2...\}.\{0,1,2...\}
+		\item MAC compartida: enp2s0:\{0,1,2...\}
+		\item VLAN 802.1q: enp2s0.\{0,1,2...\}
+		\item VLAN 802.1ad: enp2s0.\{0,1,2...\}.\{0,1,2...\}
 		\item Pares de ethernet virtuales (\textit{veth pairs})
 		\item TUN/TAP
 	\end{itemize}
@@ -3272,100 +3280,7 @@ containernet> d1 ping -c4 d2
 	\section{Anexos}
 	%\addcontentsline{toc}{section}{Anexos}
 	
-	\subsection{Instalación de \texttt{ansible} para automatizar una VM}
-	%\subsection{Anexo 1. Instalación de \texttt{ansible} para automatizar una VM}
-	%\addcontentsline{toc}{subsection}{Anexo 1. Instalación \texttt{ansible}}
 	
-	\noindent En el caso de que queramos utilizar la herramienta ansible para configurar una VM, tendremos que seguir los siguientes pasos.
-	\begin{enumerate}
-		\item Asegurarnos de que tenemos instalado el programa en el host. La principal dependencia de \texttt{ansible} es \texttt{Python}. \\
-		Para instalar \texttt{ansible} en diferentes distribuciones sería tal que:
-		\begin{itemize}
-			\item Ubuntu 21.04:
-			\begin{lstlisting}[language=Bash, caption={Instalación \texttt{ansible} en Ubuntu}]
-sudo apt install -y software-properties-common
-sudo add-apt-repository --yes --update ppa:ansible/ansible
-sudo apt update
-sudo apt install -y ansible
-			\end{lstlisting}
-			
-			\item Fedora 32:
-			\begin{lstlisting}[language=Bash, caption={Instalación \texttt{ansible} en Fedora}]
-sudo dnf update
-sudo dnf install ansible
-			\end{lstlisting}
-			
-			\item OpenSUSE:
-			\begin{lstlisting}[language=Bash, caption={Instalación \texttt{ansible} en OpenSUSE}]
-zypper in ansible
-			\end{lstlisting}
-			
-			\item Arch Linux:
-			\begin{lstlisting}[language=Bash, caption={Instalación \texttt{ansible} en Arch Linux}]
-sudo pacman -S ansible
-			\end{lstlisting} 
-		\end{itemize}
-		
-		\item Creamos una clave SSH para utilizarla como método de autentificación con la maquina virtual. 
-		\begin{lstlisting}[language=Bash, caption={Crear clave SSH para autenticación en VM}]
-(host)$ ssh-keygen -t ed25519 -C "Host Ansible ssh key"
-		\end{lstlisting}
-		
-		\pagebreak
-		
-		\item Utilizando nuestro gestor de máquinas virtuales, encendemos la VM. Es importante que nos aseguremos que tiene internet, por lo que configuramos que la interfaz de red sea de tipo \textit{NAT}. Dentro de la máquina, buscaremos que ip tiene asignada con el comando \texttt{ip address}. Desde este momento, dejaremos la máquina virtual encendida.
-		
-		\item Procedemos a copiar la clave pública SSH que hemos generado en el paso dos. Utilizamos el siguiente comando, sustituyendo con el usuario e IP específico de la máquina. Tendremos que configurar una red tipo \textit{Host-only network} para poder comunicarnos correctamente con nuestra máquina virtual, para ello podemos seguir los pasos detallados en [\ref{bib:configure host-only}]
-		\begin{lstlisting}[language=Bash, caption={Copiar clave pública de \texttt{ansible} a VM}]
-(host)$ ssh-copy-id -i $HOME/.ssh/id_ed25519.pub <user>@<IP VM>
-		\end{lstlisting}
-
-		\item En este momento ya podríamos conectar con la máquina virtual utilizando \texttt{ansible}. Sin embargo, por comodidad, lo que vamos a hacer es crear un archivo que funcione con inventario de servidores. Nos servirá para guardar las direcciones IP de los servidores en los que queremos ejecutar comandos remotos con \texttt{ansible}. Para ello, creamos un archivo \texttt{inventory}. Como ejemplo, dicho archivo puede ser tal que:
-		\begin{lstlisting}[language=Bash, caption={Contenido del archivo \texttt{inventory} de \texttt{ansible}}]
-## VMs locals 
-[virtualbox]
-10.0.100.1
-10.0.100.2
-			
-## Server SSH
-[server]
-192.168.1.200
-		\end{lstlisting}
-		
-		\item Para probar la conectividad. Nos aseguramos de que tenemos la máquina virtual encendida y que además, hemos copiado la clave ssh y tenemos su IP añadida a nuestro inventario. Después, procedemos a ejecutar el siguiente comando en la máquina host:
-		\begin{verbatim}
-			(host)$ ansible -i inventory -m ping
-		\end{verbatim}
-		\noindent En la consola nos aparecerá la información de cada uno de las IP que habrá probado para ejecutar el comando remoto \texttt{ping}.
-	\end{enumerate}
-	
-	\pagebreak
-	
-	\subsection{Configuración de \textit{Guest Network} para comunicar con la VM}
-	%\subsection{Anexo 2. Configuración de \textit{Guest Network} para comunicar con la VM}
-	%\addcontentsline{toc}{subsection}{Anexo 2. Configuración de \textit{Guest Network} para comunicar con la VM}
-	
-	\noindent Para comunicar nuestra máquina host [\ref{bib:configure host-only}], con una \textit{virtual machine} es necesario que estén en una misma red, es por esto por lo que vamos a crear una red en especifico para ello. En el programa \textit{Virtualbox}, esta funcionalidad recibe el nombre de \textit{Host-only}.\\
-	
-	\noindent Es importante que cuando queramos configurar una máquina virtual con esta funcionalidad que siempre pongamos el adaptador de red 1 como el que tendrá la comunicación \textit{guest}, mientras que el adaptador 2 será el que tendrá la conexión a internet via \textit{NAT}.\\
-	
-	\noindent Procedemos a enumerar los pasos a seguir para configurar una máquina virtual con conectividad con el host, utilizando \textit{Virtualbox}.
-	
-	\begin{enumerate}
-		\item Abrimos el programa \textit{Virtualbox}. Navegamos a la sección: \textbf{File $\rightarrow$ Preferences}.
-		\item Seleccionamos la tabla de \textbf{\textit{Host-only Networks}}. Procedemos a pulsar el botón + para añadir una nueva red.
-		\item Asignamos las diferentes IP que considermos. Es importante que dejemos activado el servidor DHCP, así la máquina virtual tendrá una IP válida dentro de la red.
-		\item Ahora, lo que tenemos que hacer es añadir una interfaz de red a nuestra máquina virtual. Para ello, vamos a las \textbf{Setting}s de la máquina virtual. En el apartado de Network, cambiamos el \textbf{Adapter 1} a\textbf{ Host-only Adapter}, y asignamos una segunda interfaz de red con NAT (Adapter 2 attached to NAT).
-		\item Para comprobar que lo hemos hecho correctamente. Arrancamos la máquina virtual, ejecutamos el comando \texttt{ip address}. Nos deberían aparacer las diferentes interfaces que previamente hemos configurado, es decir, una interfaz de loopback, otra que corresponde al Host-only network, y por último, una que corresponda con la interfaz de NAT.
-	\end{enumerate}
-	
-	\pagebreak
-	
-	\subsection{Playbooks \texttt{ansible}}
-	%\subsection{Anexo 3. Playbooks \texttt{ansible}}
-	%\addcontentsline{toc}{subsection}{Anexo 3. Playbooks \texttt{ansible}}
-	
-	\pagebreak
 	
 	\subsection{Código asociado a topologías de red}
 	%\subsection*{Anexo 4. Código asociado a topologías de red}
