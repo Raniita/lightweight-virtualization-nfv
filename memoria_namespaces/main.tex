@@ -2748,22 +2748,28 @@ sudo python limit.py
 	
 	\noindent \textbf{\large Ejemplo: controlador externo}\\
 	
-	\noindent En los ejemplos anteriores de \texttt{mininet}, hemos estado utilizando el controlador OpenFlow ``build in'', es decir, hemos utilizado \texttt{Open vSwitch} como controlador de los dispositivos de red de nuestra topología. Sin embargo, \texttt{mininet} nos permite la utilización de otros controladores SDN externos, que además pueden estar basados en las diferentes versiones del protocolo OpenFlow que están disponibles actualmente, permitiendo así compatibilidad con más dispositivos disponibles en el mercado. \\
+	\noindent En los ejemplos anteriores de \texttt{mininet}, hemos estado utilizando el controlador OpenFlow ``built in'' de \texttt{mininet}, es decir, hemos utilizado \texttt{Open vSwitch} como controlador de los dispositivos de red de nuestra topología (switches). Dicho controlador, tiene como tarea distribuir, de manera dinámica y según ciertas reglas, la información asociada al encaminamiento de los paquetes de la red, rellenando las \texttt{flow-table} de los switches. \\
+	
+	\noindent Sin embargo, \texttt{mininet} nos permite la utilización de otros controladores SDN externos, que además pueden estar basados en las diferentes versiones del protocolo OpenFlow que están disponibles actualmente, permitiendo así compatibilidad con más dispositivos físicos disponibles en el mercado. \\
 	
 	\noindent Algunos de los controladores SDN que más se utilizan actualmente son los siguientes:
 	\begin{itemize}
-		\item \texttt{OpenDayLight}. Controlador SDN más utilizado. Desarrollado en el lenguaje Java. Filosofía modular, permite desarrollar aplicaciones sobre el, de modo que podamos customizar y automatizar las redes a la escala que queramos.
+		\item \texttt{OpenDayLight} [\ref{bib: opendaylight}]. Controlador SDN más utilizado. Desarrollado en el lenguaje Java. Filosofía modular, permite desarrollar aplicaciones sobre el, de modo que podamos customizar y automatizar las redes a la escala que queramos.
 		
-		\item \texttt{POX}/\texttt{NOX}. Controlador SDN escrito en Python/C++. Soporta OpenFlow 1.0. Permite un desarrollo rápido y asíncrono.
+		\item \texttt{POX}/\texttt{NOX} [\ref{bib: pox}][\ref{bib: nox}]. Controlador SDN escrito en Python/C++. Soporta OpenFlow 1.0. Permite un desarrollo rápido y asíncrono.
 		
-		\item \texttt{Ryu}. Controlador SDN escrito en Python. Filosofía basada en componentes, por lo que permite una fácil integración con nuevas aplicaciones. Aporta una \texttt{northbound API} bien definida. Soporta OpenFlow 1.0, 1.2, 1.3, 1.4 y 1.5, además de otros protocolos como Netconf.
+		\item \texttt{Ryu} [\ref{bib: ryu}]. Controlador SDN escrito en Python. Filosofía basada en componentes, por lo que permite una fácil integración con nuevas aplicaciones. Aporta una \texttt{northbound API} bien definida. Soporta OpenFlow 1.0, 1.2, 1.3, 1.4 y 1.5, además de otros protocolos como Netconf.
 				
-		\item \texttt{ONOS}. Controlador SDN muy utilizado. Desarrollado en el lenguaje Java y que tiene una arquitectura modular. 
+		\item \texttt{ONOS} [\ref{bib: onos}]. Controlador SDN muy utilizado. Desarrollado en el lenguaje Java y que tiene una arquitectura modular. 
 	\end{itemize}
 
-	\noindent A modo de ejemplo, vamos a instalar y ejecutar una topología \texttt{mininet} utilizando el controlador SDN \texttt{Ryu}. \\
+	\vspace{20px}
+	\noindent \textbf{Controlador \texttt{Ryu}}\\
+
+	\noindent A modo de ejemplo, vamos a instalar y ejecutar una topología en \texttt{mininet} utilizando el controlador SDN \texttt{Ryu}.  \\
 	
-	\noindent Lo primero, para instalar \texttt{Ryu} tenemos que ejecutar lo siguiente:
+	\noindent Lo primero, para instalar \texttt{Ryu} tenemos que ejecutar el comando siguiente. Para este ejemplo, vamos a utilizar la misma máquina virtual que estamos utilizando para \texttt{mininet}.
+	
 	\begin{verbatim}
 git clone https://github.com/faucetsdn/ryu.git
 pip install ryu/.
@@ -2774,16 +2780,16 @@ pip install ryu/.
 sudo mn --topo tree,depth=3 --mac --switch ovsk --controller remote
 	\end{verbatim}
 
-	\noindent Con dicha topología, estaremos simulando una red de tipo arbol con 8 hosts, 7 switchs \texttt{Open vSwitch} y un controlador remoto (escuchando en la dirección \texttt{127.0.0.1:6653}). \\
-	
-	\noindent Una vez ejecutada la topología, podemos comprobar que no tenemos conectividad entre los host utilizando el comando \texttt{pingall}, esto es debido a que no tenemos ejecutando nuestro controlador. \\
+	\noindent Con dicha topología, estaremos simulando una red de tipo árbol con 8 hosts, 7 switchs \texttt{Open vSwitch} y un controlador remoto (escuchando en la dirección \texttt{127.0.0.1:6653}). 
 	
 	\pagebreak
+	
+	\noindent Una vez ejecutada la topología, podemos comprobar que no tenemos conectividad entre los host utilizando el comando \texttt{pingall}, esto es debido a que no tenemos ejecutando nuestro controlador. (ver Figura \ref{img: mn ryu 1})
 	
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=1\textwidth]{img/mn_ryu_1.png}
-			\caption{Ryu 1}
+			\caption{Ejecución topologia \texttt{mininet} sin controlador asignado (terminal A)}
 			\label{img: mn ryu 1}	
 		\end{center}
 	\end{figure}
@@ -2794,34 +2800,37 @@ sudo mn --topo tree,depth=3 --mac --switch ovsk --controller remote
 ryu run ryu.app.simple_switch_13
 	\end{verbatim}
 	
-	\noindent Una vez ejecutado, nos aparecerá en la terminal B la información acerca de los módulos que \texttt{Ryu} ha cargado para dar la funcionalidad que deseamos. \\
+	\noindent Una vez ejecutado, nos aparecerá en la terminal B la información acerca de los módulos que \texttt{Ryu} ha cargado para dar la funcionalidad que deseamos. Además, en dicha terminal se irán mostrando los diferentes paquetes que conmute el switch. \\
 	
-	\noindent Si ahora comprobamos la conectividad en la topología de mininet (escribiendo en la terminal A el comando \texttt{pingall}), podemos ver como efectivamente ahora si que los paquetes llegan a su destino. Por lo tanto, podemos determinar que efectivamente el controlador SDN está rellenando correctamente la \texttt{flow-table} del switch. \\
+	\noindent Si ahora comprobamos la conectividad en la topología de \texttt{mininet} (escribiendo en la terminal A el comando \texttt{pingall}), podemos ver como efectivamente ahora si que los paquetes llegan a su destino. Por lo tanto, podemos determinar que efectivamente el controlador SDN está rellenando correctamente la \texttt{flow-table} del switch. (ver Figura \ref{img: mn ryu 2}) 
 	
 	\pagebreak
 	
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.65\textwidth]{img/mn_ryu_2.png}
-			\caption{Ryu 2}
+			\includegraphics[width=0.7\textwidth]{img/mn_ryu_2.png}
+			\caption{Ejecución del controlador \texttt{Ryu} (terminal inferior, B) y posterior \texttt{pingall} en \texttt{mininet} (terminal superior, A)}
 			\label{img: mn ryu 2}	
 		\end{center}
 	\end{figure}
 	
-	\noindent Por otro lado, otra funcionalidad interesante de este controlador es el visualizador de topologías. Nos permite ver en una página web la topología de nuestra red, es decir, como se interconectan los diferentes hosts con los switches de la red. Para ello, solo tenemos que ejecutar el siguiente comando en la terminal B (si tenemos activo el ejemplo de \texttt{simple\_switch\_13.py}, pararemos su ejecución con Ctrl+C):
+	\noindent Por otro lado, otra funcionalidad interesante de este controlador es el visualizador de topologías. Nos permite ver en una página web la topología de nuestra red, es decir, como se interconectan los diferentes switches de la red. Para ello, solo tenemos que ejecutar el siguiente comando en la terminal B (si tenemos activo el ejemplo de \texttt{simple\_switch\_13.py}, pararemos su ejecución con Ctrl+C):
 	\begin{verbatim}
 ryu run --observe-links ryu.app.simple_switch_13 ryu.app.gui_
 topology.gui_topology
 	\end{verbatim}
 
-	\noindent Ahora, una vez ejecutado el comando anterior, tenemos que utilizar un navegador web y dirigirnos a la siguiente dirección: \url{http://127.0.0.1:8080/}. Una vez estamos en dicha página, podemos ver como se nos presenta la topología de la red que estamos controlando (ver Figura X).
-	
 	\pagebreak
+
+	\noindent Ahora, una vez ejecutado el comando anterior, tenemos que utilizar un navegador web y dirigirnos a la siguiente dirección: \url{http://localhost:8080/}. Después de acceder a dicha página, podemos ver como se nos presenta la topología de la red que estamos controlando (ver Figura \ref{img: mn ryu 3}). [\ref{bib: ryu gui}]
+	
+	%\pagebreak
+	\vspace{10px}
 	
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=1\textwidth]{img/mn_ryu_3.png}
-			\caption{Ryu 3}
+			\caption{Herramienta \textit{Topology Viewer} del controlador \texttt{Ryu}}
 			\label{img: mn ryu 3}	
 		\end{center}
 	\end{figure}
@@ -3272,7 +3281,7 @@ containernet> d1 ping -c4 d2
 		%53
 		\item
 		\label{bib: oci}
-		\href{https://opencontainers.org/}{Open Container Initiative}
+		\href{https://opencontainers.org/}{Open Container Initiative (OCI)}
 		
 		%54
 		\item
@@ -3299,9 +3308,40 @@ containernet> d1 ping -c4 d2
 		\label{bib: containernet github}
 		\href{https://github.com/containernet/containernet}{Github: containernet}
 		
+		%60
 		\item 
 		\label{bib: what is bind}
 		\href{https://unix.stackexchange.com/questions/198590/what-is-a-bind-mount}{Stackexchange: what is a bind mount?}
+		
+		%61
+		\item 
+		\label{bib: opendaylight}
+		\href{https://www.opendaylight.org/}{OpenDaylight (ODL)}
+		
+		%62
+		\item 
+		\label{bib: pox}
+		\href{https://github.com/noxrepo/pox}{Github: POX}
+		
+		%63
+		\item 
+		\label{bib: nox}
+		\href{https://github.com/noxrepo/nox}{Github: NOX}
+		
+		%64
+		\item 
+		\label{bib: ryu}
+		\href{https://github.com/faucetsdn/ryu}{Github: Ryu}
+		
+		%65
+		\item 
+		\label{bib: onos}
+		\href{https://opennetworking.org/onos/}{Open Networking Operating System (ONOS)}
+		
+		%66
+		\item
+		\label{bib: ryu gui}
+		\href{https://ryu.readthedocs.io/en/latest/gui.html}{Ryu Doc: Topology Viewer}
 		
 		% X
 		\item
