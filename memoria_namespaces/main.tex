@@ -2746,6 +2746,88 @@ sudo python limit.py
 	
 	\pagebreak
 	
+	\noindent \textbf{\large Ejemplo: controlador externo}\\
+	
+	\noindent En los ejemplos anteriores de \texttt{mininet}, hemos estado utilizando el controlador OpenFlow ``build in'', es decir, hemos utilizado \texttt{Open vSwitch} como controlador de los dispositivos de red de nuestra topología. Sin embargo, \texttt{mininet} nos permite la utilización de otros controladores SDN externos, que además pueden estar basados en las diferentes versiones del protocolo OpenFlow que están disponibles actualmente, permitiendo así compatibilidad con más dispositivos disponibles en el mercado. \\
+	
+	\noindent Algunos de los controladores SDN que más se utilizan actualmente son los siguientes:
+	\begin{itemize}
+		\item \texttt{OpenDayLight}. Controlador SDN más utilizado. Desarrollado en el lenguaje Java. Filosofía modular, permite desarrollar aplicaciones sobre el, de modo que podamos customizar y automatizar las redes a la escala que queramos.
+		
+		\item \texttt{POX}/\texttt{NOX}. Controlador SDN escrito en Python/C++. Soporta OpenFlow 1.0. Permite un desarrollo rápido y asíncrono.
+		
+		\item \texttt{Ryu}. Controlador SDN escrito en Python. Filosofía basada en componentes, por lo que permite una fácil integración con nuevas aplicaciones. Aporta una \texttt{northbound API} bien definida. Soporta OpenFlow 1.0, 1.2, 1.3, 1.4 y 1.5, además de otros protocolos como Netconf.
+				
+		\item \texttt{ONOS}. Controlador SDN muy utilizado. Desarrollado en el lenguaje Java y que tiene una arquitectura modular. 
+	\end{itemize}
+
+	\noindent A modo de ejemplo, vamos a instalar y ejecutar una topología \texttt{mininet} utilizando el controlador SDN \texttt{Ryu}. \\
+	
+	\noindent Lo primero, para instalar \texttt{Ryu} tenemos que ejecutar lo siguiente:
+	\begin{verbatim}
+git clone https://github.com/faucetsdn/ryu.git
+pip install ryu/.
+	\end{verbatim}
+
+	\noindent En una terminal (la llamaremos terminal A), ejecutaremos una topología de \texttt{mininet}. Por ejemplo, utilizando el siguiente comando:
+	\begin{verbatim}
+sudo mn --topo tree,depth=3 --mac --switch ovsk --controller remote
+	\end{verbatim}
+
+	\noindent Con dicha topología, estaremos simulando una red de tipo arbol con 8 hosts, 7 switchs \texttt{Open vSwitch} y un controlador remoto (escuchando en la dirección \texttt{127.0.0.1:6653}). \\
+	
+	\noindent Una vez ejecutada la topología, podemos comprobar que no tenemos conectividad entre los host utilizando el comando \texttt{pingall}, esto es debido a que no tenemos ejecutando nuestro controlador. \\
+	
+	\pagebreak
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=1\textwidth]{img/mn_ryu_1.png}
+			\caption{Ryu 1}
+			\label{img: mn ryu 1}	
+		\end{center}
+	\end{figure}
+	
+	\noindent En este caso, vamos a ejecutar nuestro controlador con una configuración de switch que soporta OpenFlow 1.3 (alojado en \texttt{simple\_switch\_13.py}). Para ello, ejecutamos el siguiente comando en una terminal diferente a la terminal A (la llamaremos terminal B).
+	
+	\begin{verbatim}
+ryu run ryu.app.simple_switch_13
+	\end{verbatim}
+	
+	\noindent Una vez ejecutado, nos aparecerá en la terminal B la información acerca de los módulos que \texttt{Ryu} ha cargado para dar la funcionalidad que deseamos. \\
+	
+	\noindent Si ahora comprobamos la conectividad en la topología de mininet (escribiendo en la terminal A el comando \texttt{pingall}), podemos ver como efectivamente ahora si que los paquetes llegan a su destino. Por lo tanto, podemos determinar que efectivamente el controlador SDN está rellenando correctamente la \texttt{flow-table} del switch. \\
+	
+	\pagebreak
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.65\textwidth]{img/mn_ryu_2.png}
+			\caption{Ryu 2}
+			\label{img: mn ryu 2}	
+		\end{center}
+	\end{figure}
+	
+	\noindent Por otro lado, otra funcionalidad interesante de este controlador es el visualizador de topologías. Nos permite ver en una página web la topología de nuestra red, es decir, como se interconectan los diferentes hosts con los switches de la red. Para ello, solo tenemos que ejecutar el siguiente comando en la terminal B (si tenemos activo el ejemplo de \texttt{simple\_switch\_13.py}, pararemos su ejecución con Ctrl+C):
+	\begin{verbatim}
+ryu run --observe-links ryu.app.simple_switch_13 ryu.app.gui_
+topology.gui_topology
+	\end{verbatim}
+
+	\noindent Ahora, una vez ejecutado el comando anterior, tenemos que utilizar un navegador web y dirigirnos a la siguiente dirección: \url{http://127.0.0.1:8080/}. Una vez estamos en dicha página, podemos ver como se nos presenta la topología de la red que estamos controlando (ver Figura X).
+	
+	\pagebreak
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=1\textwidth]{img/mn_ryu_3.png}
+			\caption{Ryu 3}
+			\label{img: mn ryu 3}	
+		\end{center}
+	\end{figure}
+	
+	\pagebreak
+	
 	\subsection{\texttt{Containernet}: Simulador de redes}
 	
 	\noindent Por otro lado, existen otras implementaciones de simuladores que extienden la funcionalidad de \texttt{mininet}, permitiendo abarcar muchas más situaciones a simular. A modo de ejemplo, destacamos \texttt{containernet} [\ref{bib: containernet github}], siendo un simulador de red basado en \texttt{mininet} que permite utilizar contenedores de \texttt{Docker} como hosts en una red emulada. Esta funcionalidad permite construir entornos de simulación para redes de tipo \textit{cloud}. \\
