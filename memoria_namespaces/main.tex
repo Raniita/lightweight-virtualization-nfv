@@ -219,13 +219,13 @@
 	\subsection{Objetivos}
 	\noindent Como bien hemos adelantado en el apartado anterior, el objetivo principal de este proyecto es el de analizar la situación en el ámbito de simulación y evaluación de redes de comunicación, además, concretar en aquellas soluciones que estén basadas en virtualización ligera. Por lo tanto, se pretende: 
 	\begin{itemize}
-		\item Aprender los conceptos básicos de la virtualización de sistemas de red (NFV).
-		\item Comprender la diferencia entre virtualización \textit{ligera} y virtualización \textit{dura}.
-		\item Estudiar, dentro del sistema operativo Linux, las diferentes tecnologías que nos permiten adoptar soluciones NFV.
-		\item Definir que es \textit{espacio de nombres} y como podemos aplicarlo para virtualizar redes.
-		\item Profundizar en el concepto de \textit{interfaces virtuales} en Linux.
-		\item Desgranar el concepto amplio de contenedor, relacionándolo con los \textit{espacios de nombres}.
-		\item Desarrollar una aplicación conceptual para la evaluación de un sistema en concreto, utilizando virtualización ligera.
+		\item Aprender los conceptos básicos de la virtualización de sistemas de red (\texttt{NFV}).
+		\item Comprender la diferencia entre virtualización \textit{ligera} y virtualización ``\textit{dura}''.
+		\item Estudiar, dentro del sistema operativo Linux, las diferentes tecnologías que nos permiten adoptar soluciones \texttt{NFV}.
+		\item Definir que es espacio de nombres y como podemos aplicarlo para virtualizar redes.
+		\item Profundizar en el concepto de interfaces virtuales en Linux.
+		\item Desgranar el concepto amplio de contenedor, relacionándolo con los espacios de nombres.
+		\item Aportar una serie de ejemplos que puedan servir de guía para la evaluación de redes de comunicaciones, utilizando virtualización ligera.
 	\end{itemize}
 
 	\subsection{Descripción de los capítulos restantes de la memoria}
@@ -828,7 +828,6 @@ sock 192.168.3.1 1026       # Terminal 4 (cliente)
 	
 	\par \noindent El objetivo de cada \textit{namespaces} es adquirir una característica global del sistema como una abstracción que haga parecer a los procesos de dentro del \textit{namespace} que tienen su propia instancia aislada del recurso global.
 	
-	% TODO
 	\subsection{¿Cómo crear/acceder a un \textit{namespace}?}
 	\noindent Los namespaces normalmente se suelen asociar a procesos o aplicaciones en específico. Para manipular estos namespaces, podemos destacar las siguientes herramientas: 
 	\begin{itemize}
@@ -3007,12 +3006,35 @@ containernet> d1 ping -c4 d2
 	
 	\pagebreak
 	
-	\section{Conclusiones}
+	\section{Conclusiones y propuestas futuras}
 	
-	\subsection{Propuestas futuras}
+	\noindent En este capítulo vamos a comentar las conclusiones obtenidas al realizar el presente trabajo. \\
 	
-	% Propuestas futuras
-	% Openflow OKO
+	\noindent En primer lugar, hemos presentado la problemática actual de la escalabilidad de las redes y como se está trabajando para un futuro basado en el software y en la descentralización. Esto supone una búsqueda para poder alejarnos de hardware específico/embebido, para acércanos a un hardware de carácter general en el que podamos desplegar nuestros servicios, todo esto, potenciado con la virtualización de los sistemas. A raíz de esto, hemos definido \texttt{NFV} y los conceptos más importantes para entender que és y por qué es un desarrollo muy importante para las telecomunicaciones. Además, lo hemos ``diferenciado'' respecto al concepto de \texttt{SDN}, y comprobado como ambas son tecnologías que van a ir de la mano, ya que una depende de la otra. \\
+	
+	\noindent Por otro lado, se ha explicado las diferentes interfaces de red virtuales de Linux, ya que son realmente importantes para las soluciones de virtualización. Para completar la explicación, se ha seguido una metodología basada en ejemplos, por lo que hemos podido comprobar la funcionalidad y el objetivo de cada una de las interfaces expuestas. Hemos comprobado la importancia de interfaces como pueden ser los pares ethernet o bien los tup/tap, aunque sobre todo tap. \\
+	
+	\noindent En el sentido de \texttt{namespaces}, se han definido los namespaces presentes dentro del Kernel de Linux. Se ha verificado el potencial que posee esta tecnología, y como está muy presente en diferentes tecnologías que están fuertemente arraigadas por la comunidad, por ejemplo \texttt{LXC} o \texttt{Docker}. Gracias a los ejemplos, se ha podido comprender fácilmente el funcionamiento de cada uno de los namespaces. \\
+	
+	\noindent En el punto de virtualización ligera, hemos aprendido que implementaciones software tenemos disponibles para realizar virtualización ligera. Además, hemos recreado un contenedor paso a paso, de modo que hemos podido comprobar la importancia de los namespaces. Por otro lado, con las definiciones de \texttt{LXC} y de \texttt{Docker}, hemos iniciado al uso de ambas herramientas, facilitando su posterior uso. \\
+	
+	\noindent Por último, se han propuesto ciertas herramientas que utilizan la virtualización ligera para simular redes de comunicaciones. En este caso hemos hablado de \texttt{mininet}, como una implementación basada totalmente en namespaces, y de \texttt{containernet} como un ``fork'' de \texttt{mininet} que está extendido para trabajar con hosts de Docker. Ambas herramientas son muy importantes ya que permiten crear entornos de desarrollo e investigación para el área de \texttt{SDN}. Nos permite realizar pruebas con topologías de gran tamaño de manera sencilla y rápida. \\
+	
+	\noindent En resumen, podemos concluir que el presente trabajo ha cumplido todos los objetivos propuestos, ya que se ha profundizado sobre la virtualización ligera, y se ha ido construyendo una ``guía'' a base de explicaciones y ejemplos, que nos permite comprender los entresijos de simuladores de redes basados en dicha virtualización, como puede ser \texttt{mininet}. \\
+	
+	\pagebreak
+	
+	%\subsection{Propuestas futuras}
+	\noindent \textbf{\large Propuestas futuras}\\
+	
+	\noindent Algunas de las líneas de investigación que pueden resultar interesantes para continuar este proyecto, son las siguientes:
+	\begin{itemize}
+		\item Profundizar en las diferencias de rendimiento entre utilizar una virtualización ``dura'', usando un hipervisor (por ejemplo VirtualBox), respecto a una solución basada en contenedores, como las que hemos comentado en este trabajo. Por otro lado, en temas de rendimiento, también se podría estudiar cual podría ser el límite en la simulación de redes utilizando virtualización ligera.
+		
+		\item Investigar sobre modificaciones del protocolo \texttt{OpenFlow}, como puede ser \url{https://github.com/Orange-OpenSource/oko}, que nos permite aplicar programas con los que filtrar paquetes de la red utilizando \texttt{BPF} (\textit{Berkley Packet Filter}). Por otro lado, sería realmente importante investigar la tecnología \texttt{DPDK}, ya que nos permite acceder directamente a la información de nuestras interfaces de red, además de mejorar considerablemente el \textit{throughput} en comparación de si utilizamos un \textit{Linux bridge}.
+		
+		\item Estudiar el lenguaje de programación \texttt{P4} (\url{https://p4.org/}), ya que ahora mismo esta siendo muy importante para el desarrollo de soluciones software en routers y switches. Se esta observando gran aceptación por la comunidad investigadora, y hay un creciente interés para su implantación. El objetivo de este lenguaje de programación es el de controlar el flujo de los paquetes de datos entre los diferentes planos de información que maneja el dispositivo. A diferencia de otros lenguajes de programación, como C o C++, \texttt{P4} está definido teniendo en mente que tiene que ser específico para las redes, por lo que presenta ciertas construcciones específicas para optimizar el flujo de la información.
+	\end{itemize}
 
 	%%% Bibliography
 	\pagebreak
