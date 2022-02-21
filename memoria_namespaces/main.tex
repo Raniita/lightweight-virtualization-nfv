@@ -408,7 +408,7 @@
 	
 	\pagebreak
 	
-	\subsection{MAC compartida \texttt{enp2s0:\{0,1,2...\}}}
+	\subsection{MAC compartida: \texttt{enp2s0:\{0,1,2...\}}}
 	\par \noindent Todas las interfaces asociadas comparten la misma dirección MAC. Cada una de ellas, recibe el nombre de \textit{aliases}. La funcionalidad principal que tienen este tipo de interfaces es la de asignar varias direcciones de IP a una misma interfaz de red.
 	
 	\begin{verbatim}
@@ -422,7 +422,7 @@ $ ip addr add 192.168.56.151/24 dev enp2s0
 $ ip addr add 192.168.56.251/24 dev enp2s0
 	\end{verbatim}
 
-	\subsection{VLAN 802.1q \texttt{enp2s0.\{0,1,2...\}}}
+	\subsection{VLAN 802.1q: \texttt{enp2s0.\{0,1,2...\}}}
 	\par \noindent Siguiendo el mismo concepto que la interfaz anterior, pero en este caso utilizando el estándar 802.1q, que permite etiquetar las tramas, para crear una red lógica independiente. Es necesario que la interfaz a la que estemos asignando, sea un puerto trunk, o bien sea tagged para una VLAN específica.
 	
 	\begin{verbatim}
@@ -440,7 +440,7 @@ $ ip link set dev enp2s0.{num} up
 
 	\pagebreak
 	
-	\subsection{VLAN 802.1ad. \texttt{enp2s0}.\texttt{\{0,1,2...\}.\{0,1,2...\}}}
+	\subsection{VLAN 802.1ad: \texttt{enp2s0}.\texttt{\{0,1,2...\}.\{0,1,2...\}}}
 	\noindent En este aparatado comentamos la interfaz virtual asociada al estándar 802.1ad, dicho estándar supone una actualización respecto a las VLANs basadas en 802.1q, pero añadiendo la posibilidad de tener dos tags dentro de mismo frame ethernet. En el caso del estándar 802.1q, solo podíamos tener un tag. El estándar de vlans 802.1ad es realmente útil cuando el proveedor de red y el usuario de dicha red quieren utilizar VLANs, además que amplía el límite de 4094 VLANs diferentes permitidas por el estándar 802.1Q [\ref{bib: 802.1ad}][\ref{bib: FS QinQ}]. Otra forma de la que nos podemos encontrar esta interfaz es bajo el nombre ``QinQ''. \\
 	
 	\noindent La estructura de la trama ethernet sigue la siguiente estructura,
@@ -463,7 +463,7 @@ $ ip link add link eth0.1000 eth0.1000.1000 type vlan proto 802.1q id 1000
 	
 	\pagebreak
 	
-	\subsection{Pares VETH.}
+	\subsection{Pares ethernet virtuales}
 	\label{sec: veth}
 	\noindent Los \texttt{veth} (Ethernet virtuales) son un dispositivo virtual que forman un túnel local ethernet. El dispositivo se crea en parejas. [\ref{bib:virtual interface list}]\\
 	
@@ -953,26 +953,26 @@ $ ls /mnt/cp
 	
 	\noindent En primer lugar, para trabajar respecto a montajes del sistema de archivos, utilizamos el comando de Linux \texttt{mount}. De manera primigenia, se utilizaba para ``montar'' dispositivos de almacenamiento físicos a un lugar específico del \texttt{tree} de nuestro sistema. Por ejemplo, suponemos que tenemos un disco duro conectado via interfaz \textit{SATA}. Utilizando el comando \texttt{lsblk}, determinamos que queremos montar la partición 1 del dispositivo físico con etiqueta \texttt{/dev/sda}. Por lo tanto, queremos realizar un punto de montaje de \texttt{/dev/sda1} en un lugar específico de nuestro sistema de archivos (\texttt{tree}). Para ello, podemos ejecutar el siguiente comando:
 	\begin{verbatim}
-mount /dev/sda1 /mnt/MI_USB
+$ mount /dev/sda1 /mnt/MI_USB
 	\end{verbatim}
 
 	\noindent Sin embargo, también podemos trabajar con el comando \texttt{mount} sin tener involucrados dispositivos físicos que queramos montar. Para ello, aparece el argumento \texttt{--bind} del comando \texttt{mount}, que nos permite ``vincular'' una parte del \texttt{tree} a otro emplazamiento diferente del \texttt{tree}. Esto lo podemos hacer tanto con directorios completos, como con archivos en específico.
 	
 	\begin{verbatim}
-mount --bind /mnt/MI_USB /home/user/MI_USB
+$ mount --bind /mnt/MI_USB /home/user/MI_USB
 	\end{verbatim}
 
 	\noindent Además, permite otras opciones interesantes. Lo primero, es que a diferencia de la herramienta \texttt{chroot}, si utilizamos \texttt{bind}, todos los puntos de montaje asociados al \texttt{tree} al que queremos aplicar el \texttt{bind} se verán también afectados, cosa que con \texttt{chroot} no sucede ya que está limitado a un único \texttt{subtree}. Por otro lado, un montaje \texttt{bind} es utilizado para aplicar una modificación sobre los permisos, o opciones del montaje, de una parte del \texttt{tree} en específico. Esto lo podemos ver con un ejemplo: queremos que ciertas carpetas de nuestra aplicación tengan permisos de solo lectura, para ello podemos ejecutar los siguientes comandos:
 	
 	\begin{verbatim}
-mount --bind /mnt/MI_USB /home/user/MI_USB
-mount -o remount,ro,bind /home/user/MI_USB
+$ mount --bind /mnt/MI_USB /home/user/MI_USB
+$ mount -o remount,ro,bind /home/user/MI_USB
 	\end{verbatim}
 
 	\noindent Por otro lado, un tercer uso del montaje tipo \texttt{bind}, es la posibilidad realizar un montaje sobre un mismo directorio. Por ejemplo, lo realizamos sobre el directorio \texttt{/mnt/MI\_USB}:
 	
 	\begin{verbatim}
-mount --bind /mnt/MI_USB /mnt/MI_USB
+$ mount --bind /mnt/MI_USB /mnt/MI_USB
 	\end{verbatim}
 
 	\noindent Al ejecutar dicho comando, lo que estamos haciendo es convertir un directorio del \texttt{tree} en un \texttt{device} o dispositivo de nuestro sistema, es decir, a partir de ahora (mientras esté montado) la ruta \texttt{/mnt/MI\_USB} será tratado como un dispositivo montado sobre ese directorio. Esto mismo nos aporta cierta ventajas, ya que podemos aplicar las opciones que hemos comentado anteriormente, tales como modificar los permisos de escritura o lectura, o cambiar las opciones de montaje.
@@ -1128,7 +1128,7 @@ $ exit
 	
 	\pagebreak
 	
-	\subsection{Network namespace (netns)}
+	\subsection{Network namespace}
 	\par \noindent Este namespaces nos permite aislar la parte red de una aplicación o proceso que nosotros elijamos. Con esto conseguimos que el \textit{stack} de red de la máquina host sea diferente al que tenemos en nuestro namespace. Debido a esto, el namespace crea una interfaz virtual, conjunto con el resto de necesidades para conformar un stack de red completo (tabla de enrutamiento, tabla ARP, etc...).\\
 	
 	\par \noindent Para crear un \textit{namespace} de tipo \textit{network}, y que este sea persistente, utilizamos la \textit{tool} ip (del \textit{package} iproute2).
@@ -1254,7 +1254,7 @@ $ ip netns exec ns1 /bin/bash
 	% https://blogs.igalia.com/dpino/2016/04/10/network-namespaces/
 	
 	\pagebreak
-	\subsection{User ID (user)}
+	\subsection{User ID namespace}
 	\par \noindent Cada sistema dispone de una manera de monitorizar que usuario es el dueño de cada archivo. Esto permite al sistema restringir el acceso a aquellos archivos que consideramos sensibles. Además, bloquea el acceso entre diferentes usuarios dentro del mismo sistema. Para el usuario, este identificador de usuarios se muestra como el usuario que en ese momento está conectado, sin embargo, para nuestro sistema, el identificador de usuario esta compuesto por una combinación arbitraria de caracteres alfanuméricos. Con el fin de mantener el monitoreo correctamente, hay un proceso encargado de transformar esos caracteres a un número específico de identificación (UID), como por ejemplo sería 1000. Es este valor el que se asocia con los archivos creados por este usuario. Esto nos aporta la ventaja de que, si un usuario cambia su nombre, no es necesario reconstruir el sistema de archivos, ya que su UID sigue siendo 1000.\\
 	
 	\par \noindent Si por ejemplo queremos ver el UID del usuario que estamos usando en este momento, podemos ejecutar: \textit{echo \$UID}, el cual nos devolverá el número asociado a nuestro usuario, en mi caso es el 1000.\\
@@ -1288,7 +1288,7 @@ $ exit
 	
 	\pagebreak
 	
-	\subsection{Control group (cgroup)}
+	\subsection{Control group namespace}
 	\par \noindent Los grupos de control, o \texttt{cgroups}, de Linux suponen un mecanismo para controlar los diferentes recursos de nuestro sistema. Cuando un \texttt{cgroup} está activo, puede controlar la cantidad de CPU, RAM, acceso I/O, o cualquier faceta que un proceso puede consumir. Además, permiten definir jerarquías en las que se agrupan, de manera en la que el administrador del sistema puede definir como se asignan los recursos o llevar la contabilidad de los mismos. Cgroups permite las siguientes funcionalidades [\ref{bib: cgroups}]: 
 	\begin{itemize}
 		\item \textbf{Limitar recursos}. Podemos configurar un grupo para limitar un recurso (o varios de ellos) para cada proceso que asignemos.
@@ -1301,7 +1301,7 @@ $ exit
 	
 	\par \noindent En el caso de la versión \texttt{v1}, los \texttt{cgroups} se crean en el sistema de archivos virtual en la ruta \texttt{/sys/fs/cgroup}. Para crear un nuevo grupo, en nuestro caso con el objetivo de limitar un proceso en memoria, tendríamos que ejecutar lo siguiente:
 	\begin{verbatim}
-mkdir /sys/fs/cgroup/memory/<NombreGrupo>
+$ mkdir /sys/fs/cgroup/memory/<NombreGrupo>
 	\end{verbatim}
 
 	\noindent De esta manera, ya tendríamos un nuevo grupo creado, asociado al \texttt{cgroup} de memory. Si ejecutamos el comando ls en el directorio que acabamos de crear, podemos comprobar como se han generado una serie de recursos: 
@@ -1319,7 +1319,7 @@ mkdir /sys/fs/cgroup/memory/<NombreGrupo>
 	
 	\noindent Si quisiéramos establecer un límite en el uso de memoria, tendríamos que escribir en el archivo \texttt{memory.limit\_in\_bytes}, a modo de ejemplo, establecemos un límite de 50MB. Esto se haría tal que:
 	\begin{verbatim}
-echo 50000000 > /sys/fs/cgroup/memory/<NombreGrupo>/memory.limit_in_bytes
+$ echo 50000000 > /sys/fs/cgroup/memory/<NombreGrupo>/memory.limit_in_bytes
 	\end{verbatim}
 
 	\noindent Para comprobar el funcionamiento de este límite de memoria, vamos a asociarle un programa escrito en Python que consume mucha memoria RAM de golpe. El programa en cuestión vendría dado por el siguiente código:
@@ -1344,7 +1344,7 @@ print("RAM used: {}M".format(len(result)))
 
 	\noindent Sin embargo, ahora vamos a proceder a limitar ese mismo programa en memoria. Para ello, vamos a añadir el PID asociado a la ejecución de dicho programa al siguiente archivo (ejecutando el script \texttt{./test\_memory.py \&}, nos aparece el PID):
 	\begin{verbatim}
-echo 62482 > /sys/fs/cgroup/memory/<NombreGrupo>/cgroup.procs
+$ echo 62482 > /sys/fs/cgroup/memory/<NombreGrupo>/cgroup.procs
 	\end{verbatim}
 	
 	\noindent De esta manera ya estaríamos limitando la memoria de ese programa en concreto. Al limitarlo, podemos comprobar como la salida en consola es tal que: 
@@ -1367,7 +1367,7 @@ echo 62482 > /sys/fs/cgroup/memory/<NombreGrupo>/cgroup.procs
 	\noindent Por otro lado, si quisiéramos limitar el uso de CPU de un programa, tendríamos que escribir en los archivos \texttt{cpu.cfs\_quota\_us} o \texttt{cpu.cfs\_period\_us}, dentro de la rama de \texttt{cpu}. Estos parámetros hacen referencia al tiempo de ejecución asociado a un proceso. En este ejemplo, vamos a limitar el proceso a 1 ms (1000 us), esto sería tal que:
 	
 	\begin{verbatim}
-echo 1000 > /sys/fs/cgroup/cpu/<NombreGrupo>/cpu.cfs_quota_us
+$ echo 1000 > /sys/fs/cgroup/cpu/<NombreGrupo>/cpu.cfs_quota_us
 	\end{verbatim}
 
 	\noindent Esto significa que cada 100ms de tiempo, el proceso está limitado por cgroups a utilizar solo 1ms del tiempo de CPU, dando lugar a utilizar solo el 1\% de la CPU. \\
@@ -1379,7 +1379,7 @@ $ while : ; do : ; done &
 
 	\noindent Al ejecutar dicho comando, la tarea se quedará funcionando en \textit{background}. Podemos comprobarlo si utilizamos herramientas para ver el consumo de los procesos, como pueden ser \texttt{top} o \texttt{htop}. Una vez tenemos el PID asociado a la tarea de prueba, podemos proceder a añadirlo a los procesos que son limitados con el cgroup creado, en este caso únicamente para limitar la CPU.
 	\begin{verbatim}
-echo <PID> > /sys/fs/cgroup/cpu/<NombreGrupo>/tasks
+$ echo <PID> > /sys/fs/cgroup/cpu/<NombreGrupo>/tasks
 	\end{verbatim}
 
 	\noindent Una vez ejecutado, si volvemos a ejecutar \texttt{top} o \texttt{htop}, podemos ver como el tiempo asignado al recurso será mucho mejor, y estrictamente igual o inferior al límite que establecimos en la creación de la regla para nuestro cgroup.	\\
@@ -1395,7 +1395,7 @@ echo <PID> > /sys/fs/cgroup/cpu/<NombreGrupo>/tasks
 	
 	\pagebreak
 	
-	\subsection{Time}
+	\subsection{Time namespace}
 	\par \noindent Por último, nos queda el namespaces asociado al tiempo. Este namespace fue propuesto para que se incorporara al kernel de Linux en 2018 y en enero de 2020 fue añadido a la versión mainline de Linux. Apareció en la release 5.6 del kernel de Linux. \\
 	
 	\par \noindent El namespace time, permite que por cada namespace que tengamos, podamos crear desfases entre los relojes monotónicos (CLOCK\_MONOTONIC) y de boot (CLOCK\_BOOTTIME), de la máquina host. Esto permite que dentro de los contendores se nos permita cambiar la fecha y la hora, sin tener que modificar la hora del sistema host. Además, supone una capa más de seguridad, ya que no estamos vinculando directamente la hora a los relojes físicos de nuestro sistema. [\ref{bib:time ns kernel}]\\
@@ -2031,13 +2031,13 @@ startx
 	
 	\noindent En el caso de optar por la opción más segura, que es la de crear un contenedor sin privilegios en el host. Tendremos que realizar una serie de configuraciones previas [\ref{bib: unprivileged LXC}]. La primera consistirá en crear un usuario sin privilegios para LXC:
 	\begin{verbatim}
-sudo useradd -s /bin/bash -c 'unprivileged lxc user' -m lxc_user
-sudo passwd lxc_user
+$ sudo useradd -s /bin/bash -c 'unprivileged lxc user' -m lxc_user
+$ sudo passwd lxc_user
 	\end{verbatim}
 
 	\noindent Ahora, necesitamos buscar los valores de grupo (subgid) e identificación (subuid) del usuario creado, para ello ejecutamos lo siguiente:
 	\begin{verbatim}
-sudo grep lxc_user /etc/sub{gid,uid}
+$ sudo grep lxc_user /etc/sub{gid,uid}
 	\end{verbatim}
 
 	\noindent Obteniendo por consola una salida similar a la siguiente:
@@ -2050,8 +2050,8 @@ sudo grep lxc_user /etc/sub{gid,uid}
 	
 	\noindent Utilizando las mismas configuraciones de red que en el aparatado de contenedor con privilegios, procedemos a acceder al usuario asignado a LXC. Ejecutaremos el comando \texttt{id} para conocer los diferentes \texttt{uid} y \texttt{gid} asignados.
 	\begin{verbatim}
-su lxc_user
-id
+$ su lxc_user
+$ id
 	\end{verbatim}
 
 	\noindent Tendremos una salida similar a:
@@ -2061,8 +2061,8 @@ uid=1002(lxc_user) gid=1002(lxc_user) groups=1002(lxc_user)
 
 	\noindent El siguiente paso sería crear los directorios de configuración de LXC, y copiar la configuración \textit{default} a dichos directorios.
 	\begin{verbatim}
-mkdir -p /home/lxc_user/.config/lxc
-cp /etc/lxc/default.conf /home/lxc_user/.config/lxc/default.conf
+$ mkdir -p /home/lxc_user/.config/lxc
+$ cp /etc/lxc/default.conf /home/lxc_user/.config/lxc/default.conf
 	\end{verbatim}
 
 	\noindent Por último, tendríamos que modificar dicho archivo para realizar un ``mapeo de permisos''. Con el fin de asignar la ejecución del contenedor al usuario LXC que acabamos de crear. Al final del archivo \texttt{default.conf} que acabamos de copiar, añadimos lo siguiente:
@@ -2084,7 +2084,7 @@ lxc.id_map = g 0 100000 65536
 	\begin{enumerate}
 		\item Lo primero que tenemos que hacer es verificar que LXC está instalado correctamente en nuestro sistema, una manera fácil de comprobarlo es con el siguiente comando:
 		\begin{verbatim}
-			sudo lxc-checkconfig
+			$ sudo lxc-checkconfig
 		\end{verbatim}
 	
 		\begin{figure}[h!]
@@ -2096,7 +2096,7 @@ lxc.id_map = g 0 100000 65536
 	
 		\item Creamos el contenedor de Ubuntu siguiendo los pasos de la creación guiada de contenedores que hemos comentado en apartados anteriores.
 		\begin{verbatim}
-			sudo lxc-create --template download --name <NombreContenedor>
+			$ sudo lxc-create --template download --name <NombreContenedor>
 		\end{verbatim}
 		
 		\begin{figure}[h!]
@@ -2124,17 +2124,17 @@ lxc.id_map = g 0 100000 65536
 	
 		\item Iniciamos el contenedor que acabamos de crear.
 		\begin{verbatim}
-			sudo lxc-start -n <NombreContenedor> -d
+			$ sudo lxc-start -n <NombreContenedor> -d
 		\end{verbatim}
 	
 		\item Accedemos a la terminal del contenedor que acabamos de iniciar.
 		\begin{verbatim}
-			sudo lxc-attach -n <NombreContenedor>
+			$ sudo lxc-attach -n <NombreContenedor>
 		\end{verbatim}
 	
 		\item Una vez dentro del contenedor de Ubuntu, podemos comprobar con el siguiente comando que efectivamente se ha instalado la distribución que hemos elegido.
 		\begin{verbatim}
-			cat /etc/os-release
+			$ cat /etc/os-release
 		\end{verbatim}
 	
 		\begin{figure}[h!]
@@ -2148,12 +2148,12 @@ lxc.id_map = g 0 100000 65536
 	
 		\item Por último, en otra terminal, procedemos a obtener el \texttt{PID} asociado a dicho contenedor. Para ello, podemos hacer uso del siguiente comando:
 		\begin{verbatim}
-			sudo lxc-info -p -n <NombreContenedor>
+			$ sudo lxc-info -p -n <NombreContenedor>
 		\end{verbatim}
 	
 		\noindent Una vez tenemos el PID, podemos utilizar el comando \texttt{lsns} los namespaces que están asociados a dicho PID. Para ello, ejecutamos lo siguiente:
 		\begin{verbatim}
-			sudo lsns | grep <PID_contenedor>
+			$ sudo lsns | grep <PID_contenedor>
 		\end{verbatim}
 	
 		\begin{figure}[h!]
@@ -2213,12 +2213,12 @@ lxc.id_map = g 0 100000 65536
 	
 	\noindent Una vez instalado, podemos comprobar que el ``demonio'' está funcionando si ejecutamos los siguientes comandos desde el cliente de docker.
 	\begin{verbatim}
-sudo docker version
+$ sudo docker version
 	\end{verbatim}
 
 	\noindent El comando nos devolverá información sobre el cliente de docker e intentará conectar con el ``demonio''. En el caso de que nos responda como en la imagen (\ref{img: docker version}), tendremos que ejecutar el comando:
 	\begin{verbatim}
-sudo systemctl start docker.service
+$ sudo systemctl start docker.service
 	\end{verbatim}
 	
 	\begin{figure}[h]
@@ -2233,7 +2233,7 @@ sudo systemctl start docker.service
 	
 	\noindent Una vez comprobado que tenemos conexión con el ``daemon''. Lo siguiente, será ejecutar nuestro primer contenedor. En este caso, haremos uso de un contenedor ``especial" que nos verifica la instalación de docker en nuestros host. Para ello, ejecutamos el siguiente comando:
 	\begin{verbatim}
-docker run hello-world
+$ docker run hello-world
 	\end{verbatim}
 
 	\noindent Una vez termina de ejecutarse el comando, la salida por consola que obtendremos sería equivalente a la siguiente figura:
@@ -2262,7 +2262,7 @@ docker run hello-world
 
 	\noindent Por otro lado, en esa misma ejecutión del contendor ``hello-world'', se nos invita a ejecutar lo siguiente:
 	\begin{verbatim}
-docker run -it ubuntu bash
+$ docker run -it ubuntu bash
 	\end{verbatim}
 
 	\noindent Si analizamos la sintaxis del comando anterior, podemos diferenciar entre cinco elementos diferentes:
@@ -2517,22 +2517,22 @@ $ docker exec -it docker-ns sh
 
 	\noindent Una vez instalado, podemos comprobar la versión ejecutando el siguiente comando en una terminal:
 	\begin{verbatim}
-		mn --version
+		$ mn --version
 	\end{verbatim}
 
 	\noindent Por otro lado, Mininet permite utilizar diferentes switches y controladores para sus topologías. Para esta explicación, vamos a utilizar Open vSwitch [\ref{bib: open vswitch}] como controlador, en el modo \textit{bridge/standalone}. Si queremos comprobar que Open vSwitch está instalado correctamente para mininet, podemos ejecutar el siguiente comando en una terminal:
 	\begin{verbatim}
-		mn --switch ovsbr --test pingall
+		$ mn --switch ovsbr --test pingall
 	\end{verbatim}
 
 	\noindent En el caso de que el comando anterior nos de un error, tendremos que instalar Open vSwitch para nuestra distribución y asegurarnos de que el servicio esté funcionando. Para iniciar el servicio de Open vSwitch, tendremos que hacer lo siguiente:
 	\begin{verbatim}
-		sudo systemctl start openvswitch.service
+		$ sudo systemctl start openvswitch.service
 	\end{verbatim}
 
 	\noindent En el caso de Arch Linux, sería tal que así:
 	\begin{verbatim}
-		sudo systemctl start ovs-vswitchd.service
+		$ sudo systemctl start ovs-vswitchd.service
 	\end{verbatim}
 
 	%% Ruta miniedit:
@@ -2540,7 +2540,10 @@ $ docker exec -it docker-ns sh
 	
 	\pagebreak
 	
-	\subsubsection{Implementación topología simple}
+	%\subsubsection{Implementación topología simple}
+	\subsubsection{Ejemplos}
+	
+	\noindent \textbf{Topología simple}\\
 	
 	\noindent En este apartado, vamos a trabajar la dualidad entre implementar una topología utilizando únicamente namespaces, a implementar esa misma topología utilizando mininet. Para ello, vamos a trabajar con una red formada por dos hosts, conectados entre sí mediante un conmutador de paquetes (\textit{switch}), que será manejado por un controlador. \\
 	
@@ -2560,7 +2563,7 @@ $ ip netns add host-1
 $ ip netns add host-2
 	\end{verbatim}
 
-	\noindent Con los \texttt{network namespaces} ya creados, lo siguiente es crear el conmutador de paquetes. En este caso, vamos a utilizar Open vSwitch [\ref{bib: open vswitch}], que previamente hemos instalado en conjunto con mininet. Para crear dicho switch, ejecutamos el siguiente comando:
+	\noindent Con los \texttt{network namespaces} ya creados, lo siguiente es crear el conmutador de paquetes. En este caso, vamos a utilizar \textit{Open vSwitch} [\ref{bib: open vswitch}], que previamente hemos instalado en conjunto con mininet. Para crear dicho switch, ejecutamos el siguiente comando:
 	
 	\begin{verbatim}
 $ ovs-vsctl add-br switch-1
@@ -2770,13 +2773,13 @@ sudo python limit.py
 	\noindent Lo primero, para instalar \texttt{Ryu} tenemos que ejecutar el comando siguiente. Para este ejemplo, vamos a utilizar la misma máquina virtual que estamos utilizando para \texttt{mininet}.
 	
 	\begin{verbatim}
-git clone https://github.com/faucetsdn/ryu.git
-pip install ryu/.
+$ git clone https://github.com/faucetsdn/ryu.git
+$ pip install ryu/.
 	\end{verbatim}
 
 	\noindent En una terminal (la llamaremos terminal A), ejecutaremos una topología de \texttt{mininet}. Por ejemplo, utilizando el siguiente comando:
 	\begin{verbatim}
-sudo mn --topo tree,depth=3 --mac --switch ovsk --controller remote
+$ sudo mn --topo tree,depth=3 --mac --switch ovsk --controller remote
 	\end{verbatim}
 
 	\noindent Con dicha topología, estaremos simulando una red de tipo árbol con 8 hosts, 7 switchs \texttt{Open vSwitch} y un controlador remoto (escuchando en la dirección \texttt{127.0.0.1:6653}). 
@@ -2796,7 +2799,7 @@ sudo mn --topo tree,depth=3 --mac --switch ovsk --controller remote
 	\noindent En este caso, vamos a ejecutar nuestro controlador con una configuración de switch que soporta OpenFlow 1.3 (alojado en \texttt{simple\_switch\_13.py}). Para ello, ejecutamos el siguiente comando en una terminal diferente a la terminal A (la llamaremos terminal B).
 	
 	\begin{verbatim}
-ryu run ryu.app.simple_switch_13
+$ ryu run ryu.app.simple_switch_13
 	\end{verbatim}
 	
 	\noindent Una vez ejecutado, nos aparecerá en la terminal B la información acerca de los módulos que \texttt{Ryu} ha cargado para dar la funcionalidad que deseamos. Además, en dicha terminal se irán mostrando los diferentes paquetes que conmute el switch. \\
@@ -2815,7 +2818,7 @@ ryu run ryu.app.simple_switch_13
 	
 	\noindent Por otro lado, otra funcionalidad interesante de este controlador es el visualizador de topologías. Nos permite ver en una página web la topología de nuestra red, es decir, como se interconectan los diferentes switches de la red. Para ello, solo tenemos que ejecutar el siguiente comando en la terminal B (si tenemos activo el ejemplo de \texttt{simple\_switch\_13.py}, pararemos su ejecución con Ctrl+C):
 	\begin{verbatim}
-ryu run --observe-links ryu.app.simple_switch_13 ryu.app.gui_
+$ ryu run --observe-links ryu.app.simple_switch_13 ryu.app.gui_
 topology.gui_topology
 	\end{verbatim}
 
@@ -2882,17 +2885,17 @@ topology.gui_topology
 	\begin{enumerate}
 		\item Instalación de \texttt{Ansible}
 		\begin{verbatim}
-sudo apt-get install ansible
+$ sudo apt-get install ansible
 		\end{verbatim}
 	
 		\item Clonamos el repositorio de Github:
 		\begin{verbatim}
-git clone https://github.com/containernet/containernet.git
+$ git clone https://github.com/containernet/containernet.git
 		\end{verbatim}
 	
 		\item Ejecutamos el ``playbook'' de \texttt{Ansible}, el cual instalará todas las dependencias y posteriormente \texttt{containernet}.
 		\begin{verbatim}
-sudo ansible-playbook -i "localhost," -c local containernet/
+$ sudo ansible-playbook -i "localhost," -c local containernet/
 ansible/install.yml
 		\end{verbatim}
 	
@@ -2932,7 +2935,7 @@ ansible/install.yml
 	
 	\noindent Para ejecutar el ejemplo, tendremos que lanzar el siguiente comando:
 	\begin{verbatim}
-sudo python3 containernet_example.py
+$ sudo python3 containernet_example.py
 	\end{verbatim}
 
 	\noindent La salida por consola será muy similar a la que obtendríamos en \texttt{mininet}, sin embargo, podemos comprobar como aparece la información respectiva de nuestros contenedores Docker que van a tener la función de host en la topología. Todo esto lo podemos ver en la figura \ref{img: cn simple 1}.
