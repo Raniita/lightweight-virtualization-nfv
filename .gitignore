@@ -29,3 +29,5 @@
 *.out
 *.synctex.gz
 *.lol
+*.nav
+*.snm
