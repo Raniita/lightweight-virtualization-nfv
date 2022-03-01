@@ -21,7 +21,16 @@ Tutor: Jose María Malgosa Sanahuja}
 
 \date{\today}
 
-\logo{\includegraphics[scale=0.3]{img/etsit.png}}
+%\logo{\includegraphics[scale=0.3]{img/etsit.png}}
+
+\usepackage{tikz}
+\logo{ 
+	\begin{tikzpicture}[overlay,remember picture, inner sep=0pt,outer sep=0pt]
+		\node[yshift=-20px,left=0.2cm] at (current page.31){
+			\includegraphics[width=3cm]{img/etsit.png}
+		};
+	\end{tikzpicture}
+}
 
 \begin{document}
 	% 1
