@@ -4,6 +4,9 @@
 
 .vscode
 
+# Revisiones
+revision_v1
+
 # Tex and TexStudio things
 *.aux
 *.glo
