@@ -294,7 +294,7 @@
 		\item \texttt{VIM} (\textit{Virtualized Infraestructure Manager}). Es el elemento responsable de controlar y gestionar la infraestructura \texttt{NFV} (NFVi). Se encarga de mantener el inventario de recursos y de ir ``colocando'' las diferentes funciones de red en los recursos disponibles de la red. Esto nos permite realizar tareas de orquestación.
 		
 		% https://www.adva.com/en/products/technology/what-is-nfv-mano
-		\item \texttt{MANO} (\textit{Management and orchestration}). Elemento clave para la implementación de \texttt{NFV}. Es el encargado de coordinar los recursos de la red y gestionar las funcionalidades de red. Esta compuesto por los elementos: orquestador NFV (NFVO), gestor de VNF (VNFM) y gestor de infraestructura virtualizada (VIM).
+		\item \texttt{MANO} (\textit{Management and orchestration}). Elemento clave para la implementación de \texttt{NFV}. Es el encargado de coordinar los recursos de la red y gestionar las funcionalidades de red. Esta compuesto por los elementos: orquestador NFV (NFVO), gestor de VNF (VNFM) y gestor de infraestructura virtualizada (VIM), con los que se comunicará para coordinar los recursos de una arquitectura NFV.
 	\end{itemize}
 	
 	\pagebreak
@@ -960,20 +960,31 @@ $ hostname			# original hostname
 	
 	\addvspace{10px}
 	
-	\begin{lstlisting}[language=bash, caption=Uso de \texttt{mount namespace} con ``bind'']
-$ sudo su		# run a shell in a new mount namespace
-$ unshare -m /bin/sh
-$ mount --bind /usr/bin/ /mnt/
-$ ls /mnt/cp
-> /mnt/cp
-$ exit			# exit the shell and close namespace
-$ ls /mnt/cp
-> ls: cannot access '/mnt/cp': No such file or directory
+%	\begin{lstlisting}[language=bash, caption=Uso de \texttt{mount namespace} con ``bind'']
+%$ sudo su		# run a shell in a new mount namespace
+%$ unshare -m /bin/sh
+%$ mount --bind /usr/bin/ /mnt/
+%$ ls /mnt/cp
+%> /mnt/cp
+%$ exit			# exit the shell and close namespace
+%$ ls /mnt/cp
+%> ls: cannot access '/mnt/cp': No such file or directory
+%	\end{lstlisting}
+
+	\begin{lstlisting}[language=bash, caption=Uso de \texttt{mount namespace} con dispositivo físico]
+	$ sudo su										# run a shell in a new mount namespace
+	$ unshare -m /bin/sh
+	$ mount /dev/sda2 /mnt/			# hard drive
+	$ ls /mnt/cp
+	> /mnt/cp										# File cp exists on hard drive
+	$ exit											# exit the shell and close namespace
+	$ ls /mnt/cp
+	> ls: cannot access '/mnt/cp': No such file or directory
 	\end{lstlisting}
 
 	\addvspace{10px}
 	
-	\par \noindent Como vemos en el ejemplo, dentro del namespaces lo que hacemos es crear un \textit{mount} de tipo \textit{bind}, que tiene por función que un archivo de la máquina host se monte en un directorio en específico, en este caso, un directorio unicamente del programa que hemos asignado al namespace. 
+	\par \noindent Como vemos en el ejemplo, dentro del namespaces lo que hacemos es realizar un \textit{mount} de un disco duro, dentro de este encontramos un archivo \texttt{cp}. Sin embargo, una vez salimos del namespace, podemos comprobar como no podemos acceder al montaje que realizamos dentro del namespace. Por lo tanto, solo desde el namespace que realizó el montaje tendremos acceso a la información del disco duro. 
 	
 	\pagebreak
 	
@@ -981,30 +992,201 @@ $ ls /mnt/cp
 	
 	\noindent Para comprender correctamente como funciona un mount namespaces, es interesante entender que es exactamente un montaje tipo \texttt{bind} y sus diferencias respecto \texttt{chroot} o \texttt{mount namespace}. [\ref{bib: what is bind}] \\
 	
-	\noindent En primer lugar, para trabajar respecto a montajes del sistema de archivos, utilizamos el comando de Linux \texttt{mount}. De manera primigenia, se utilizaba para ``montar'' dispositivos de almacenamiento físicos a un lugar específico del \texttt{tree} de nuestro sistema. Por ejemplo, suponemos que tenemos un disco duro conectado via interfaz \textit{SATA}. Utilizando el comando \texttt{lsblk}, determinamos que queremos montar la partición 1 del dispositivo físico con etiqueta \texttt{/dev/sda}. Por lo tanto, queremos realizar un punto de montaje de \texttt{/dev/sda1} en un lugar específico de nuestro sistema de archivos (\texttt{tree}). Para ello, podemos ejecutar el siguiente comando:
-	\begin{verbatim}
-$ mount /dev/sda1 /mnt/MI_USB
-	\end{verbatim}
-
-	\noindent Sin embargo, también podemos trabajar con el comando \texttt{mount} sin tener involucrados dispositivos físicos que queramos montar. Para ello, aparece el argumento \texttt{--bind} del comando \texttt{mount}, que nos permite ``vincular'' una parte del \texttt{tree} a otro emplazamiento diferente del \texttt{tree}. Esto lo podemos hacer tanto con directorios completos, como con archivos en específico.
+	\noindent En primer lugar, es importante repasar el funcionamiento básico de \texttt{mount}, es decir, podemos montar un dispositivo en un directorio. Esto nos permite acceder al sistema de archivos de ese dispositivo. Por ejemplo, supongamos que queremos montar un disco duro, el cual representamos como \texttt{/dev/sdb2}, y que montaremos sobre el directorio \texttt{/mnt/HDD1}: [\ref{bib: mount bind}]
 	
 	\begin{verbatim}
-$ mount --bind /mnt/MI_USB /home/user/MI_USB
+$ mdkir /mnt/HDD1
+$ mount /dev/sdb2 /mnt/HDD1
+$ ls /mnt/HDD1
+main.pdf images/ storage_shared/ 
 	\end{verbatim}
 
-	\noindent Además, permite otras opciones interesantes. Lo primero, es que a diferencia de la herramienta \texttt{chroot}, si utilizamos \texttt{bind}, todos los puntos de montaje asociados al \texttt{tree} al que queremos aplicar el \texttt{bind} se verán también afectados, cosa que con \texttt{chroot} no sucede ya que está limitado a un único \texttt{subtree}. Por otro lado, un montaje \texttt{bind} es utilizado para aplicar una modificación sobre los permisos, o opciones del montaje, de una parte del \texttt{tree} en específico. Esto lo podemos ver con un ejemplo: queremos que ciertas carpetas de nuestra aplicación tengan permisos de solo lectura, para ello podemos ejecutar los siguientes comandos:
+	\noindent Podemos ver como dentro del sistema de archivos del disco duro, encontramos un archivo y un par de carpetas. Si verificamos la lista de todos los dispositivos que tenemos montados, utilizando el comando \texttt{findmnt --real}, obtenemos la siguiente salida:
 	
 	\begin{verbatim}
-$ mount --bind /mnt/MI_USB /home/user/MI_USB
-$ mount -o remount,ro,bind /home/user/MI_USB
+TARGET                SOURCE                   FSTYPE      OPTIONS
+/                     /dev/sda2                ext4        rw,relatime
+--/home               /dev/sdc1                ext4        rw,relatime
+--/mnt/HDD1           /dev/sdb2                ext4
+rw,relatime,fmask=0022,dmask=0022,codepage=437,errors=remount-ro
+--/boot               /dev/sda1                vfat
+rw,relatime,fmask=0022,dmask=0022,codepage=437,errors=remount-ro
 	\end{verbatim}
-
-	\noindent Por otro lado, un tercer uso del montaje tipo \texttt{bind}, es la posibilidad realizar un montaje sobre un mismo directorio. Por ejemplo, lo realizamos sobre el directorio \texttt{/mnt/MI\_USB}:
+	
+	\noindent Como podemos ver, en este momento hay cuatro dispositivos montados en nuestro sistema, incluido el disco duro (el que montamos en \texttt{/mnt/HDD1}). Cada dispositivo tiene asociado un directorio, por el cual podremos acceder a sus archivos. Procedemos a desmontar el disco duro:
 	
 	\begin{verbatim}
-$ mount --bind /mnt/MI_USB /mnt/MI_USB
+$ umount /dev/HDD1
+	\end{verbatim}
+	
+	\noindent Sin embargo, también podemos realizar un montaje de un directorio sobre otro directorio, para ello utilizaremos el comando \texttt{mount --bind}. Podemos entender el montaje \texttt{bind} como un \textit{alias}, por ejemplo, si realizamos un montaje \texttt{bind} del directorio \texttt{/tmp/dir1} sobre \texttt{/tmp/disk}, ambos tendrán el mismo contenido. Podremos acceder a los archivos de \texttt{/tmp/dir1} desde \texttt{/tmp/disk}, y viceversa. \\
+	
+	\noindent Cualquier directorio puede ser utilizado en un montaje \texttt{bind}. Al igual que si el directorio origen es un dispositivo, el dispositivo formará un montaje \texttt{bind} en la ruta de destino. Además, es importante tener en cuenta que cuando utilizamos el parámetro \texttt{bind}, los puntos de montaje que estaban dentro de la carpeta origen no son remontados, por lo que si queremos que el directorio origen y todos sus montajes de dentro de ese directorio, se monten con el \texttt{bind}, tendremos que utilizar el parámetro \texttt{--rbind} (\textit{recursive bind}). Por último, recalcar que después de realizar un montaje tipo \texttt{bind}, no tendremos acceso al contenido original del directorio destino. \\
+	
+	\pagebreak
+	
+	\noindent A modo de ejemplo, realizamos los siguientes pasos:
+	
+	\begin{verbatim}
+$ mkdir /tmp/dir1
+$ touch /tmp/dir1/bind_example
+$ touch /tmp/dir1/mount_example
 	\end{verbatim}
 
+	\noindent Creamos un directorio \texttt{/tmp/disk} y realizamos un montaje tipo \texttt{bind} sobre el:
+	
+	\begin{verbatim}
+$ mkdir /tmp/disk
+$ mount --bind /tmp/dir1 /tmp/disk
+	\end{verbatim}
+
+	\noindent Observamos el contenido de ambos directorios:
+	
+	\begin{verbatim}
+$ ls -l /tmp/dir1
+total 40K
+-rw-r--r--  1 rani rani    0 Mar 10 18:46 bind_example
+-rw-r--r--  1 rani rani    0 Mar 10 18:47 mount_example
+$ ls -l /tmp/disk
+total 40K
+-rw-r--r--  1 rani rani    0 Mar 10 18:46 bind_example
+-rw-r--r--  1 rani rani    0 Mar 10 18:47 mount_example
+	\end{verbatim}
+
+	\noindent Ambos directorios contienen los mismos archivos, podemos comprobarlo creando un archivo en uno de ellos:
+	
+	\begin{verbatim}
+$ echo "file" > /tmp/dir1/file.txt
+$ cat /tmp/disk/file.txt
+file
+	\end{verbatim}
+
+	\noindent Al igual que hicimos en el ejemplo anterior, podemos utilizar el comando \texttt{findmnt --real} para verificar los montajes del sistema.
+	
+	\begin{verbatim}
+TARGET                SOURCE                   FSTYPE      OPTIONS
+/                     /dev/sda2                ext4        rw,relatime
+--/home               /dev/sdc1                ext4        rw,relatime
+--/boot               /dev/sda1                vfat
+rw,relatime,fmask=0022,dmask=0022,codepage=437,errors=remount-ro
+--/tmp/disk           /dev/sda2[/tmp/dir1]     ext4        rw,relatime
+	\end{verbatim}
+
+	\noindent Por último, desmontamos \texttt{/tmp/disk}
+	
+	\begin{verbatim}
+$ umount /tmp/disk
+	\end{verbatim}
+	
+	%\noindent En primer lugar, para trabajar respecto a montajes del sistema de archivos, utilizamos el comando de Linux \texttt{mount}. De manera primigenia, se utilizaba para ``montar'' dispositivos de almacenamiento físicos a un lugar específico del \texttt{tree} de nuestro sistema. Por ejemplo, suponemos que tenemos un disco duro conectado via interfaz \textit{SATA}. Utilizando el comando \texttt{lsblk}, determinamos que queremos montar la partición 1 del dispositivo físico con etiqueta \texttt{/dev/sda}. Por lo tanto, queremos realizar un punto de montaje de \texttt{/dev/sda1} en un lugar específico de nuestro sistema de archivos (\texttt{tree}). Para ello, podemos ejecutar el siguiente comando:
+%	\begin{verbatim}
+%$ mount /dev/sda1 /mnt/MI_USB
+%	\end{verbatim}
+
+%	\noindent Sin embargo, también podemos trabajar con el comando \texttt{mount} sin tener involucrados dispositivos físicos que queramos montar. Para ello, aparece el argumento \texttt{--bind} del comando \texttt{mount}, que nos permite ``vincular'' una parte del \texttt{tree} a otro emplazamiento diferente del \texttt{tree}. Esto lo podemos hacer tanto con directorios completos, como con archivos en específico.
+	
+%	\begin{verbatim}
+%$ mount --bind /mnt/MI_USB /home/user/MI_USB
+%	\end{verbatim}
+
+	\subsection{Casos de uso del montaje tipo \texttt{bind}}
+	
+	\vspace{10px}
+	
+	\noindent \textbf{\large Ejemplo: acceder a archivos escondidos por un punto de montaje}\\
+	
+	\noindent Cuando montamos un dispositivo en un directorio, el contenido que había en el directorio destino antes del montaje se oculta por el punto de montaje. Por lo tanto, perdemos el acceso al contenido original. Sin embargo, tal y como vimos en la explicación anterior, si utilizamos \texttt{--bind}, el montaje no montará los puntos de montaje que estén asociados a ese directorio, por lo cual, podemos aprovechar esta funcionalidad para acceder a los archivos que están ocultos. A modo de ejemplo, supongamos que tenemos un directorio \texttt{/mnt/storage}, pero no hemos montado el disco duro todavía.
+	
+	\begin{verbatim}
+$ echo test_hidden > /mnt/storage/hidden_file
+$ ls /mnt/storage
+hidden_file
+	\end{verbatim}
+
+	\noindent Montamos el disco duro en la ruta que hemos comentado:
+	
+	\begin{verbatim}
+$ mount /dev/sdb2 /mnt/storage
+$ ls /mnt/storage
+main.pdf images/ storage_shared/ 
+	\end{verbatim}
+
+	\noindent Para acceder al archivo oculto, podemos utilizar un montaje tipo \texttt{bind}. Para ello, creamos una carpeta \texttt{/tmp/storage} y realizamos el montaje:
+	
+	\begin{verbatim}
+$ mkdir /tmp/storage
+$ mount --bind /mnt /tmp/storage
+	\end{verbatim}
+
+	\noindent Ahora, podemos comprobar como hemos recuperado el archivo oculto:
+	
+	\begin{verbatim}
+$ ls /tmp/storage/storage
+$ cat /tmp/storage/hidden_file
+test_hidden
+	\end{verbatim}
+
+	\noindent Como podemos comprobar, se ha utilizado el directorio \texttt{/mnt} ya que son los \textit{submounts} los que no se montan usando el \texttt{bind}. Si hubiéramos realizado el montaje \texttt{bind} sobre el directorio \texttt{/mnt/storage}, no hubiéramos podido acceder al archivo oculto. Para terminar, desmontamos los respectivos puntos de montaje:
+	
+	\begin{verbatim}
+$ umount /mnt/storage /tmp/storage
+	\end{verbatim}
+
+	%\pagebreak
+	
+	\noindent \textbf{\large Ejemplo: acceder a archivos fuera de un entorno \texttt{chroot}}\\
+	
+	\noindent Otro ejemplo de uso de los montajes tipo \texttt{bind} es el de montar directorios dentro de un entorno \texttt{chroot} (un programa que permite un aislamiento limitado de procesos). Utilizando \texttt{chroot}, podemos elegir el directorio raíz en donde ejecutaremos nuestro programa. Por ejemplo, podemos utilizar \texttt{chroot} para ejecutar \texttt{httpd} en el directorio raíz \texttt{/home/apache}. Esto lo que hará es convertir \texttt{/home/apache} en el directorio raíz de ese programa, es decir, directorio \texttt{/}. Si quisiéramos acceder al directorio \texttt{/home/apache/www} sería equivalente a \texttt{/www}. Esto permite a que el proceso \texttt{httpd} no pueda acceder a ningún archivo fuera del directorio \texttt{/home/apache}. \\
+	
+	\noindent Sin embargo, si el proceso necesita acceder a archivos de fuera del \texttt{chroot}, por ejemplo, ciertas librerías del sistema, podemos utilizar un montaje tipo \texttt{bind} para hacer accesibles los directorios necesarios dentro del directorio al que hemos hecho \texttt{chroot}. \\
+	
+	\noindent A modo de ejemplo, creamos el directorio \texttt{/tmp/program} sobre el que haremos un \texttt{chroot}. Después, le añadiremos ciertas carpetas del sistema. 
+	
+	\begin{verbatim}
+$ mkdir /tmp/program
+$ mkdir /tmp/program/bin
+$ mkdir /tmp/program/lib64
+	\end{verbatim}
+
+	\noindent Realizamos los montajes tipo \texttt{bind} antes de ejecutar el \texttt{chroot}.
+	
+	\begin{verbatim}
+$ mount --bind /bin /tmp/program/bin
+$ mount --bind /lib64 /tmp/program/lib64
+$ chroot /tmp/program
+	\end{verbatim}
+
+	\noindent Con la terminal dentro del \texttt{chroot}, podemos comprobar como podemos acceder a los puntos de montaje que previamente habíamos configurado.
+	
+	\begin{verbatim}
+$ ls -l / 
+total 508K
+drwxr-xr-x   6 root root 172K Mar  8 11:38 bin
+drwxr-xr-x 305 root root 288K Mar  7 20:14 lib64
+	\end{verbatim}
+
+	\noindent Como podemos comprobar, dentro del entorno \texttt{chroot} solo tenemos acceso a los directorios \texttt{/bin} y \texttt{/lib64}. \\
+	
+	
+	\noindent \textbf{\large Ejemplo: convertir un directorio en solo lectura}\\
+	
+	\noindent Un montaje \texttt{bind} es utilizado para aplicar una modificación sobre los permisos, o opciones del montaje, de una parte del \texttt{tree} en específico. Esto lo podemos ver con un ejemplo: queremos que ciertas carpetas de nuestra aplicación tengan permisos de solo lectura, para ello podemos ejecutar los siguientes comandos:
+	
+	\begin{verbatim}
+		$ mount --bind /mnt/MI_USB /home/user/MI_USB
+		$ mount -o remount,ro,bind /home/user/MI_USB
+	\end{verbatim} 
+
+	\vspace{10px}
+	
+	\noindent \textbf{\large Ejemplo: montaje \texttt{bind} sobre un mismo directorio}\\
+	
+	\noindent Por otro lado, otro uso del montaje tipo \texttt{bind}, es la posibilidad realizar un montaje sobre un mismo directorio. Por ejemplo, lo realizamos sobre el directorio \texttt{/mnt/MI\_USB}:
+	
+	\begin{verbatim}
+		$ mount --bind /mnt/MI_USB /mnt/MI_USB
+	\end{verbatim}
+	
 	\noindent Al ejecutar dicho comando, lo que estamos haciendo es convertir un directorio del \texttt{tree} en un \texttt{device} o dispositivo de nuestro sistema, es decir, a partir de ahora (mientras esté montado) la ruta \texttt{/mnt/MI\_USB} será tratado como un dispositivo montado sobre ese directorio. Esto mismo nos aporta cierta ventajas, ya que podemos aplicar las opciones que hemos comentado anteriormente, tales como modificar los permisos de escritura o lectura, o cambiar las opciones de montaje.
 
 	%\pagebreak
@@ -1310,7 +1492,7 @@ $ exit
 	
 	\addvspace{20px}
 	
-	\par \noindent Como vemos en el ejemplo, el UID de usuario difiere de la máquina host. Dentro del namespace, tenemos UID 0, sin embargo, eso no significa que podamos acceder a los archivos con UID 0 de la máquina host, ya que en verdad lo que hace el namespace es \textit{mapear} el UID 1000 al 0. [\ref{bib:ns tutorial1}]
+	\par \noindent Como vemos en el ejemplo, el UID de usuario difiere de la máquina host. Dentro del namespace, tenemos UID 0, sin embargo, eso no significa que podamos acceder a los archivos con UID 0 de la máquina host, ya que en verdad lo que hace el namespace es \textit{mapear} el UID 1000 al 0. Por ejemplo, si a la vez que creamos un user namespace, también creamos un mount namespace, este mount namespace si que tendría privilegios de root [\ref{bib:ns tutorial1}]
 	
 	%\pagebreak
 	
@@ -1350,7 +1532,8 @@ $ mkdir /sys/fs/cgroup/memory/<NombreGrupo>
 	
 	\noindent Si quisiéramos establecer un límite en el uso de memoria, tendríamos que escribir en el archivo \texttt{memory.limit\_in\_bytes}, a modo de ejemplo, establecemos un límite de 50MB. Esto se haría tal que:
 	\begin{verbatim}
-$ echo 50000000 > /sys/fs/cgroup/memory/<NombreGrupo>/memory.limit_in_bytes
+$ echo 50000000 > /sys/fs/cgroup/memory/<NombreGrupo>/
+memory.limit_in_bytes
 	\end{verbatim}
 
 	\noindent Para comprobar el funcionamiento de este límite de memoria, vamos a asociarle un programa escrito en Python que consume mucha memoria RAM de golpe. El programa en cuestión vendría dado por el siguiente código:
@@ -1429,7 +1612,7 @@ $ echo <PID> > /sys/fs/cgroup/cpu/<NombreGrupo>/tasks
 	\section{Time namespace}
 	\par \noindent Por último, nos queda el namespaces asociado al tiempo. Este namespace fue propuesto para que se incorporara al kernel de Linux en 2018 y en enero de 2020 fue añadido a la versión mainline de Linux. Apareció en la release 5.6 del kernel de Linux. [\ref{bib:time ns}] \\
 	
-	\par \noindent El namespace time, permite que por cada namespace que tengamos, podamos crear desfases entre los relojes monotónicos (CLOCK\_MONOTONIC) y de boot (CLOCK\_BOOTTIME), de la máquina host. Esto permite que dentro de los contendores se nos permita cambiar la fecha y la hora, sin tener que modificar la hora del sistema host. Además, supone una capa más de seguridad, ya que no estamos vinculando directamente la hora a los relojes físicos de nuestro sistema. [\ref{bib:time ns kernel}]\\
+	\par \noindent El namespace time, permite que por cada namespace que tengamos, podamos crear desfases entre los relojes monotónicos (\texttt{CLOCK\_MONOTONIC}) y de boot (\texttt{CLOCK\_BOOTTIME}), de la máquina host. Esto permite que dentro de los contenedores se nos permita cambiar la fecha y la hora, sin tener que modificar la hora del sistema host. Además, supone una capa más de seguridad, ya que no estamos vinculando directamente la hora a los relojes físicos de nuestro sistema. [\ref{bib:time ns kernel}]\\
 	
 	\par \noindent Un namespace de tipo time, es muy similar al namespace de tipo PID en la manera de como lo creamos. Utilizamos el comando \texttt{unshare -T}, y mediante una systemcall se nos creará un nuevo time namespace, pero no lo asocia directamente con el proceso. Tenemos que utilizar setns para asociar un proceso a un namespace, además todos los procesos dependientes también tendrán asignado dicho namespace. 
 	
@@ -1456,7 +1639,7 @@ $ echo <PID> > /sys/fs/cgroup/cpu/<NombreGrupo>/tasks
 	\pagebreak
 	
 	\section[Ejemplo: topología de red con \texttt{ip}]{Ejemplo: topología de red usando comando \texttt{ip}}
-	\noindent En este apartado, vamos a detallar un ejemplo de como funciona el comando IP manejando los 'network namespaces'.\\
+	\noindent En este apartado, vamos a detallar un ejemplo de como funciona el comando IP manejando los ``network namespaces''.\\
 	
 	\noindent Creamos los \textit{network namespaces}, en este caso, con nombre h1 y h2. El sistema no crea directamente el namespace, lo que en realidad hace es definirlos en el sistema. El \textit{network namespace} se crea cuando una aplicación se asocia a el.
 	\begin{verbatim}
@@ -2036,11 +2219,10 @@ sudo lxc-create --template download --name <NombreContenedor> -- --dist debian -
 	\end{verbatim}
 	\noindent Añadiremos la siguiente configuración para que utilice el \texttt{NAT bridge} que definimos con anterioridad, además de permitir la ejecución de aplicaciones tipo X11, utilizando xorg (aplicaciones con interfaz gráfica) [\ref{bib: xorg arch wiki}].
 	\begin{lstlisting}[language=Bash, caption={Configuración interfaz NAT bridge y aplicaciones X a un contenedor LXC}]
-# Network configuration (bridge)
+# Network configuration (NAT bridge)
 lxc.net.0.type = veth
-lxc.net.0.veth.pair = veth_containerLXC
+lxc.net.0.veth.pair = lxcbr0
 lxc.net.0.flags = up
-lxc.net.0.ipv4.address = 172.16.27.2/24
 
 ## for xorg
 lxc.mount.entry = /dev/dri dev/dri none bind,optional,create=dir
@@ -2049,15 +2231,17 @@ lxc.mount.entry = /tmp/.X11-unix tmp/.X11-unix none bind,optional,create=dir,ro
 lxc.mount.entry = /dev/video0 dev/video0 none bind,optional,create=file
 	\end{lstlisting}
 	
-	\noindent Ahora ya tenemos listo el contenedor para arrancarlo, solo nos quedaría asignar una IP válida al host, que también está dentro del \texttt{bridge} de LXC. Para ello, ejecutaremos:
-	\begin{lstlisting}[language=Bash, caption={Asignar IP al host LXC y arrancar un contenedor}]
-ip link add 172.16.27.1/24 dev veth_containerLXC
-sudo lxc-start --name <NombreContenedor>
-sudo lxc-attach --name <NombreContenedor>
+%	\noindent Ahora ya tenemos listo el contenedor para arrancarlo, solo nos quedaría asignar una IP válida al host, que también está dentro del \texttt{bridge} de LXC. Para ello, ejecutaremos:
+%	\begin{lstlisting}[language=Bash, caption={Asignar IP al host LXC y arrancar un contenedor}]
+%ip link add 172.16.27.1/24 dev veth_containerLXC
+%sudo lxc-start --name <NombreContenedor>
+%sudo lxc-attach --name <NombreContenedor>
 
-# Para ejecutar interfaz grafica
-startx
-	\end{lstlisting}
+%# Para ejecutar interfaz grafica
+%startx
+%	\end{lstlisting}
+
+	\noindent Para iniciar la interfaz gráfica, una vez tengamos iniciado el contenedor y estemos dentro de una \texttt{shell}, ejecutamos el comando \texttt{startx}.
 
 	\vspace{20px}
 
@@ -2080,7 +2264,7 @@ $ sudo grep lxc_user /etc/sub{gid,uid}
 /etc/subuid:lxc_user:100000:65536
 	\end{verbatim}
 
-	\pagebreak
+	%\pagebreak
 	
 	\noindent Utilizando las mismas configuraciones de red que en el aparatado de contenedor con privilegios, procedemos a acceder al usuario asignado a LXC. Ejecutaremos el comando \texttt{id} para conocer los diferentes \texttt{uid} y \texttt{gid} asignados.
 	\begin{verbatim}
@@ -2108,7 +2292,7 @@ lxc.id_map = g 0 100000 65536
 	\noindent Una vez realizados todos estos pasos, ya podríamos crear nuestro contenedor sin privilegios. Lo haríamos de manera similar que en el apartado anterior, es decir utilizando el comando \texttt{lxc-create}. Además, también será importante modificar el archivo \texttt{config} de nuestro contenedor para asignar la interfaz de red y permitir la ejecución de aplicaciones con interfaz gráfica. \\
 	
 	%\vspace{10px}
-	\pagebreak
+	%\pagebreak
 	
 	\noindent \textbf{\large Ejemplo: \texttt{namespaces} en un contenedor LXC de Ubuntu}\\
 	
@@ -2178,7 +2362,7 @@ lxc.id_map = g 0 100000 65536
 			\end{center}
 		\end{figure}
 	
-		\pagebreak
+		%\pagebreak
 	
 		\item Por último, en otra terminal, procedemos a obtener el \texttt{PID} asociado a dicho contenedor. Para ello, podemos hacer uso del siguiente comando:
 		\begin{verbatim}
@@ -2310,7 +2494,7 @@ $ docker run -it ubuntu bash
 		\item \texttt{bash}. Binario a ejecutar dentro del contenedor, en este caso corresponde con una consola shell.
 	\end{itemize}
 
-	\noindent Una vez ejecutamos dicho comando, automáticamente se crea un contendor con una imagen de \texttt{ubuntu} y se nos ejecuta una consola, en la que podemos navegar y trabajar de manera aislada a nuestra máquina host. (ver Figuras \ref{img: docker ubuntu} y \ref{img: docker ubuntu ver}).
+	\noindent Una vez ejecutamos dicho comando, automáticamente se crea un contenedor con una imagen de \texttt{ubuntu} y se nos ejecuta una consola, en la que podemos navegar y trabajar de manera aislada a nuestra máquina host. (ver Figuras \ref{img: docker ubuntu} y \ref{img: docker ubuntu ver}).
 	
 	\pagebreak
 	
@@ -2332,6 +2516,8 @@ $ docker run -it ubuntu bash
 			\label{img: docker ubuntu ver}
 		\end{center}
 	\end{figure}
+
+	\noindent Las imágenes que utilizamos, serán almacenadas en el directorio \texttt{/var/lib/docker}. Por lo tanto, toda la configuración asociada a un contenedor Docker (configuración de red, volúmenes, imágenes, etc) la podremos encontrar en dicho directorio. Las imágenes que tengamos disponibles para utilizar en el hosts, están almacenadas en \texttt{/var/lib/docker/overlay2}
 
 	\pagebreak
 
@@ -3086,7 +3272,7 @@ containernet> d1 ping -c4 d2
 	%\addcontentsline{toc}{section}{Bibliografía}
 	
 	\subsection*{Enlaces y referencias consultadas}
-	\addcontentsline{toc}{subsection}{Enlaces y referencias consultadas}
+	\addcontentsline{toc}{section}{Enlaces y referencias consultadas}
 	%%\hyperref[bib:link1]{\emph{Reference of bibliography}}
 	\begin{enumerate}
 		%1
@@ -3319,6 +3505,10 @@ containernet> d1 ping -c4 d2
 		\label{bib: mount namespace info 2}
 		\href{https://lwn.net/Articles/689856/}{Mount namespaces and shared subtrees}
 		
+		\item
+		\label{bib: mount bind}
+		\href{https://www.baeldung.com/linux/bind-mounts}{Understanding Bind Mounts}
+		
 		%47
 		\item
 		\label{bib: tmpfs arch linux}
@@ -3426,7 +3616,7 @@ containernet> d1 ping -c4 d2
 	\vspace{20px}
 
 	\subsection*{Imágenes}
-	\addcontentsline{toc}{subsection}{Imagenes}
+	\addcontentsline{toc}{section}{Imagenes}
 	\begin{itemize}
 		%1
 		\item Figura \ref{imagen comparativa classic network nfv}:
