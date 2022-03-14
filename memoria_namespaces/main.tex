@@ -85,19 +85,6 @@
 \begin{document}
 	\selectlanguage{spanish}
 	
-	%%%% PORTADA V1
-	%\title{\textbf{Aplicación de técnicas de virtualización ligera para la evaluación de redes de comunicaciones} \\ 
-	%\addvspace{10px} \large \textit{Trabajo Final de Estudios} \\
-	%\large Ingeniería Telemática}
-	%\author{Autor: Enrique Fernández Sánchez \\ Tutor: Josemaria Malgosa Sanahuja \\ \\Universidad Politécnica de Cartagena}
-	
-	%% EDITAR PARA SEGUIMIENTO DE VERSIONES
-	%\date{Revisión Enero 2022}
-	
-	%\maketitle
-	%\pagebreak
-	%%% END PORTADA
-	
 	%% PORTADA UPCT
 	\thispagestyle{empty}
 	
@@ -109,23 +96,14 @@
 	\centerline{\begin{minipage}[t][5cm][b]{0.5\textwidth}
 		\title{\textbf{Aplicación de técnicas de virtualización ligera para la evaluación de redes de comunicaciones}} 
 		
-		%% EDITAR PARA SEGUIMIENTO DE VERSIONES
-		%\date{Revisión Febrero 2022}
-		
 		\maketitle
 	
 		\vspace{0.5cm}
-	
 		\hspace{1.5cm} \textbf{TRABAJO FIN DE GRADO} \\
-	
 		\vspace{0.5cm}
-	
-		\hspace{1.8cm} Grado en Ingeniería Telemática \\
-	
-		\vspace{1cm}
-	
-		\textbf{Autor:}\author{ Enrique Fernández Sánchez}\\
-	
+		\hspace{1.65cm} Grado en Ingeniería Telemática \\
+		\vspace{0.5cm}
+		\textbf{Autor:}\author{ Enrique Fernández Sánchez} \\
 		\textbf{Tutor:} José María Malgosa Sanahuja
 	\end{minipage}}
 
@@ -143,9 +121,6 @@
 	
 	\pagebreak
 	
-	%\addcontentsline{toc}{section}{Índice de tablas}
-	%\listoftables
-	
 	\addcontentsline{toc}{section}{Listado de ejemplos}
 	\lstlistoflistings
 	
@@ -156,14 +131,6 @@
 	\section*{Glosario de términos}
 	\addcontentsline{toc}{section}{Glosario de términos}
 	\thispagestyle{plain}
-	
-	%\noindent{\large \textbf{NFV}} (\textit{Network Function Virtualization}). Virtualización de funciones de red.\\
-		 
-	%\noindent{\large \textbf{SDN}} (\textit{Software Defined Networks})\\
-		 
-	%\noindent{\large \textbf{Namespace}}. \textit{Espacio de nombres}\\
-		 
-	%\noindent{\large \textbf{NS}} (\textit{Network namespace}). Tipo de espacio de nombres en Linux que tiene por función aislar la parte de red de la máquina host.\\
 	
 	\noindent{\large \textbf{Linux}}. Sistema operativo tipo UNIX, de código abierto, multiplataforma, multiusuario y multitarea.\\
 	
@@ -178,14 +145,14 @@
 	\noindent{\large \textbf{GID}} (\textit{Group Identifier}). Al igual que sucede con el UID, suele aparecer como un número o palabra y hace referencia al identificador de grupo dentro del sistema de Linux.\\
 		 
 	\noindent{\large \textbf{root}}. Cuenta superusuario del sistema operativo Linux.\\
-		 
-	%\noindent{\large \textbf{veth-pair}} (\textit{Virtual Ethernet Pair}). Tipo de interfaz virtual. Funcionan de dos en parejas.\\
 	
 	\noindent{\large \textbf{NAT}} (\textit{Network Address Translation}). Traducción de direcciones de red, mecanismo utilizado por router para cambiar paquetes entre redes con direcciones IP diferentes.\\
 	
 	\noindent{\large \textbf{DHCP}} (\textit{Dynamic Host Configuration Protocol}). Protocolo de red que permite a un servidor asignar dinámicamente direcciones IP y otros parámetros, a cada dispositivo de la red en la que se encuentre. \\
 	
-	\noindent{\large \textbf{API}} (\textit{Application Programming Interface}). Conjunto de subrutinas, funciones y procedimientos que ofrecen cierto software, con el objetivo de ser utilizado por otro software externo.
+	\noindent{\large \textbf{API}} (\textit{Application Programming Interface}). Conjunto de subrutinas, funciones y procedimientos que ofrecen cierto software, con el objetivo de ser utilizado por otro software externo. \\
+	
+	\noindent{\large \textbf{SNMP}} (\textit{Simple Network Management Protocol}). Protocolo de la capa de aplicación que permite el intercambio de información de administración entre los dispositivos de una red habilitados con SNMP.
 		 
 	
 	\pagebreak
@@ -198,7 +165,7 @@
 	
 	\noindent Por otro lado, me gustaría agradecer a mi familia, en especial a mis padres, Encarnación y Miguel Ángel, y a mi hermano y a mi cuñada, Miguel y Yolanda; ellos han supuesto un pilar fundamental en este camino que ha sido para mi la ingeniería, ellos han sido mi principal apoyo, y sin él, no hubiera llegado hasta donde estoy hoy. También agradecer a mis padrinos, Ana y Anastasio, ya que siempre han tenido palabras de ánimo para mi, incluso en este último año, en el que han sabido transmitir esa fortaleza, tan propia de ellos. Especial mención a mis abuelos, estoy seguro que estarían muy orgullosos de mi camino y de cómo su nieto es ahora ingeniero. Agradecer también a mis suegros, María Dolores y Francisco, ya que suponen otra fuente importante de apoyo y confianza. \\
 	
-	\noindent Especial mención a Lucía Francoso Fernández, compañera del grado en sistemas de telecomunicación, con la cual he tenido la suerte de emprender codo con codo muchos de los proyectos que he llevado entre manos estos años. Fuente de apoyo incondicional, una mina de creatividad y una brillante ingeniera. Sin ella, mi paso por la universidad no hubiera sido igual. \\
+	\noindent Especial mención a Lucía Francoso Fernández, compañera del grado en sistemas de telecomunicación, con la cual he tenido la suerte de emprender codo con codo muchos de los proyectos que he llevado entre manos estos años. Fuente de apoyo incondicional, una mina de creatividad y una brillante ingeniera. Sin ella, mi paso por la universidad no hubiera el mismo. \\
 	
 	\noindent Por último, agradecer a mis compañeros del \textit{Free Open Source Club} (\url{https://fosc.space}), ya que gracias a ellos he puesto en valor el movimiento \textit{Open Source}. Me han servido de trampolín para entrar a un mundo muy bonito que es el conocimiento libre y poder vivir experiencias únicas. Con ellos, he pasado muchas horas de trastear y aprender sobre cualquier cosa que se nos ocurría, lo que nosotros amistosamente llamamos ``\textit{hackear}''. 
 		
@@ -206,10 +173,9 @@
 	
 	\chapter{Introducción}
 	
-	%\section{Introducción}
-	\noindent Con el fin de concluir los estudios de grado en ingeniería telemática, es necesaria la investigación y el posterior desarrollo del \textit{Trabajo Fin de Estudios} (TFE). Dicho trabajo, tiene como objetivo enfrentar al alumno a un proceso de investigación en el que pueda aplicar muchos de los conceptos que ha ido aprendiendo durante su paso por el grado, pudiendo añadir puntos de innovación, y aportar soluciones nuevas a un proyecto en específico. \\
+	\noindent Con el fin de concluir los estudios de grado en ingeniería telemática, es necesaria la investigación y el posterior desarrollo del \textit{Trabajo Fin de Estudios} (TFE). Dicho trabajo, tiene como objetivo enfrentar al alumno a un proceso de investigación en el que pueda aplicar muchos de los conceptos que ha ido aprendiendo durante su paso por el grado, pudiendo añadir puntos de innovación, y aportar soluciones nuevas a un proyecto específico. \\
 	
-	\noindent En este documento, recojo lo que sería mi memoria en relación al TFE. En este documento detallaremos las diferentes investigaciones realizadas sobre el concepto de virtualización en sistemas Linux, el funcionamiento de los contenedores y la utilización de la virtualización ligera para la evaluación de redes de comunicaciones, en nuestro caso, de conmutación de paquetes. \\
+	\noindent En este documento recojo lo que sería mi memoria en relación al TFE. En él se detallarán las diferentes investigaciones realizadas sobre el concepto de virtualización en sistemas Linux, el funcionamiento de los contenedores y la utilización de la virtualización ligera para la evaluación de redes de comunicaciones, en nuestro caso, de conmutación de paquetes. \\
 	
 	\noindent Además, toda documentación y códigos utilizados en este proyectos se ha liberado en un repositorio de \textit{GitHub} (\url{https://github.com/}). En dicho repositorio, encontraremos toda la información recopilada para este trabajo, además de los códigos fuente de la memoria, y las pruebas realizadas. La dirección del repositorio es la siguiente: \url{https://github.com/Raniita/lightweight-virtualization-nfv/}
 	
@@ -218,13 +184,6 @@
 	
 	 \noindent Por otra parte, muchas de las herramientas de evaluación y simulación de redes de comunicaciones son costosas en términos de recursos a utilizar (tanto hardware como software), lo que limita seriamente su escalabilidad a la hora de evaluar redes de cierta envergadura. La virtualización de redes (en especial la virtualización ligera) nos permitirá desarrollar simuladores de redes más complejas sin consumir excesivos recursos computacionales. Por ello, en este proyecto  particularizaremos estas tecnologías y las acercamos al campo de conocimiento de la telemática para utilizarlas con el fin de evaluar y simular redes de conmutación de tipo IP. \\
 	
-	%\noindent Partiendo de supuesto de que las herramientas más sencillas de simulación de redes se nos pueden quedar cortas en cuanto queremos escalar el sistema, nos topamos en que otras soluciones pueden ser mucho más \textit{resource hungry} de lo que podríamos imaginar. Además, tampoco podemos contar con realizar dichas pruebas de manera física, ya que el presupuesto del proyecto escalaría de nivel exponencial. Esto sucede ya que deberíamos configurar cada dispositivo de manera específica, y después proceder a interconectarlos con una tecnología de red adecuada, que en nuestro caso, son tecnologías en fase de desarrollo o evaluación de prestaciones.\\
-	
-	%\noindent Conociendo las limitaciones, establecemos una serie de objetivos de cara a evaluar el viaje que realicemos durante ese proyecto, y poder evaluar posteriormente los avances que hemos podido conseguir, y además las conclusiones vinculadas a estos. Estos objetivos podrían ser:\\
-	%\begin{itemize}
-	
-	%\pagebreak
-	
 	\section{Objetivos}
 	
 	\noindent Como bien hemos adelantado en el apartado anterior, el objetivo principal de este proyecto es el de estudiar propuestas en el ámbito de simulación y evaluación de redes de comunicación, basadas en virtualización ligera. Por lo tanto, se pretende: 
@@ -232,7 +191,7 @@
 		\item Aprender los conceptos básicos de la virtualización de sistemas de red (\texttt{NFV}).
 		\item Comprender la diferencia entre virtualización \textit{ligera} y virtualización ``\textit{dura}''.
 		\item Estudiar, dentro del sistema operativo Linux, las diferentes tecnologías que nos permiten adoptar soluciones \texttt{NFV}.
-		\item Definir que es espacio de nombres (\textit{namespaces}) y cómo podemos aplicarlo para virtualizar redes.
+		\item Definir los espacios de nombres (\textit{namespaces}) y cómo podemos aplicarlo para virtualizar redes.
 		\item Profundizar en el concepto de interfaces virtuales en Linux.
 		\item Desgranar el concepto amplio de contenedor, relacionándolo con los espacios de nombres.
 		\item Aportar una serie de ejemplos que puedan servir de guía para la evaluación de redes de comunicaciones, utilizando virtualización ligera.
@@ -243,15 +202,13 @@
 	\begin{itemize}
 		\item \textbf{Capítulo 1}: \textit{Introducción}. Comienzo del proyecto. Se exponen introducción, objetivos y el contexto del trabajo. \\
 		
-		\item \textbf{Capítulo 2}: \textit{Virtualización de funciones de red}. Se pretende contextualizar el motivo por el que es importante la virtualización de las redes. Además, se comentan las tecnologías involucradas para dar lugar a la virtualización. \\
+		\item \textbf{Capítulo 2}: \textit{Virtualización de funciones de red}. Se pretende contextualizar el motivo por el que la virtualización de las redes es importante. Además, se comentan las tecnologías involucradas para dar lugar a la virtualización. \\
 		
 		\item \textbf{Capítulo 3}: \textit{Interfaces de red virtuales en Linux}. Se describirán las diferentes interfaces de red virtuales que nos ofrece Linux. Se evaluarán sus ventajas y cómo nos pueden ser útiles para implementar topologías de red virtualizadas. \\
 		
 		\item \textbf{Capítulo 4}: \textit{Espacio de nombres en Linux}. Se estudiará el concepto de espacio de nombres. Se aportará una explicación de cada espacio de nombres disponibles, además de ejemplos de aplicación de los más importantes. \\
 		
 		\item \textbf{Capítulo 5}: \textit{Virtualización ligera y contenedores}. Se profundiza en diferentes técnicas de virtualización ligera, además de proponer ejemplos y primeros pasos para cada una de las soluciones propuestas. \\
-		
-		%\pagebreak
 		
 		\item \textbf{Capítulo 6}: \textit{Caso práctico: Virtualización para la simulación de redes}. Se proponen varios ejemplos de \textit{software} en el que se utiliza virtualización ligera para la simulación de redes. \\
 		
@@ -261,40 +218,31 @@
 	
 	\pagebreak
 	
-	%\section{Virtualización de Funciones de Red}
 	\chapter{Virtualización de Funciones de Red}
 	\label{sec: nfv}
-	%% https://www.youtube.com/watch?v=3JEAK66wujg	
-	\noindent El punto de partida de la ``virtualización de funciones de red'' (\texttt{NFV}) surge a partir de las necesidades de las operadoras de red para solucionar los problemas de escalado de la red, producido principalmente por el estancamiento de los operadores en innovación, generando una red poco flexible. Estos problemas se pueden resumir en los siguientes:
+	
+	\noindent El punto de partida de la ``virtualización de funciones de red'' (\texttt{NFV}) surge a partir de las necesidades de las operadoras de red para solucionar los problemas de escalado de la red, generando una red poco flexible. Estos problemas se pueden resumir en los siguientes:
 	\begin{itemize}
 		\item Saturación general en la red, o bien en servicios específicos.
 		\item Servicios que requieren una instalación manual o que necesitan una intervención manual.
 		\item Problemas relacionados con el negocio de las operadoras de red, como puede ser la reducción de costes del servicio.
 	\end{itemize}
 	
-	%\noindent Estos problemas radican en una serie de motivos, pero principalmente tiene que ver con el poco crecimiento de la red, y la rápida adopción por la sociedad. Si concretamos estos motivos, podrían ser tal que:
-	%\begin{itemize}
-	%	\item Falta de estabilidad en la red, debido a la poca flexibilidad de la misma.
-	%	\item Poca evolución en las redes ``core''.
-	%	\item Falta de innovación, se hace realmente difícil crear nuevos servicios.
-	%\end{itemize}
-
-	%\noindent En general, se podría resumir en que la poca innovación y la falta de flexibilidad, hacían realmente difícil cambiar ciertos servicios y estructuras críticas de la red ``core''. Para ello, 
-	\noindent Para solucionar todos estos problemas, desde los grupos de trabajo de la ITU se empezó a trabajar en nuevas propuestas con el fin de aportar nuevas alternativas. La solución propuesta con más apoyo sería ``la virtualización de funciones de red'', que tendría su punto de partida en octubre de 2012, en un grupo de trabajo de la ITU, formado por 13 operadoras internacionales, dando lugar a un \textit{paper} informativo [\ref{paper nfv 2012}] en el que se detallaba de forma teórica la solución de \texttt{NFV}. \\
+	\noindent Para solucionar todos estos problemas, desde los grupos de trabajo de la ITU se empezó a trabajar en nuevas propuestas con el fin de aportar nuevas alternativas. La solución propuesta con más apoyo sería ``la virtualización de funciones de red'', que tendría su punto de partida en octubre de 2012, en un grupo de trabajo de la ITU, formado por 13 operadoras internacionales, dando lugar a un \textit{paper} informativo [\ref{paper nfv 2012}] en el que se detallaba de forma teórica la solución de NFV. \\
 	
 	\noindent En esta arquitectura de red basada en virtualización, distinguimos varios roles: 
 	\begin{itemize}
 		% https://www.redhat.com/es/topics/cloud-native-apps/vnf-and-cnf-whats-the-difference
-		\item \texttt{VNF} (\textit{Virtual Network Function}). Aplicaciones software que ofrecen ciertas funciones (enrutadores, firewall, etc) y que se implementan como máquinas virtuales, y que no necesitan un sistema hardware en específico. 
+		\item \texttt{VNF} (\textit{Virtual Network Function}). Aplicaciones software que ofrecen ciertas funciones (enrutadores, firewall, etc) y que se implementan como máquinas virtuales, y que no necesitan un sistema hardware específico. 
 		
 		% https://www.sdxcentral.com/networking/nfv/definitions/nfv-infrastructure-nfvi-definition/
 		\item \texttt{NFVi} (\textit{NFV infraestructure}). Se trata de la infraestructura disponible para una arquitectura basada en NFV. Supone la infraestructura donde se desplegarán los \texttt{VNF}, que incluye recursos de computo, almacenamiento y de red. 
 		
 		% https://www.sdxcentral.com/networking/nfv/definitions/virtualized-infrastructure-manager-vim-definition/
-		\item \texttt{VIM} (\textit{Virtualized Infraestructure Manager}). Es el elemento responsable de controlar y gestionar la infraestructura \texttt{NFV} (NFVi). Se encarga de mantener el inventario de recursos y de ir ``colocando'' las diferentes funciones de red en los recursos disponibles de la red. Esto nos permite realizar tareas de orquestación.
+		\item \texttt{VIM} (\textit{Virtualized Infraestructure Manager}). Es el elemento responsable de controlar y gestionar la infraestructura \texttt{NFV} (\texttt{NFVi}). Se encarga de mantener el inventario de recursos y de ir ``colocando'' las diferentes funciones de red en los recursos disponibles de la red. Esto nos permite realizar tareas de orquestación.
 		
 		% https://www.adva.com/en/products/technology/what-is-nfv-mano
-		\item \texttt{MANO} (\textit{Management and orchestration}). Elemento clave para la implementación de \texttt{NFV}. Es el encargado de coordinar los recursos de la red y gestionar las funcionalidades de red. Esta compuesto por los elementos: orquestador NFV (NFVO), gestor de VNF (VNFM) y gestor de infraestructura virtualizada (VIM), con los que se comunicará para coordinar los recursos de una arquitectura NFV.
+		\item \texttt{MANO} (\textit{Management and orchestration}). Elemento clave para la implementación de NFV. Es el encargado de coordinar los recursos de la red y gestionar las funcionalidades de red. Esta compuesto por los elementos: orquestador NFV (\texttt{NFVO}), gestor de VNF (\texttt{VNFM}) y gestor de infraestructura virtualizada (\texttt{VIM}), con los que se comunicará para coordinar los recursos de una arquitectura NFV.
 	\end{itemize}
 	
 	\pagebreak
@@ -310,37 +258,27 @@
 	\end{figure}
 	
 	\noindent En el enfoque clásico, las funciones de red están basadas en tener un software y hardware específico para cada dispositivo. Sin embargo, \texttt{NFV} nos permite desplegar esos mismos recursos software y hardware en servidores físicos de propósito general, dando lugar a una mejor gestión de los recursos y un mayor aprovechamiento. Por lo tanto, un mismo nodo físico, puede ser DHCP, router o Firewall. [\ref{bib: what is nfv}]\\
-	
-	%\pagebreak
 
-	\noindent La virtualización de funciones de red supone una manera para reducir costes y acelerar el desarrollo de servicios para los operadores de red. \\ 
+	\noindent La virtualización de funciones de red supone una oportunidad para reducir costes y acelerar el desarrollo de servicios para los operadores de red. \\ 
 	
 	\noindent Tal y como podemos ver en la comparativa de la Figura \ref{imagen comparativa classic network nfv}, sustituimos electrónica de red específica, como podrían ser router, switches, etc; por máquinas virtualizadas que se despliegan en servidores de carácter general, dando lugar a un mayor control y escalabilidad de los sistemas físicos. A consecuencia de esto, podemos ver como las redes toman un camino diferente, dejando a atrás el hardware y software propietario, para centrarse en un enfoque basado en el software. \\
-	
-	%\begin{figure}[h!]
-	%	\begin{center}
-	%		\includegraphics[width=0.6\textwidth]{img/NFV-image-v2.jpg}
-	%		\label{img: comparativa redes classic vs nfv}
-	%		\caption{Comparativa redes clásicas vs redes basadas en NFV [\ref{img: nfv vs classic 2}]}
-	%	\end{center}
-	%\end{figure}
 	
 	\pagebreak
 	
 	\section{Tecnologías implicadas}
-	\noindent Para que este cambio de paradigma en las redes se materialice y que pase a ser una solución viable, tienen que realizarse una serie de desarrollos, que aunque son utilizadas en entornos reales, todavía están en continuo desarrollo e investigación. \\
+	\noindent Aunque la virtualización ya es una realidad en muchos entornos reales, para que este cambio de paradigma en las redes se materialice y pase a ser una solución viable, tienen que realizarse antes una serie de desarrollos de calado, especialmente en el campo de las Redes Definidas por Software (\texttt{SDN}, \textit{Software Defined Networking}). \\
 	
-	\noindent Además, aunque estamos hablando de NFV, hay una tecnología extra que también aparece en la ecuación, esta tecnología es SDN (\textit{Software Defined Networks}). En este caso particular, nos encontramos con que el NFV no puede existir sin el SDN, y viceversa [\ref{bib: sdn y nfv}]. Si tuviéramos que definir brevemente cada una de dichas tecnologías, podríamos resumirlo así:
-	\begin{itemize}
-		\item \textit{Software Defined Networks} (\texttt{SDN}). Desacoplo entre el plano de control y el plano de datos de los routers y switches de una red. Aparece la figura de controlador SDN que permite ``controlar'' la red via software. Para ello, se utiliza una API de control (\texttt{Southbound API}), con el fin de dirigir el tráfico de red y comunicarse con la infraestructura hardware de capas superiores. (ver Figura \ref{img: sdn + nfv}) [\ref{bib: vmware sdn}]
-		 
-		\item \textit{Network Functions Virtualizations} (\texttt{NFV}). NFV desacopla las funciones de la red de dispositivos de hardware dedicados y las traslada a servidores virtuales, y así se consolidan múltiples funciones en un único servidor físico. Dentro de este servidor físico, podemos distinguir diferentes funciones de red virtuales (VNF), dichas funciones suponen un conjunto de máquinas interconectadas entre sí, y cada una de ellas tiene una función distinta, y además, el conjunto de ellas tienen por objetivo realizar una función que antes era realizada por un equipo físico determinado (un router, firewall o similar). Aporta una API para controlar los diferentes dispositivos virtuales (\texttt{Northbound API}) (ver Figura \ref{img: sdn + nfv}) [\ref{bib: vmware nfv}]
-	\end{itemize}
+	\noindent A modo de resumen, \textit{Software Defined Networks} (\texttt{SDN}) desacopla el plano de control y el plano de datos de los routers y switches de una red. El controlador SDN es el encargado de programar los dispositivos de la red vía software. En entornos SDN, el switch/router solo sabe encaminar paquetes de datos de la forma en la que el controlador SDN lo ha programado. Hasta el momento no hay nada nuevo, ya que esto mismo se consigue -por ejemplo- mediante el protocolo SNMP. La novedad que introduce SDN consiste en que la programación de los routers/switches es dinámica, permitiendo que se vaya adaptando automáticamente a las condiciones de la red. \\
+	
+	\noindent Para programar bajo el paradigma de SDN, se utilizan APIs llamadas respectivamente \texttt{South-
+		bound} y \texttt{Northbound}. La primera es una API de muy bajo nivel que permite comunicar el controlador con el equipo de red. La segunda es de alto nivel y permite que el administrador de la red pueda programar los equipos de forma fácil y amigable.
+
+	\vspace{20px}
 
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.85\textwidth]{img/sdn-y-nfv.jpg}
-			\caption{Comparativa en capas OSI de las tecnologías NFV y SDN}
+			\includegraphics[width=0.55\textwidth]{img/south_north.jpg}
+			\caption{Esquema y ámbito de aplicación de las APIs \texttt{Southbound} y \texttt{Northbound}}
 			\label{img: sdn + nfv}
 		\end{center}
 	\end{figure}
@@ -350,22 +288,14 @@
 	\section{Virtualización ligera}
 	\label{sect: virt ligera}
 	
-	\noindent Entendemos la virtualización ligera (también conocida como \textit{containers}) como la virtualización de los recursos propios de un sistema operativo, tales como memoria, cpu, interfaces de red, etc. Dicha virtualización la hace el propio \textit{kernel} del sistema operativo, proporcionando diferentes espacios de usuarios aislados entre sí. Sin embargo, a diferencia del concepto ``\textit{máquina virtual}'' (virtualización dura), en la virtualización ligera todos los sistemas virtualizados dependen del \texttt{kernel} de la máquina host, mientras que en el caso de una máquina virtual, cada instancia tendría su propio \texttt{kernel} (ver Figura \ref{img: virtualization comparative}). [\ref{bib: virt ligera}]\\
+	\noindent Entendemos la virtualización ligera (también conocida como \textit{containers}) como la virtualización de los recursos propios de un sistema operativo, tales como memoria, cpu, interfaces de red, etc. Dicha virtualización la hace el propio \textit{kernel} del sistema operativo, proporcionando diferentes espacios de usuarios aislados entre sí. En la virtualización ligera todos los sistemas virtualizados dependen del \texttt{kernel} de la máquina host, mientras que en el caso de una máquina virtual (virtualización dura), cada instancia tendría su propio \texttt{kernel} (ver Figura \ref{img: virtualization comparative}). [\ref{bib: virt ligera}]\\
 	
 	\noindent Por lo tanto, las ventajas destacables sobre la virtualización ligera frente a la virtualización ``dura'' serían:
 	\begin{itemize}
 		\item Eliminamos el correspondiente \textit{overhead} al no tener que emular un \texttt{kernel} para cada instancia.
 		\item Menor consumo de CPU y RAM, comparado con las virtualizaciones ``duras''.
-		\item Disponen de la posibilidad de iniciar, mover, parar o borrar la instancia virtualizada.
+		\item Disponer de la posibilidad de iniciar, mover, parar o borrar la instancia virtualizada.
 	\end{itemize}
-	
-	%\begin{figure}[h!]
-	%	\begin{center}
-	%		\includegraphics[width=0.8\textwidth]{img/virtualization_comparative.png}
-	%		\caption{Comparativa entre virtualización ligera y virtualización dura [\ref{bib_img: comparativa virt}] }
-	%		\label{img: virtualization comparative}
-	%	\end{center}
-	%\end{figure}
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -377,18 +307,18 @@
 	\end{figure}
 	
 	% Introducción a los siguientes capítulos
-	\noindent En consecuencia de tener que utilizar un mismo \texttt{kernel} para todas las instancias, tenemos que profundizar sobre los conceptos de interfaces de red virtuales [\ref{sect: interfaces virtuales}] y espacios de nombres [\ref{sect: espacio nombres}], ya que serán piezas clave para tener nuestras instancias aisladas entre sí, pero a su vez conectadas con los diferentes recursos en red que nosotros definamos.
+	\noindent A consecuencia de tener que utilizar un mismo \texttt{kernel} para todas las instancias, tenemos que profundizar sobre los conceptos de interfaces de red virtuales [\ref{sect: interfaces virtuales}] y espacios de nombres [\ref{sect: espacio nombres}], ya que serán piezas clave para tener nuestras instancias aisladas entre sí, pero a su vez conectadas con los diferentes recursos en red que nosotros definamos.
 	
 	\pagebreak
 	
-	%\section{Interfaces de red virtuales en \textit{Linux}}
 	\chapter{Interfaces de red virtuales en \textit{Linux}}
 	\label{sect: interfaces virtuales}
+	
 	\noindent En este capítulo, vamos a profundizar en el concepto de interfaces de red virtuales, específicas al sistema operativo basados en el kernel de Linux. \\
 	
 	\noindent Linux dispone de una selección muy diferente de interfaces de red que nos permiten, de manera sencilla, el uso de máquinas virtuales o contenedores. En este apartado vamos a mencionar las interfaces más relevantes de cara a la virtualización ligera que proponemos para el despliegue de una red virtualizada. Para obtener una lista completa de las interfaces disponibles, podemos ejecutar el comando \texttt{ip link help}.\\
 	
-	\par \noindent En este trabajo, vamos a comentar la siguientes interfaces [\ref{bib:virtual interface list}]:
+	\par \noindent En este trabajo vamos a comentar la siguientes interfaces [\ref{bib:virtual interface list}]:
 	\begin{itemize}
 		\item MAC compartida: enp2s0:\{0,1,2...\}
 		\item VLAN 802.1q: enp2s0.\{0,1,2...\}
@@ -399,12 +329,10 @@
 
 
 	\section[Nombrado predecible de dispositivos]{Nombres predecibles en dispositivos físicos.}
-	%\noindent \% Comentar udev (dinamic device management) \% \\
-	\noindent Con el fin de comprender como se nombran las diferentes interfaces de red, es necesario que estudiemos el servicio \texttt{udev} (\textit{Dynamic device management}). \texttt{udev} es el gestor de dispositivos que utiliza el kernel de Linux, y su función principal es permitir al administrador del sistema operativo manejar dinámicamente los dispositivos conectados al ordenador mediante la gestión de eventos del sistema. Estos eventos que recibe el servicio \texttt{udev} son específicamente generados por el kernel, en respuesta a eventos físicos relacionados con dispositivos periféricos. Por lo tanto, el propósito de \texttt{udev} es actuar sobre la detección de periféricos y con conexiones tipo \textit{hotplug}, pudiendo encadenar las acciones necesarias que devuelven el control al kernel, como por ejemplo, cargar módulos específicos o un firmware de un dispositivo. [\ref{bib: udev archwiki}] \\
 	
-	\noindent Además, \texttt{udev} también se encarga de gestionar los nodos de dispositivos ubicados en el directorio \texttt{/dev} añadiendo los, enlazando los simbólicamente y renombrándolos. Por otro lado, una consideración a tener en cuenta es que \texttt{udev} maneja los eventos de manera concurrente, lo que aporta una mejora de rendimiento, pero a la vez puede dar problemas a la hora de que el orden de carga de los módulos del kernel no se conserva entre los arranques. Un ejemplo de esto podría ser que en el caso de tener dos discos duros (uno llamado \texttt{/dev/sda} y otro \texttt{/dev/sdb}), en el siguiente arranque el orden de de arranque puede variar, generando que ambos identificadores se intercambien entre sí, desencadenando una serie de problemas en nuestro sistema. [\ref{bib: udev archwiki}]\\
+	\noindent Con el fin de comprender la forma en que se nombran las diferentes interfaces de red, es necesario que estudiemos el servicio \texttt{udev} (\textit{Dynamic device management}). \texttt{udev} es el gestor de dispositivos que utiliza el kernel de Linux, y su función principal es permitir al administrador del sistema operativo manejar dinámicamente los dispositivos conectados al ordenador mediante la gestión de eventos del sistema. Estos eventos que recibe el servicio \texttt{udev} son específicamente generados por el kernel, en respuesta a eventos físicos relacionados con dispositivos periféricos. Por lo tanto, el propósito de \texttt{udev} es actuar sobre la detección de periféricos y con conexiones tipo \textit{hotplug}, pudiendo encadenar las acciones necesarias que devuelven el control al kernel, como por ejemplo, cargar módulos específicos o un firmware de un dispositivo. [\ref{bib: udev archwiki}] \\
 	
-	%\pagebreak
+	\noindent Además, \texttt{udev} también se encarga de gestionar los nodos de dispositivos ubicados en el directorio \texttt{/dev} añadiéndolos, encadenándolos simbólicamente y renombrándolos. Por otro lado, una consideración a tener en cuenta es que \texttt{udev} maneja los eventos de manera concurrente, lo que aporta una mejora de rendimiento, pero a la vez puede dar problemas a la hora de que el orden de carga de los módulos del kernel no se conserva entre los arranques. Un ejemplo de esto podría ser que en el caso de tener dos discos duros (uno llamado \texttt{/dev/sda} y otro \texttt{/dev/sdb}), en el siguiente arranque el orden de de arranque puede variar, generando que ambos identificadores se intercambien entre sí, desencadenando una serie de problemas en nuestro sistema. [\ref{bib: udev archwiki}]\\
 	
 	% Captura de regla udev modificada por usuario
 	\noindent A modo de ejemplo, el usuario puede crear sus propias reglas, de modo que puede realizar las acciones que ya hemos comentado, de acuerdo a sus propias necesidades. A modo de ejemplo, podemos ver en la siguiente captura (Figura \ref{img: udev rule}) como hemos creado un archivo en la ruta \texttt{/etc/udev/rules.d/} en el que definimos la regla para un dispositivo físico en específico (en este caso un USB). Identificamos el dispositivo que queremos a través de los atributos \texttt{idVendor} e \texttt{idProduct} (atributos necesarios para cualquier dispositivo USB), después le asignamos un "MODE" que corresponde con los permisos que le queremos asignar al dispositivo (en modo numérico) y el grupo al que permitimos acceder al dispositivo.\\
@@ -418,7 +346,7 @@
 	\end{figure}
 	
 	% Comentamos el cambio en el nombrado de las interfaces de red 
-	\noindent En el caso de las interfaces físicas de red, vamos a suponer que estamos utilizando el etiquetado de interfaces de red tradicional, tales como eth0, eth1, etc. En la últimas versiones del kernel, se ha cambiado la forma en la que las interfaces de red son nombradas por Linux (\texttt{systemd networkd v197} [\ref{bib: systemd networkd v197}]). Es por este motivo por lo que antes podíamos tener interfaces del tipo \texttt{eth0} y ahora nos encontramos con la siguiente nomenclatura \texttt{enps30}. Este cambio surge ya que anteriormente se nombraban las diferentes interfaces durante el \textit{boot} del sistema, por lo que podría pasar que lo que en un primer momento se nombró como \texttt{eth1}, en el próximo arranque fuera \texttt{eth0}, dando lugar a incontables errores en configuración del sistema. Es por esto por lo que se empecó a trabajar en soluciones alternativas. Por ejemplo, la que acabamos de comentar (udev), utiliza la información aportada por la BIOS del dispositivo para catalogarlo en diferentes categorías, con su formato de nombre para cada categorías. Dichas clasificación corresponde con las siguientes:
+	\noindent En el caso de las interfaces físicas de red, vamos a suponer que estamos utilizando el etiquetado de interfaces de red tradicional, tales como eth0, eth1, etc. En la últimas versiones del kernel, se ha cambiado la forma en la que las interfaces de red son nombradas por Linux (\texttt{systemd networkd v197} [\ref{bib: systemd networkd v197}]). Es por este motivo por lo que antes podíamos tener interfaces del tipo \texttt{eth0} y ahora nos encontramos con la siguiente nomenclatura \texttt{enps30}. Este cambio surge ya que anteriormente se nombraban las diferentes interfaces durante el \textit{boot} del sistema, por lo que podría pasar que lo que en un primer momento se nombró como \texttt{eth1}, en el próximo arranque fuera \texttt{eth0}, dando lugar a incontables errores en configuración del sistema. Es por esto por lo que se empezó a trabajar en soluciones alternativas. Por ejemplo, la que acabamos de comentar (udev), utiliza la información aportada por la BIOS del dispositivo para catalogarlo en diferentes categorías, con su formato de nombre para cada categorías. Dichas clasificación corresponde con las siguientes:
 	\begin{enumerate}
 		\item Nombres incorporados en Firmware/BIOS que proporcionan un número asociado a dispositivos en la placa base. (ejemplo: \texttt{eno1})
 		\item Nombres incorporados en Firmware/BIOS proveniente de una conexión PCI Express hotplug, con número asociado al conector. (ejemplo: \texttt{ens1})
@@ -430,7 +358,7 @@
 	\pagebreak
 	
 	\section{MAC compartida: \texttt{enp2s0:\{0,1,2...\}}}
-	\par \noindent Todas las interfaces asociadas comparten la misma dirección MAC. Cada una de ellas, recibe el nombre de \textit{aliases}. La funcionalidad principal que tienen este tipo de interfaces es la de asignar varias direcciones de IP a una misma interfaz de red.
+	\par \noindent Todas las interfaces asociadas comparten la misma dirección MAC. Cada una de ellas, recibe el nombre de \textit{aliases}. La funcionalidad principal que tienen este tipo de interfaces es la de asignar varias direcciones IP a una misma interfaz de red.
 	
 	\begin{verbatim}
 $ ip addr add 192.168.56.151/24 broadcast 192.168.56.255 dev enp2s0 
@@ -444,7 +372,7 @@ $ ip addr add 192.168.56.251/24 dev enp2s0
 	\end{verbatim}
 
 	\section{VLAN 802.1q: \texttt{enp2s0.\{0,1,2...\}}}
-	\par \noindent Siguiendo el mismo concepto que la interfaz anterior, pero en este caso utilizando el estándar 802.1q, que permite etiquetar las tramas, para crear una red lógica independiente. Es necesario que la interfaz a la que estemos asignando, sea un puerto trunk, o bien sea tagged para una VLAN específica.
+	\par \noindent Siguiendo el mismo concepto que la interfaz anterior, pero en este caso utilizando el estándar 802.1q, que permite etiquetar las tramas para crear una red lógica independiente. Es necesario que la interfaz a la que estemos asignando, sea un puerto trunk, o bien sea tagged para una VLAN específica.
 	
 	\begin{verbatim}
 $ ip link add link enp2s0 name enp2s0.{num} type vlan id {num}
@@ -489,7 +417,7 @@ $ ip link add link eth0.1000 eth0.1000.1000 type vlan proto
 	\label{sec: veth}
 	\noindent Los \texttt{veth} (Ethernet virtuales) son un dispositivo virtual que forman un túnel local ethernet. El dispositivo se crea en parejas. [\ref{bib:virtual interface list}]\\
 	
-	\noindent Los paquetes transmitidos por un extremo del ethernet virtual se reciben inmediatamente en el otro extremo. Si alguno de ellos se encuentra apagado, decimos que el link de la pareja esta también apagado. A modo de ejemplo, nos fijamos en una estructura básica en la que dos aplicaciones se comunican utilizando \texttt{veth}, tal y como vemos en la figura (\ref{ej1 veth})\\
+	\noindent Los paquetes transmitidos por un extremo del ethernet virtual se reciben inmediatamente en el otro extremo. Si alguno de ellos se encuentra apagado, decimos que el link de la pareja está también apagado. A modo de ejemplo, nos fijamos en una estructura básica en la que dos aplicaciones se comunican utilizando \texttt{veth}, tal y como vemos en la figura (\ref{ej1 veth})\\
 	
 	\begin{figure}[h]
 		\begin{center}
@@ -618,7 +546,7 @@ $ ip netns exec app2 ip link set lo up
 		\end{center}
 	\end{figure}
 	
-	\noindent Si nos fijamos en la figura \ref{img: tun vs tap}, podemos ver las diferencias entre ambas interfaces. Aún así, hay una que se utiliza mucho más que la otra, esta interfaz es TAP. Las interfaces tipo TAP son muy ampliamente utilizadas ya que nos permiten añadir a nuestro sistema tantas tarjetas ethernet virtuales (software) como se necesiten. Posteriormente -utilizando los comandos Linux tradicionales para configurar redes- se le asigna una IP y ya pueden ser utilizadas por cualquier aplicación -incluso de forma compartida- como si fuera una interfaz de red hardware.
+	\noindent Si nos fijamos en la figura \ref{img: tun vs tap}, podemos ver las diferencias entre ambas interfaces. Aún así, hay una que se utiliza mucho más que la otra, esta interfaz es TAP. Las interfaces tipo TAP son ampliamente utilizadas ya que nos permiten añadir a nuestro sistema tantas tarjetas ethernet virtuales (software) como se necesiten. Posteriormente -utilizando los comandos Linux tradicionales para configurar redes- se le asigna una IP y ya pueden ser utilizadas por cualquier aplicación -incluso de forma compartida- como si fuera una interfaz de red hardware.
 	
 	\pagebreak
 	
@@ -771,7 +699,6 @@ ping -c 4 192.168.209.139 -I tun0
 	
 	\pagebreak
 	
-	%\vspace{10px}
 	\noindent \textbf{\large Ejemplo: aislamiento entre puertos usando interfaz \texttt{tuntap}}\\
 	
 	\noindent En este ejemplo, queremos comprobar el funcionamiento de una interfaz \texttt{tap}, pero poniéndonos en el caso de que el usuario cree dicha interfaz mediante el comando \texttt{ip} y un programa externo se asocie a dicha interfaz. Para ello, vamos a utilizar la aplicación \texttt{sock} [\ref{bib: sock}], que nos servirá para crear un socket IP en un puerto específico.
@@ -794,8 +721,6 @@ ip address add 192.168.3.1/24 dev tap0
 ip link set tap0 up
 ip route add 192.168.3.1 dev tap0
 	\end{lstlisting}
-
-	%\pagebreak
 	
 	\noindent Una vez ya tenemos creada la interfaz, podemos proceder a comprobar la funcionalidad utilizando el programa \texttt{sock}. Para ello, vamos a crear dos instancias cliente-servidor, cada una con un puerto asociado diferente.
 	
@@ -806,8 +731,6 @@ sock 192.168.3.1 1025       # Terminal 2 (cliente)
 sock -s 192.168.3.1 1026    # Terminal 3 (servidor)
 sock 192.168.3.1 1026       # Terminal 4 (cliente)
 	\end{lstlisting}
-
-	%\pagebreak
 
 	\noindent De esta manera, podemos escribir en cada una de las terminales, y comprobar que solo son recibidas por el servidor, o cliente, asociado al puerto de la terminal en cuestión. Es decir, en las interfaces \texttt{tuntap} tenemos aislamiento entre los diferentes puertos, por lo que funcionan de manera equivalente a un enlace \texttt{ethernet} físico. En la figura (\ref{img: ejemplo sock}) podemos ver el ejemplo realizado. \\
 	
@@ -844,16 +767,15 @@ sock 192.168.3.1 1026       # Terminal 4 (cliente)
 	
 	\pagebreak
 	
-	%\section{Espacio de nombres en \textit{Linux}}
-	\chapter{Espacio de nombres en \textit{Linux}}
+	\chapter{Espacios de nombres en Linux}
 	\label{sect: espacio nombres}
 	
 	\section{¿Qué es un \textit{espacio de nombres}?}
-	\noindent Los \textit{espacios de nombres}, o también llamados, \textit{namespaces}, son una característica del kernel de Linux que permite gestionar los recursos del kernel, pudiendo limitarlos a uno (o varios) procesos. Constituyen la base tecnológica en la que se asientan las técnicas de virtualización más modernas (como puede ser Docker, Kubernetes, etc) y de ahí la importancia de conocer en profundidad su funcionamiento. A un nivel alto, permiten aislar procesos respecto al resto del kernel. \\
+	\noindent Los espacios de nombres, o también llamados, namespaces, son una característica del kernel de Linux que permite gestionar los recursos del kernel, pudiendo limitarlos a uno (o varios) procesos. Constituyen la base tecnológica en la que se asientan las técnicas de virtualización más modernas (como puede ser Docker, Kubernetes, etc) y de ahí la importancia de conocer en profundidad su funcionamiento. A un nivel alto, permiten aislar procesos respecto al resto del kernel. \\
 	
 	\par \noindent El objetivo de cada \textit{namespaces} es adquirir una característica global del sistema como una abstracción que haga parecer a los procesos de dentro del \textit{namespace} que tienen su propia instancia aislada del recurso global.
 	
-	\section{¿Cúantos \textit{namespaces} hay?}
+	\section{¿Cuantos namespaces hay?}
 	\par\noindent El kernel ha estado en contaste evolución desde que 1991, cuando Linus Torvalds comenzó el proyecto, actualmente sigue muy activo y se siguen añadiendo nuevas características. El origen de los namespaces se remonta a la versión del kernel 2.4.19, lanzada en 2002. Conforme fueron pasando los años, más tipos diferentes de namespaces se fueron añadiendo a Linux. El concepto de \textit{User namespaces}, se consideró terminado con la versión 3.9. [\ref{bib:ns overview}]. Actualmente, tenemos 8 tipos diferentes de namespaces, siendo el último añadido en la versión 5.8 (lanzada el 2 de Agosto de 2020) [\ref{bib:link5}]. 
 	
 	\begin{enumerate}
@@ -868,23 +790,19 @@ sock 192.168.3.1 1026       # Terminal 4 (cliente)
 	\end{enumerate}
 	
 	
-	\section{¿Cómo crear/acceder a un \textit{namespace}?}
-	%\noindent Los namespaces normalmente se suelen asociar a procesos o aplicaciones en específico. Para manipular estos namespaces, podemos destacar las siguientes herramientas: 
+	\section{¿Cómo crear/acceder a un namespace?}
+	
 	\noindent Los namespaces deben asociarse a procesos. Dichos procesos pueden estar programados de antemano para ejecutarse en un namespace específico, utilizando la función \textit{close()}. Sin embargo, lo habitual es utilizar los comandos \texttt{unshare} y \texttt{nsenter} para asignar un proceso cualquiera a un namespace.
 	
 	\begin{itemize}
-		%\item \texttt{unshare}. Permite asociar un namespace a un archivo. Si habia un namespace ya en ese archivo, lo sobreescribe. No nos permite reutilizar un namespace.
 		\item \texttt{unshare}. Permite asociar un proceso cualquiera a uno o varios namespaces. Si no se indica ningún proceso, utilizará el \texttt{bash} (o cualquier otro shell que tenga configurado el sistema) como proceso por defecto.
 		
-		%\item \texttt{nsenter}. Puede acceder al namespace de un archivo existente. Podemos asociar el namespace a un archivo del sistema, de modo que aunque cerremos el proceso asociado, el archivo sigue existiendo, y por lo tanto puede ser reutilizado.
 		\item \texttt{nsenter}. Permite añadir un proceso a un namespace existente.	
 	\end{itemize}
 	
-	%\pagebreak
-	
 	\section{UTS namespace}
 	\label{sect: uts namespace}
-	\par \noindent El tipo más sencillo de todos los namespaces. La funcionalidad consiste en controlar el hostname asociado del ordenador, en este caso, del proceso o procesos asignados al namespace. Existen tres diferentes rutinas que nos permiten obtener y modifcar el hostname: 
+	\par \noindent El tipo más sencillo de todos los namespaces. La funcionalidad consiste en controlar el hostname asociado del ordenador, en este caso, del proceso o procesos asignados al namespace. Existen tres diferentes rutinas que nos permiten obtener y modificar el hostname: 
 	\begin{itemize}
 		\item \textit{sethostname()}
 		\item \textit{setdomainname()}
@@ -896,62 +814,58 @@ sock 192.168.3.1 1026       # Terminal 4 (cliente)
 	% https://www.cloudsavvyit.com/742/what-are-linux-namespaces-and-what-are-they-used-for/
 	\par \noindent Un ejemplo muy básico de uso de este namespaces podría ser el siguiente [\ref{bib:ns tutorial1}]:\\
 	\begin{lstlisting}[language=bash, caption=Ejemplo de uso de UTS namespace]
-$ sudo su			# super user
+$ sudo su				# super user
 $ hostname			# current hostname
 > arch-linux					
-$ unshare -u /bin/sh		# shell with UTS namespace
+$ unshare -u /bin/sh			# shell with UTS namespace
 $ hostname new-hostname		# set hostname
 $ hostname			# check hostname of the shell
 > new-hostname
-$ exit				# exit shell and namespace
+$ exit					# exit shell and namespace
 $ hostname			# original hostname
 > arch-linux
 	\end{lstlisting}
 
-	%\addvspace{10px}
-
-	\par \noindent En el ejemplo planteado, vemos que utilizamos el comando \texttt{unshare}. Utilizando la documentación de dicho comando, \texttt{man unshare}. Podemos deducir lo siguiente:
+	\par \noindent En el ejemplo planteado, vemos que utilizamos el comando \texttt{unshare}. Utilizando la documentación de dicho comando (\texttt{man unshare}), podemos deducir lo siguiente:
 	\begin{itemize}
 		\item Ejecuta un programa (proceso) en los namespaces que se especifiquen (uno o varios).
-		\item Tenemos que especificar la ruta del ejecutable que queremos aislar
+		\item Tenemos que especificar la ruta del ejecutable que queremos aislar. Si no se especifica, se asume \texttt{bash} como proceso por defecto.
 		\item La sintaxis sería tal que: \texttt{unshare [options] [program] [<argument>...]}
 	\end{itemize}
 
-	\noindent En resumen, si quisieramos mantener ``vivo'' un namespace, sería necesario que lo asociemos con un archivo del sistema, y después volver a ``crear'' el namespace con la herramienta \texttt{nsenter} apuntando a dicho archivo. A modo de ejemplo, sería tal que así:
+	\noindent Si quisiéramos mantener ``vivo'' un namespace, sería necesario que lo asociemos con un archivo del sistema, y después volver a ``crear'' el namespace con la herramienta \texttt{nsenter} apuntando a dicho archivo. A modo de ejemplo, sería tal que así:
 	
 	\begin{lstlisting}[language=Bash, label=lst: persistencia ns, caption=Ejemplo de un persistencia namespace]
-		touch /root/ns-uts											# Creamos un archivo
-		unshare --uts=/root/ns-uts /bin/bash		# Asociamos namespace UTS al archivo
-		hostname FooBar
+touch /root/ns-uts											# Creamos un archivo
+unshare --uts=/root/ns-uts /bin/bash		# Asociamos namespace UTS al archivo
+hostname FooBar
+
+# Salimos del namespace
+exit
 		
-		# Salimos del namespace
-		exit
 		
+# Volvemos a entrar al namespace
+nsenter --uts=/root/ns-uts /bin/bash
+hostname                  # Nos devuelve 'FooBar'
 		
-		# Volvemos a entrar al namespace
-		nsenter --uts=/root/ns-uts /bin/bash
-		hostname                  # Nos devuelve 'FooBar'
+# Salimos del namespace
+exit
 		
-		# Salimos del namespace
-		exit
-		
-		umount /root/ns-uts 			# Eliminamos el namespace definitivamente
+umount /root/ns-uts 			# Eliminamos el namespace definitivamente
 	\end{lstlisting}
 	
 	\vspace{10px}
 	
-	\noindent Tal y como vemos en el ejemplo (\ref{lst: persistencia ns}), utilizamos los comandos \texttt{unshare} y \texttt{nsenter} para manipular un namespace de tipo UTS (hostname), veremos más en profundidad este namespace en el apartado \ref{sect: uts namespace}. Lo importante es comprobar que si asociamos un namespace a un archivo, podemos recuperar dicho namespace si utilizamos el comando \texttt{nsenter}. Además, si quisieramos eliminar permanentemente dicho namespace, tendríamos que hacer uso del comando \texttt{umount}.
+	\noindent Tal y como vemos en el ejemplo (\ref{lst: persistencia ns}), utilizamos los comandos \texttt{unshare} y \texttt{nsenter} para manipular un namespace de tipo UTS (hostname). Lo importante es comprobar que si asociamos un namespace a un archivo, podemos recuperar dicho namespace si utilizamos el comando \texttt{nsenter}. Además, si quisiéramos eliminar permanentemente dicho namespace, tendríamos que hacer uso del comando \texttt{umount}.
 	
 	\pagebreak
 	
 	\section{Mount namespace}
 	\noindent Este \texttt{namespace} fue el primero en aparecer en el Kernel de Linux (versión 2.4.19, en 2002). El objetivo era restringir la visualización de la jerarquía global de archivos, dando lugar a que cada namespace tenga su propio ``set'' de puntos de montaje (directorio, archivo o enlace simbólico, que al crearse forma parte del sistema de archivos del sistema). [\ref{bib: mount namespace info 1}][\ref{bib: mount namespace info 2}] \\
 	
-	\noindent Una vez iniciamos el sistema, solo existe un único \texttt{mount namespace}, al que llamamos ``namespace inicial'' (\textit{default}). Los nuevos \texttt{mount namespaces} que creemos los haremos utilizando la llamada al sistema: \texttt{clone()}, para crear un nuevo proceso asociado en el nuevo namespaces; o bien utilizando el comando \texttt{unshare}, para mover un proceso dentro del nuevo namespace. Por defecto, cuando creamos un nuevo \texttt{mount namespace}, éste recibe una copia del punto de montaje inicial, replicado por el \texttt{namespace} que lo ha llamado. [\ref{bib: mount namespace info 2}] \\
+	\noindent Una vez iniciamos el sistema, solo existe un único \texttt{mount namespace}, al que llamamos ``namespace inicial'' (\textit{default}). Los nuevos \texttt{mount namespaces} que creemos los haremos utilizando la llamada al sistema \texttt{clone()}, para crear un nuevo proceso asociado en el nuevo namespaces; o bien utilizando el comando \texttt{unshare}, para mover un proceso dentro del nuevo namespace. Por defecto, cuando creamos un nuevo \texttt{mount namespace}, éste recibe una copia del punto de montaje inicial, replicado por el \texttt{namespace} que lo ha llamado. [\ref{bib: mount namespace info 2}] \\
 	
-	\noindent Un concepto importante es que los \texttt{mount namespaces} tienen activado la funcionalidad del kernel llamada \texttt{shared subtree}. Esto permite que cada punto de montaje que tengamos en nuestra máquina pueda tener su propio tipo de propagación asociado. Esta información permite que nuevos puntos de montaje en ciertas rutas se propagen a otros puntos de montaje. A modo de ejemplo, si conectamos un USB a nuestro sistema, y este se monta automáticamente en la ruta \texttt{/MI\_USB}, el contenido solo estará visible en otros \texttt{namespaces} si la propagación está configurada correctamente. [\ref{bib: mount namespace redhat}] \\
-	
-	%\par \noindent Un \textit{mount namespace (mnt)} supone otro tipo de espacio de nombres, en este caso relacionado con los \textit{mounts} de nuestro sistema. Lo primero es entender a que nos referimos cuando hablamos de \textit{mount}. \textit{Mount}, o montaje, hace referencia a conectar un sistema de archivos adicional que sea accesible para el sistema de archivos actual de un ordenador. Un \texttt{mount}, tiene asignado lo que se llama \textit{mount point}, que corresponde con el directorio en el que está accesible el sistema de archivo que previamente hemos montado.\\
+	\noindent Un concepto importante es que los \texttt{mount namespaces} tienen activado la funcionalidad del kernel llamada \texttt{shared subtree}. Esto permite que cada punto de montaje que tengamos en nuestra máquina pueda tener su propio tipo de propagación asociado. Esta información permite que nuevos puntos de montaje en ciertas rutas se propaguen a otros puntos de montaje. A modo de ejemplo, si conectamos un USB a nuestro sistema, y este se monta automáticamente en la ruta \texttt{/MI\_USB}, el contenido solo estará visible en otros \texttt{namespaces} si la propagación está configurada correctamente. [\ref{bib: mount namespace redhat}] \\
 	
 	\par \noindent Por lo tanto, un namespace de tipo \textit{mount} nos permite modificar un sistema de archivos en concreto, sin que otros namespaces puedan ver y/o acceder a dicho sistema de archivos. Podríamos concluir que el objetivo de este espacio de nombres es el de permitir que diferentes procesos puedan tener ``vistas'' diferentes de los puntos del montaje de nuestro sistema. \\
 	
@@ -959,27 +873,16 @@ $ hostname			# original hostname
 	\noindent Un ejemplo básico de esta funcionalidad podría ser la siguiente:
 	
 	\addvspace{10px}
-	
-%	\begin{lstlisting}[language=bash, caption=Uso de \texttt{mount namespace} con ``bind'']
-%$ sudo su		# run a shell in a new mount namespace
-%$ unshare -m /bin/sh
-%$ mount --bind /usr/bin/ /mnt/
-%$ ls /mnt/cp
-%> /mnt/cp
-%$ exit			# exit the shell and close namespace
-%$ ls /mnt/cp
-%> ls: cannot access '/mnt/cp': No such file or directory
-%	\end{lstlisting}
 
 	\begin{lstlisting}[language=bash, caption=Uso de \texttt{mount namespace} con dispositivo físico]
-	$ sudo su										# run a shell in a new mount namespace
-	$ unshare -m /bin/sh
-	$ mount /dev/sda2 /mnt/			# hard drive
-	$ ls /mnt/cp
-	> /mnt/cp										# File cp exists on hard drive
-	$ exit											# exit the shell and close namespace
-	$ ls /mnt/cp
-	> ls: cannot access '/mnt/cp': No such file or directory
+$ sudo su										# run a shell in a new mount namespace
+$ unshare -m /bin/sh
+$ mount /dev/sda2 /mnt/			# hard drive
+$ ls /mnt/cp
+> /mnt/cp										# File cp exists on hard drive
+$ exit											# exit the shell and close namespace
+$ ls /mnt/cp
+> ls: cannot access '/mnt/cp': No such file or directory
 	\end{lstlisting}
 
 	\addvspace{10px}
@@ -1077,17 +980,6 @@ rw,relatime,fmask=0022,dmask=0022,codepage=437,errors=remount-ro
 	\begin{verbatim}
 $ umount /tmp/disk
 	\end{verbatim}
-	
-	%\noindent En primer lugar, para trabajar respecto a montajes del sistema de archivos, utilizamos el comando de Linux \texttt{mount}. De manera primigenia, se utilizaba para ``montar'' dispositivos de almacenamiento físicos a un lugar específico del \texttt{tree} de nuestro sistema. Por ejemplo, suponemos que tenemos un disco duro conectado via interfaz \textit{SATA}. Utilizando el comando \texttt{lsblk}, determinamos que queremos montar la partición 1 del dispositivo físico con etiqueta \texttt{/dev/sda}. Por lo tanto, queremos realizar un punto de montaje de \texttt{/dev/sda1} en un lugar específico de nuestro sistema de archivos (\texttt{tree}). Para ello, podemos ejecutar el siguiente comando:
-%	\begin{verbatim}
-%$ mount /dev/sda1 /mnt/MI_USB
-%	\end{verbatim}
-
-%	\noindent Sin embargo, también podemos trabajar con el comando \texttt{mount} sin tener involucrados dispositivos físicos que queramos montar. Para ello, aparece el argumento \texttt{--bind} del comando \texttt{mount}, que nos permite ``vincular'' una parte del \texttt{tree} a otro emplazamiento diferente del \texttt{tree}. Esto lo podemos hacer tanto con directorios completos, como con archivos en específico.
-	
-%	\begin{verbatim}
-%$ mount --bind /mnt/MI_USB /home/user/MI_USB
-%	\end{verbatim}
 
 	\subsection{Casos de uso del montaje tipo \texttt{bind}}
 	
@@ -1131,8 +1023,6 @@ test_hidden
 	\begin{verbatim}
 $ umount /mnt/storage /tmp/storage
 	\end{verbatim}
-
-	%\pagebreak
 	
 	\noindent \textbf{\large Ejemplo: acceder a archivos fuera de un entorno \texttt{chroot}}\\
 	
@@ -1188,20 +1078,14 @@ drwxr-xr-x 305 root root 288K Mar  7 20:14 lib64
 	\end{verbatim}
 	
 	\noindent Al ejecutar dicho comando, lo que estamos haciendo es convertir un directorio del \texttt{tree} en un \texttt{device} o dispositivo de nuestro sistema, es decir, a partir de ahora (mientras esté montado) la ruta \texttt{/mnt/MI\_USB} será tratado como un dispositivo montado sobre ese directorio. Esto mismo nos aporta cierta ventajas, ya que podemos aplicar las opciones que hemos comentado anteriormente, tales como modificar los permisos de escritura o lectura, o cambiar las opciones de montaje.
-
-	%\pagebreak
-
-	%\noindent En resumen, un montaje tipo \texttt{bind} expone una vista de un directorio (porción del \texttt{tree}) en una localización diferente. Se encarga de exponer los mismos archivos, pero con la posibilidad de diferentes opciones de montaje, diferentes ``ownership'' o permisos. Estos sistemas de archivos que muestran una vista alterada del sistema de archivos original se suelen llamar \textit{overlay filesystems}, y son comúnmente utilizados en soluciones de contenedores, algún ejemplo podría ser: \texttt{overlayfs} [\ref{bib: overlayfs}], utilizado por Docker, y que permite tener múltiples sistemas de archivos dentro de un mismo directorio (\texttt{union mounts}). \\
-
-	%\noindent Por lo tanto, una de las ventajas que nos aporta la opción \texttt{bind} es la de utilizar parte de nuestro sistema de archivos actual para destinarlo a nuestro \texttt{mount namespace}. Si bien es cierto que podemos utilizar un \texttt{mount namespace} vacío (creándolo con la herramienta \texttt{unshare}, por ejemplo), pero tendríamos que realizar un montaje dentro del namespace para cada directorio que queramos utilizar.
 	
 	\pagebreak
 	
 	\noindent \textbf{\large \texttt{tmpfs}}\\
 	
-	\noindent De cara al siguiente ejemplo, es interesante que repasemos la funcionalidad del kernel del linux llamada \texttt{tmpfs}. Dicha funcionalidad permite crear un sistema de archivos temporal dentro de nuestro sistema. El sistema de archivo creado reside completamente en la memoria y/o ``swap'' de nuestro sistema. Este tipo de montajes suele ser muy interesante cuando necesitamos agilizar el acceso a ciertos archivos, ya que al estar en la memoria RAM, la lectura es mucho más rápida que si lo comparamos con un disco duro e incluso un disco duro de estado sólido. Sin embargo, el inconveniente que tiene es que el contenido de dicho sistema de archivos se elimina una vez reiniciemos el sistema, ya que este está almacenado en la memoria RAM de nuestro dispositivo. [\ref{bib: tmpfs arch linux}] \\
+	\noindent De cara al siguiente ejemplo, es interesante que repasemos la funcionalidad del kernel del Linux llamada \texttt{tmpfs}. Dicha funcionalidad permite crear un sistema de archivos temporal dentro de nuestro sistema. El sistema de archivo creado reside completamente en la memoria y/o ``swap'' de nuestro sistema. Este tipo de montajes suele ser muy interesante cuando necesitamos agilizar el acceso a ciertos archivos, ya que al estar en la memoria RAM, la lectura es mucho más rápida que si lo comparamos con un disco duro e incluso un disco duro de estado sólido. Sin embargo, el inconveniente que tiene es que el contenido de dicho sistema de archivos se elimina una vez reiniciemos el sistema, ya que este está almacenado en la memoria RAM de nuestro dispositivo. [\ref{bib: tmpfs arch linux}] \\
 	
-	\noindent Este tipo de archivos es comunmente utilizado en los siguientes directorios: \texttt{/tmp}, \texttt{/var/lock}, \texttt{/var/run}, entre otros muchos. Desde el punto de vista de los namespaces, tiene la ventaja de que -si el sistema de archivo no es muy grande- permite crear un punto de montaje de forma fácil y rápida. \\
+	\noindent Este tipo de archivos es comúnmente utilizado en los siguientes directorios: \texttt{/tmp}, \texttt{/var/lock}, \texttt{/var/run}, entre otros muchos. Desde el punto de vista de los namespaces, tiene la ventaja de que -si el sistema de archivo no es muy grande- permite crear un punto de montaje de forma fácil y rápida. \\
 	
 	\noindent Un ejemplo de esto podría ser el siguiente: [\ref{bib: mount namespaces containerlabs}]
 	\begin{lstlisting}[language=bash, caption={Uso de \texttt{mount namespaces} con ``tmpfs''}]
@@ -1237,7 +1121,7 @@ $ df -h | grep mount_ns
 	
 	\noindent \texttt{shared subtrees} nos aporta cuatro maneras diferentes de realizar un montaje. Dichas opciones son las siguientes:
 	\begin{itemize}
-		\item \textbf{\texttt{shared mount}}. Un montaje de este tipo puede ser replicado en tantos puntos de montaje y todas las réplicas seguirán siendo exactamente iguales. Es decir, una vez enlazados los directorios origen y destino a través de la opción \texttt{bind}, cualquier montaje nuevo que se haga en el directorio origen se reflejará en el directorio destino (y viceversa).
+		\item \textbf{\texttt{shared mount}}. Un montaje de este tipo puede ser replicado en tantos puntos de montaje como se quieran y todas las réplicas seguirán siendo exactamente iguales. Es decir, una vez enlazados los directorios origen y destino a través de la opción \texttt{bind}, cualquier montaje nuevo que se haga en el directorio origen se reflejará en el directorio destino (y viceversa).
 		\item \textbf{\texttt{slave mount}}. Un montaje de tipo \textit{esclavo} funciona como un montaje compartido, menos para los eventos asociados al montaje y desmontaje, que solo se propagarán hacia él. Es decir, una vez enlazados los directorios origen y destino a través de la opción \texttt{bind}, cualquier montaje nuevo que se haga en el directorio origen se reflejará en el directorio destino pero no a la inversa.
 		\item \textbf{\texttt{private mount}}. Un montaje de tipo \textit{privado} no permite realizar ni recibir ningún tipo de propagación.
 		\item \textbf{\texttt{unbindeable mount}}. Un montaje de tipo \textit{privado} que no permite ser asociado/vinculable.
@@ -1264,7 +1148,7 @@ $ df -h | grep mount_ns
 	\noindent \textbf{\large Casos de uso de \texttt{shared subtrees}}
 	
 	\begin{enumerate}
-		\item Supongamos un proceso que quiere crear un \texttt{namespace}, pero quiere mantener el acceso a un disco duro extraible que previamente estaba montado en el sistema. [\ref{bib: mount namespaces shared subtree}]
+		\item Supongamos un proceso que quiere crear un \texttt{namespace}, pero quiere mantener el acceso a un disco duro extraíble que previamente estaba montado en el sistema. [\ref{bib: mount namespaces shared subtree}]
 		
 		\begin{lstlisting}[language=bash, caption={Caso de uso de \texttt{shared subtree}}]
 # El administrador del sistema realiza el montaje del usb con 
@@ -1333,10 +1217,7 @@ $ exit
 
 	\addvspace{10px}
 	
-	\par \noindent Si ejecutamos el ejemplo, lo que podemos comprobar es que el ID del proceso que está dentro del namespaces (\texttt{echo \$\$}), no coincide con el proceso que podemos ver de la máquina host (\texttt{ps -ef | grep /bin/sh}). Más concretamente, el primer proceso creado en un PID namespace recibirá el pid número 1, y además de un tratamiento especial ya que supone  un \texttt{init process} dentro de ese namespace [\ref{bib:ns tutorial1}].
-	
-	% revisar: https://www.redhat.com/sysadmin/linux-pid-namespaces
-	% https://man7.org/linux/man-pages/man7/pid_namespaces.7.html
+	\par \noindent Si ejecutamos el ejemplo, lo que podemos comprobar es que el ID del proceso que está dentro del namespaces (\texttt{echo \$\$}), no coincide con el proceso que podemos ver de la máquina host (\texttt{ps -ef | grep /bin/sh}). Más concretamente, el primer proceso creado en un PID namespace recibirá el pid número 1, además de un tratamiento especial ya que supone  un \texttt{init process} dentro de ese namespace [\ref{bib:ns tutorial1}].
 	
 	\pagebreak
 	
@@ -1369,7 +1250,7 @@ $ ip netns exec ns1 ping 127.0.0.1
 	
 	\addvspace{10px}
 	
-	\par \noindent Es importante mencionar, que aunque existen más comandos para gestionar las redes dentro de linux (como pueden ser ifconfig, route, etc), el comando ip es el considerado sucesor de todos estos, y los anteriores mencionados, dejarán de formar parte de Linux en versiones posteriores. Un detalle a tener en cuenta con el comando ip, es que es necesario tener privilegios de administrador para poder usarlo, por lo que deberemos ser root o utilizar sudo.
+	\par \noindent Es importante mencionar, que aunque existen más comandos para gestionar las redes dentro de Linux (como pueden ser ifconfig, route, etc), el comando ip es el considerado sucesor de todos estos, y los anteriores mencionados, dejarán de formar parte de Linux en versiones posteriores. Un detalle a tener en cuenta con el comando ip, es que es necesario tener privilegios de administrador para poder usarlo, por lo que deberemos ser root o utilizar sudo.
 	
 	\addvspace{10px}
 	
@@ -1381,11 +1262,11 @@ $ ip netns exec <network-namespace> <command>
 	\pagebreak
 	
 	\noindent \textbf{\large Ejemplo: topología de red usando \texttt{network namespaces} y NAT}\\
-	\par \noindent Una de las problemáticas que supone el uso de los network namespaces, es que solo podemos asignar \textbf{una interfaz real} a \textbf{un namespace}. Suponiendo el caso en el que el usuario root tenga asignada la interfaz eth0 (identificador de una interfaz de red física), significaría que solo los programas en el namespace de root podrán acceder a dicha interfaz. En el caso de que eth0 sea la salida a Internet de nuestro sistema, eso conllevaría que no podríamos tener conexión a Internet en nuestros namespaces. La solución para esto reside en los \textbf{veth-pair}.
+	\par \noindent Una de las problemáticas que supone el uso de los network namespaces, es que solo podemos asignar una interfaz real a un namespace. Suponiendo el caso en el que el usuario root tenga asignada la interfaz \texttt{eth0} (identificador de una interfaz de red física), significaría que solo los programas en el namespace de root podrán acceder a dicha interfaz. En el caso de que eth0 sea la salida a Internet de nuestro sistema, eso conllevaría que no podríamos tener conexión a Internet en nuestros namespaces. La solución para esto reside en los veth-pair. \\
 	
-	\addvspace{10px}
+	%\addvspace{10px}
 	
-	\par \noindent Como ya hemos visto anteriormente, un veth-pair funciona como si fuera un cable físico, es decir, interconecta dos dispositivos, en este caso, interfaces virtuales. Consiste en dos interfaces virtuales, una de ellas asignada al root namespace, y la otra asignada a otro network namespace diferente. Si a esta arquitectura le añadimos una configuración de IP válida y activamos la opción de hacer NAT en el eth0 del host, podemos dar conectividad de Internet al network namespace que hayamos conectado.
+	\par \noindent Como ya hemos visto anteriormente, un veth-pair funciona como si fuera un cable físico, es decir, interconecta dos dispositivos, en este caso, interfaces virtuales. Consiste en dos interfaces virtuales, una de ellas asignada al root namespace, y la otra asignada a otro network namespace diferente. Si a esta arquitectura le añadimos una configuración de IP válida y activamos la opción de hacer NAT en el \texttt{eth0} del host, podemos dar conectividad de Internet al network namespace que hayamos conectado.
 	
 	\addvspace{10px}
 	
@@ -1415,12 +1296,10 @@ $ ip netns exec ns1 ip link set lo up
 # All traffic leaving ns1 go through v-eth1
 $ ip netns exec ns1 ip route add default via 10.200.1.1
 	\end{lstlisting}
-
-	%\addvspace{10px}
 	
 	\pagebreak
 
-	\par \noindent Siguiendo el ejemplo propuesto, llegamos hasta el punto en el que el tráfico saliente del namespace ns1, será redirigido a v-eth1. Sin embargo, esto no es suficiente para tener conexión a Internet. Tenemos que configurar el NAT en el eth0.
+	\par \noindent Siguiendo el ejemplo propuesto, llegamos hasta el punto en el que el tráfico saliente del namespace \texttt{ns1}, será redirigido a \texttt{v-eth1}. Sin embargo, esto no es suficiente para tener conexión a Internet. Tenemos que configurar el NAT en el \texttt{eth0}.
 	
 	\begin{lstlisting}[language=bash, caption=Configuración de NAT para dar Internet a un network namespace]
 # Share internet access between host and NS
@@ -1461,18 +1340,15 @@ $ ip netns exec ns1 ping google.es
 $ ip netns exec ns1 /bin/bash
 	\end{verbatim}
 	\par \noindent Utilizaremos \texttt{exit} para salir de la shell y abandonar el network namespace.
-
-
-	% https://blogs.igalia.com/dpino/2016/04/10/network-namespaces/
 	
 	\pagebreak
 	
 	\section{User ID namespace}
 	\par \noindent Cada sistema dispone de una manera de monitorizar el usuario es el dueño de cada archivo. Esto permite al sistema restringir el acceso a aquellos archivos que consideramos sensibles. Además, bloquea el acceso entre diferentes usuarios dentro del mismo sistema. Para el usuario, este identificador de usuarios se muestra como el usuario que en ese momento está conectado, sin embargo, para nuestro sistema, el identificador de usuario esta compuesto por una combinación arbitraria de caracteres alfanuméricos. Con el fin de mantener el monitoreo correctamente, hay un proceso encargado de transformar esos caracteres a un número específico de identificación (UID), como por ejemplo sería 1000. Es este valor el que se asocia con los archivos creados por este usuario. Esto nos aporta la ventaja de que, si un usuario cambia su nombre, no es necesario reconstruir el sistema de archivos, ya que su UID sigue siendo 1000.\\
 	
-	\par \noindent Si por ejemplo queremos ver el UID del usuario que estamos usando en este momento, podemos ejecutar: \textit{echo \$UID}, el cual nos devolverá el número asociado a nuestro usuario. \\
+	\par \noindent Si por ejemplo queremos ver el UID del usuario que estamos usando en este momento, podemos ejecutar: \texttt{echo \$UID}, el cual nos devolverá el número asociado a nuestro usuario. \\
 	
-	\par \noindent Además de diferenciar entre los IDs de usuarios (UID), también se nos permite separar entre IDs de grupos (GID). En linux, un grupo sirve para agrupar usuarios de modo que un grupo puede tener asociado un privilegio que le permite usar un recurso o programas.\\
+	\par \noindent Además de diferenciar entre los IDs de usuarios (UID), también se nos permite separar entre IDs de grupos (GID). En Linux, un grupo sirve para agrupar usuarios de modo que un grupo puede tener asociado un privilegio que le permite usar un recurso o programas.\\
 	
 	\par \noindent Por lo tanto, el namespace de UID, lo que nos permite es tener un UID y GID diferente al del host. 
 	
@@ -1494,14 +1370,12 @@ $ exit
 	
 	\par \noindent Como vemos en el ejemplo, el UID de usuario difiere de la máquina host. Dentro del namespace, tenemos UID 0, sin embargo, eso no significa que podamos acceder a los archivos con UID 0 de la máquina host, ya que en verdad lo que hace el namespace es \textit{mapear} el UID 1000 al 0. Por ejemplo, si a la vez que creamos un user namespace, también creamos un mount namespace, este mount namespace si que tendría privilegios de root [\ref{bib:ns tutorial1}]
 	
-	%\pagebreak
-	
-	\section{Interprocess Communication namespace (IPC)}
-	\par \noindent Este namespace supone uno de los más técnicos, complicados de entender y explicar. IPC (Interprocess comunication) controla la comunicación entre procesos, utilizando zonas de la memoría que están compartidas, colas de mensajes, y semáforos. La aplicación más común para este tipo de gestión es el uso en bases de datos.
+	\section{Interprocess Communication namespace}
+	\par \noindent Este namespace supone uno de los más técnicos, complicados de entender y explicar. \textit{Interprocess comunication} (IPC) controla la comunicación entre procesos, utilizando zonas de la memoria que están compartidas, colas de mensajes, y semáforos. La aplicación más común para este tipo de gestión es el uso en bases de datos.
 	
 	\pagebreak
 	
-	\section{Control group namespace}
+	\section{Control groups namespace}
 	\par \noindent Los grupos de control, o \texttt{cgroups}, de Linux suponen un mecanismo para controlar los diferentes recursos de nuestro sistema. Cuando un \texttt{cgroup} está activo, puede controlar la cantidad de CPU, RAM, acceso I/O, o cualquier faceta que un proceso puede consumir. Además, permiten definir jerarquías en las que se agrupan, de manera en la que el administrador del sistema puede definir como se asignan los recursos o llevar la contabilidad de los mismos. Cgroups permite las siguientes funcionalidades [\ref{bib: cgroups}]: 
 	\begin{itemize}
 		\item \textbf{Limitar recursos}. Podemos configurar un grupo para limitar un recurso (o varios de ellos) para cada proceso que asignemos.
@@ -1517,7 +1391,7 @@ $ exit
 $ mkdir /sys/fs/cgroup/memory/<NombreGrupo>
 	\end{verbatim}
 
-	\noindent De esta manera, ya tendríamos un nuevo grupo creado, asociado al \texttt{cgroup} de memory. Si ejecutamos el comando ls en el directorio que acabamos de crear, podemos comprobar como se han generado una serie de recursos: 
+	\noindent De esta manera, ya tendríamos un nuevo grupo creado, asociado al \texttt{cgroup} de \texttt{memory}. Si ejecutamos el comando ls en el directorio que acabamos de crear, podemos comprobar como se han generado una serie de recursos: 
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -1530,7 +1404,7 @@ $ mkdir /sys/fs/cgroup/memory/<NombreGrupo>
 	
 	\noindent \textbf{\large Ejemplo: limitar uso de memoria RAM}\\
 	
-	\noindent Si quisiéramos establecer un límite en el uso de memoria, tendríamos que escribir en el archivo \texttt{memory.limit\_in\_bytes}, a modo de ejemplo, establecemos un límite de 50MB. Esto se haría tal que:
+	\noindent Si quisiéramos establecer un límite en el uso de memoria, tendríamos que escribir en el archivo \texttt{memory.limit\_in\_bytes}, a modo de ejemplo, establecemos un límite de 50 MB. Esto se haría tal que:
 	\begin{verbatim}
 $ echo 50000000 > /sys/fs/cgroup/memory/<NombreGrupo>/
 memory.limit_in_bytes
@@ -1605,18 +1479,13 @@ $ echo <PID> > /sys/fs/cgroup/cpu/<NombreGrupo>/tasks
 	
 	\noindent Para estas tareas, limitación y monitorización de recursos en contenedores de Docker, éste nos facilita una serie de comandos para facilitar la creación y asignación de contenedores a un cgroup en específico, facilitando en consecuencia el uso de cgroups para limitar los recursos de los contenedores que estemos utilizando.
 	
-	%\addvspace{60px}
-	
-	%\pagebreak
-	
 	\section{Time namespace}
 	\par \noindent Por último, nos queda el namespaces asociado al tiempo. Este namespace fue propuesto para que se incorporara al kernel de Linux en 2018 y en enero de 2020 fue añadido a la versión mainline de Linux. Apareció en la release 5.6 del kernel de Linux. [\ref{bib:time ns}] \\
 	
 	\par \noindent El namespace time, permite que por cada namespace que tengamos, podamos crear desfases entre los relojes monotónicos (\texttt{CLOCK\_MONOTONIC}) y de boot (\texttt{CLOCK\_BOOTTIME}), de la máquina host. Esto permite que dentro de los contenedores se nos permita cambiar la fecha y la hora, sin tener que modificar la hora del sistema host. Además, supone una capa más de seguridad, ya que no estamos vinculando directamente la hora a los relojes físicos de nuestro sistema. [\ref{bib:time ns kernel}]\\
 	
-	\par \noindent Un namespace de tipo time, es muy similar al namespace de tipo PID en la manera de como lo creamos. Utilizamos el comando \texttt{unshare -T}, y mediante una systemcall se nos creará un nuevo time namespace, pero no lo asocia directamente con el proceso. Tenemos que utilizar setns para asociar un proceso a un namespace, además todos los procesos dependientes también tendrán asignado dicho namespace. 
+	\par \noindent Un namespace de tipo time, es muy similar al namespace de tipo PID en la manera de como lo creamos. Utilizamos el comando \texttt{unshare -T}, y mediante una systemcall se nos creará un nuevo time namespace, pero no lo asocia directamente con el proceso. Tenemos que utilizar \texttt{setns} para asociar un proceso a un namespace, además todos los procesos dependientes también tendrán asignado dicho namespace. 
 	
-	%\addvspace{80px}
 	\vspace{80px}
 	
 	\begin{figure}[h!]
@@ -1627,14 +1496,6 @@ $ echo <PID> > /sys/fs/cgroup/cpu/<NombreGrupo>/tasks
 			\label{img: linux namespaces api}
 		\end{center}
 	\end{figure}
-	
-	%\begin{figure}[h]
-	%	\begin{center}
-	%		% https://twitter.com/b0rk/status/1240364585766576128/photo/1
-	%		\includegraphics[width=0.8\textwidth]{img/how_containers_work.jpg}
-	%		\caption{Como funcionan los contenedores. (\ref{bib:img2})}
-	%	\end{center}
-	%\end{figure}
 	
 	\pagebreak
 	
@@ -1657,7 +1518,7 @@ $ ip netns exec h2 bash
 
 	\noindent Ahora, si que podemos utilizar el comando \texttt{lsns}. Comprobamos que si nos aparecen los ns que hemos creado, cosa que antes de asociar una aplicación al ns, no pasaba. \\
 	
-	\noindent El comando \texttt{ip} crea automaticamente un \textit{nsfs} para poder colocar los archivos de configuración del \textit{netns}. Para ello, debe crearse el directorio \texttt{/etc/netns/h1} y poner en el los archivos de configuración de la red.
+	\noindent El comando \texttt{ip} crea automáticamente un \textit{nsfs} para poder colocar los archivos de configuración del \textit{netns}. Para ello, debe crearse el directorio \texttt{/etc/netns/h1} y poner en el los archivos de configuración de la red.
 	\begin{verbatim}
 $ mkdir /etc/netns/h1
 $ echo "nameserver 8.8.8.8" > /etc/netns/h1/resolv.conf
@@ -1753,17 +1614,16 @@ $ umount /var/uts-h1
 
 	\pagebreak
 	
-	%\section{Virtualización ligera y contenedores}
 	\chapter{Virtualización ligera y contenedores}
 	\label{sec: virt ligera y contenedores}
 	
 	\noindent En este capítulo vamos a trabajar el concepto de virtualización ligera, que ya introdujimos en el apartado \ref{sect: virt ligera}, pero esta vez aplicando los conceptos de \texttt{namespaces} del apartado anterior. Además, presentaremos el concepto de \textit{contenedor}, y cómo supone una de las piezas más importantes para la virtualización tal y como hoy en día la conocemos. \\
 	
-	\noindent Recuperando la definición de \textbf{virtualización ligera}, entendemos este tipo de virtualización como aquella que \textbf{se realiza a nivel de sistema operativo}, permitiendo la coexistencia de diferentes espacios aislados entre sí. En dichos espacios, podremos ejecutar de manera aislada nuestras aplicaciones. Como punto en común, todos los espacios aislados que creemos, \textbf{utilizarán} como base \textbf{el mismo \texttt{kernel}}. La tecnología clave para realizar esta virtualización serán los diferentes \texttt{namespaces}, comentados en el capítulo \ref{sect: espacio nombres}, que podremos combinar a nuestro gusto con el fin de crear un espacio aislado con todos los recursos necesarios para satisfacer las necesidades de nuestra aplicación. \\
+	\noindent Recuperando la definición de virtualización ligera, entendemos este tipo de virtualización como aquella que se realiza a nivel de sistema operativo, permitiendo la coexistencia de diferentes espacios aislados entre sí. En dichos espacios, podremos ejecutar de manera aislada nuestras aplicaciones. Como punto en común, todos los espacios aislados que creemos, utilizarán como base el mismo \texttt{kernel}. La tecnología clave para realizar esta virtualización serán los diferentes \texttt{namespaces}, comentados en el capítulo \ref{sect: espacio nombres}, que podremos combinar a nuestro gusto con el fin de crear un espacio aislado con todos los recursos necesarios para satisfacer las necesidades de nuestra aplicación. \\
 	
 	\noindent La principal ventaja que encontramos al utilizar \texttt{namespaces}, respecto a otro tipo de virtualizaciones como podrían ser las máquinas virtuales, es el aprovechamiento de los recursos de la máquina host. Al tener todos el mismo kernel, evitamos tener por duplicados los kernels para cada una de las instancias a realizar, ahorrando ciclos de CPU, como espacio en RAM.\\
 	
-	\noindent Por otro lado, tenemos el concepto de \textbf{contenedor}. Entendemos contenedor, en el ambito de la virtualización, como una abstracción a alto nivel de un sistema aislado creado utilizando \texttt{namespaces} y \texttt{cgroups}. Por lo tanto, si el kernel nos da la posibilidad de trabajar a bajo nivel utilizando dichos \texttt{namespaces}, en este caso, buscamos ir más allá y encapsular dicho espacio aislado en unas APIs de alto nivel, que sean mucho más fáciles de entender y de implementar. Tenemos muchos ejemplos de sistemas que trabajan con contenedores, y muchos de ellos implementados en una amplia variedad de lenguajes [\ref{bib:container is a lie}]. Algunos de los más importantes son:
+	\noindent Por otro lado, tenemos el concepto de contenedor. Entendemos contenedor, en el ámbito de la virtualización, como una abstracción a alto nivel de un sistema aislado creado utilizando \texttt{namespaces} y \texttt{cgroups}. Por lo tanto, si el kernel nos da la posibilidad de trabajar a bajo nivel utilizando dichos \texttt{namespaces}, en este caso, buscamos ir más allá y encapsular dicho espacio aislado en unas APIs de alto nivel, que sean mucho más fáciles de entender y de implementar. Tenemos muchos ejemplos de sistemas que trabajan con contenedores, y muchos de ellos implementados en una amplia variedad de lenguajes [\ref{bib:container is a lie}]. Algunos de los más importantes son:
 	\begin{itemize}
 		\item \texttt{LXC}, LinuX Containers, escrito en C: \url{https://linuxcontainers.org/}
 		\item \texttt{Docker}, escrito en Go: \url{https://www.docker.com/}
@@ -1772,9 +1632,7 @@ $ umount /var/uts-h1
 		\item \texttt{Vagga}, escrito en Rust: \url{https://github.com/tailhook/vagga}
 	\end{itemize}
 
-	\noindent Por último, es interesante comentar el concepto de \texttt{chroot}, ya que muchas de estas abstracciones de los \texttt{namespaces} hacen uso de esta técnica para su funcionamiento. Un \texttt{chroot} es una operación Unix que permite cambiar la ruta aparente de un directorio para un usuario en específico. Un proceso ejecutado después de realizar un \texttt{chroot} solo tendrá acceso al nuevo directorio definido y a sus subdirectorios, esta operación recibe el nombre de \texttt{chroot jail}, ya que los procesos no pueden leer ni escribir fuera del nuevo directorio. Este método suele ser de gran utilidad en virtualizaciones a nivel de kernel, es decir, virtualización ligera o contenedores. [\ref{bib: chroot jail}]
-	
-	%\pagebreak
+	\noindent Por último, es interesante comentar el concepto de \texttt{chroot}, ya que muchas de estas abstracciones de los \texttt{namespaces} hacen uso de esta técnica para su funcionamiento. Un \texttt{chroot} es una operación Unix que permite cambiar la ruta aparente de un directorio para un usuario en específico. Un proceso ejecutado después de realizar un \texttt{chroot} solo tendrá acceso al nuevo directorio definido y a sus subdirectorios. Esta operación recibe el nombre de \texttt{chroot jail}, ya que los procesos no pueden leer ni escribir fuera del nuevo directorio. Este método suele ser de gran utilidad en virtualizaciones a nivel de kernel, es decir, virtualización ligera o contenedores. [\ref{bib: chroot jail}]
 	
 	\section{Creando nuestro propio ``contenedor''}
 	
@@ -1867,10 +1725,10 @@ echo "ServerName localhost" >> layers/2/etc/apache2/httpd.conf
 	\noindent Una vez tenemos la imagen creada, el siguiente paso es el \texttt{runtime} encargado de ejecutarla. Para ello, creamos un ``contenedor'' utilizando los siguientes namespaces: 
 	\begin{enumerate}
 		\item Network. Utilizado para dotar de acceso a internet y acceso al host al contenedor. 
-		\item PID. Asignar un nuevo PID y GID al contendor.
+		\item PID. Asignar un nuevo PID y GID al contenedor.
 		\item IPC. Aislar ciertos recursos del host al contenedor.
 		\item UTS. Utilizado para asignar un hostname específico al contenedor
-		\item cgroup. Utilizado para la gestión de límites de recursos y monitorizar el contenedor.
+		\item cgroups. Utilizado para la gestión de límites de recursos y monitorizar el contenedor.
 		\item mount. Sistema de archivos del contenedor.
 	\end{enumerate}
 
@@ -2030,7 +1888,7 @@ unshare --pid --ipc --uts --cgroup --mount --root=rootfs --mount-proc --fork "$@
 		\item Se realiza el montaje del sistema de archivos, diferenciando en dos capas. Una capa, llamada capa inferior, en la que se almacena todo lo necesario de la distribución a ejecutar y que será inmutable para la aplicación a encapsular, y otra capa en la que encontramos los directorios que si tendrá acceso dicha aplicación. En este caso, se utiliza un montaje de tipo \texttt{overlay}, a modo de ejemplo de los montajes de unión.
 		\item Se realiza un montaje de tipo \texttt{bind} para todos los recursos del sistema, que se encuentran en el directorio \texttt{/sys}.
 		\item Se define una función para revertir todos los cambios realizados al sistema.
-		\item Por último, se ejecuta el contenedor con el comando \texttt{unshare} y especificando los namespaces que vamos a utilizar, además le ponemos como punto de entrada al unshare la aplicación que el usuario haya especificado (por ejemplo: \texttt{sh} o \texttt{httpd}).
+		\item Por último, se ejecuta el contenedor con el comando \texttt{unshare} y especificando los namespaces que vamos a utilizar, además le ponemos como punto de entrada al \texttt{unshare} la aplicación que el usuario haya especificado (por ejemplo: \texttt{sh} o \texttt{httpd}).
 	\end{enumerate}
 
 	\pagebreak
@@ -2054,8 +1912,6 @@ unshare --pid --ipc --uts --cgroup --mount --root=rootfs --mount-proc --fork "$@
 				\caption{Ejecución del script \texttt{setup-image} (2/2)}
 			\end{center}
 		\end{figure}
-	
-		%\pagebreak
 		
 		\item Una vez tenemos la imagen creada, ya podemos ejecutar el \texttt{runtime} con el comando que nosotros queramos. Para ello, tendremos que ejecutar el comando \texttt{./runtime-exec <commando>}
 		
@@ -2070,7 +1926,7 @@ unshare --pid --ipc --uts --cgroup --mount --root=rootfs --mount-proc --fork "$@
 		
 		\begin{figure}[h!]
 			\begin{center}
-				\includegraphics[width=0.85\textwidth]{img/container_runtime2.png}
+				\includegraphics[width=0.9\textwidth]{img/container_runtime2.png}
 				\caption{Ejecución del script \texttt{runtime-exec} (2/2)}
 			\end{center}
 		\end{figure}
@@ -2083,14 +1939,14 @@ unshare --pid --ipc --uts --cgroup --mount --root=rootfs --mount-proc --fork "$@
 		
 		\begin{figure}[h!]
 			\begin{center}
-				\includegraphics[width=0.8\textwidth]{img/container_runtime3.png}
+				\includegraphics[width=0.9\textwidth]{img/container_runtime3.png}
 				\caption{Ejecución del script \texttt{runtime-exec} con comando \texttt{httpd}}
 			\end{center}
 		\end{figure}
 	
 		\begin{figure}[h!]
 			\begin{center}
-				\includegraphics[width=0.75\textwidth]{img/container_runtime4.png}
+				\includegraphics[width=0.85\textwidth]{img/container_runtime4.png}
 				\caption{Ejecución del script \texttt{runtime-exec} con comando \texttt{httpd}}
 			\end{center}
 		\end{figure}
@@ -2128,8 +1984,8 @@ unshare --pid --ipc --uts --cgroup --mount --root=rootfs --mount-proc --fork "$@
 	
 	\noindent LXC soporta dos tipos de conexiones virtuales de red. Estas son las siguientes: 
 	\begin{itemize}
-		\item NAT bridge. En este modo, LXC tiene su propio bridge (\texttt{lxcbr0}) que funciona en conjunto con las aplicaciones \texttt{dnsmasq} e \texttt{iptables} del host, dando lugar a que se puedan utilizar servicios de red como DNS, DHCP y NAT dentro del propio contenedor.
-		\item Host bridge. En este modo, es necesario que el host configure su propio bridge para dar servicio a las aplicaciones que creamos pertinentes. Esta opción nos permite mucha flexibilidad a la hora de interconectar nuestros contenedores para una funcionalidad específica.
+		\item \textbf{NAT bridge}. En este modo, LXC tiene su propio bridge (\texttt{lxcbr0}) que funciona en conjunto con las aplicaciones \texttt{dnsmasq} e \texttt{iptables} del host, dando lugar a que se puedan utilizar servicios de red como DNS, DHCP y NAT dentro del propio contenedor.
+		\item \textbf{Host bridge}. En este modo, es necesario que el host configure su propio bridge para dar servicio a las aplicaciones que creamos pertinentes. Esta opción nos permite mucha flexibilidad a la hora de interconectar nuestros contenedores para una funcionalidad específica.
 	\end{itemize}
 
 
@@ -2181,7 +2037,7 @@ lxc.net.0.flags = up
 lxc.net.0.hwaddr = 00:16:3e:xx:xx:xx
 	\end{lstlisting}
 
-	\noindent Para que todos estos cambios se realicen, es necesario que tengamos activado el servicio \texttt{lxc-net.service}.
+	\noindent Para que todos estos cambios se realicen, es necesario que tengamos activado el servicio \\ \texttt{lxc-net.service}.
 	\begin{verbatim}
 > sudo systemctl enable lxc-net.service
 > sudo systemctl start lxc-net.service
@@ -2230,16 +2086,6 @@ lxc.mount.entry = /dev/snd dev/snd none bind,optional,create=dir
 lxc.mount.entry = /tmp/.X11-unix tmp/.X11-unix none bind,optional,create=dir,ro
 lxc.mount.entry = /dev/video0 dev/video0 none bind,optional,create=file
 	\end{lstlisting}
-	
-%	\noindent Ahora ya tenemos listo el contenedor para arrancarlo, solo nos quedaría asignar una IP válida al host, que también está dentro del \texttt{bridge} de LXC. Para ello, ejecutaremos:
-%	\begin{lstlisting}[language=Bash, caption={Asignar IP al host LXC y arrancar un contenedor}]
-%ip link add 172.16.27.1/24 dev veth_containerLXC
-%sudo lxc-start --name <NombreContenedor>
-%sudo lxc-attach --name <NombreContenedor>
-
-%# Para ejecutar interfaz grafica
-%startx
-%	\end{lstlisting}
 
 	\noindent Para iniciar la interfaz gráfica, una vez tengamos iniciado el contenedor y estemos dentro de una \texttt{shell}, ejecutamos el comando \texttt{startx}.
 
@@ -2263,8 +2109,6 @@ $ sudo grep lxc_user /etc/sub{gid,uid}
 /etc/subgid:lxc_user:100000:65536
 /etc/subuid:lxc_user:100000:65536
 	\end{verbatim}
-
-	%\pagebreak
 	
 	\noindent Utilizando las mismas configuraciones de red que en el aparatado de contenedor con privilegios, procedemos a acceder al usuario asignado a LXC. Ejecutaremos el comando \texttt{id} para conocer los diferentes \texttt{uid} y \texttt{gid} asignados.
 	\begin{verbatim}
@@ -2291,14 +2135,10 @@ lxc.id_map = g 0 100000 65536
 
 	\noindent Una vez realizados todos estos pasos, ya podríamos crear nuestro contenedor sin privilegios. Lo haríamos de manera similar que en el apartado anterior, es decir utilizando el comando \texttt{lxc-create}. Además, también será importante modificar el archivo \texttt{config} de nuestro contenedor para asignar la interfaz de red y permitir la ejecución de aplicaciones con interfaz gráfica. \\
 	
-	%\vspace{10px}
-	%\pagebreak
-	
 	\noindent \textbf{\large Ejemplo: \texttt{namespaces} en un contenedor LXC de Ubuntu}\\
 	
 	\noindent A modo de ejemplo, vamos a crear un contenedor (con privilegios) paso a paso, y por último, vamos a verificar que namespaces está utilizando dicho contenedor. Para esto, vamos a crear un contenedor de Ubuntu 20.04.03 (Focal) utilizando el catálogo de imágenes de LXC.
 	
-	%https://www.alibabacloud.com/blog/how-to-install-and-configure-lxc-container-on-ubuntu-16-04_594090
 	\begin{enumerate}
 		\item Lo primero que tenemos que hacer es verificar que LXC está instalado correctamente en nuestro sistema, una manera fácil de comprobarlo es con el siguiente comando:
 		\begin{verbatim}
@@ -2307,7 +2147,7 @@ lxc.id_map = g 0 100000 65536
 	
 		\begin{figure}[h!]
 			\begin{center}
-				\includegraphics[width=0.36\textwidth]{img/lxc_ns1.jpg}
+				\includegraphics[width=0.4\textwidth]{img/lxc_ns1.jpg}
 				\caption{Comprobación instalación de LXC usando \texttt{lxc-checkconfig}}
 			\end{center}
 		\end{figure}
@@ -2326,7 +2166,7 @@ lxc.id_map = g 0 100000 65536
 		
 		\pagebreak
 		
-		\noindent De manera interactiva, el programa nos preguntará por diferentes opciones para nuestro contenedor. Para elegir una distribución, podemos acceder a la siguiente web: \href{https://uk.lxd.images.canonical.com/}{imagenes LXC}, en las que aparecen todas las imagenes disponibles. En este caso, escribimos lo siguiente para cada una de ellas:
+		\noindent De manera interactiva, el programa nos preguntará por diferentes opciones para nuestro contenedor. Para elegir una distribución, podemos acceder a la siguiente web: \href{https://uk.lxd.images.canonical.com/}{imagenes LXC}, en las que aparecen todas las imágenes disponibles. En este caso, escribimos lo siguiente para cada una de ellas:
 		\begin{itemize}
 			\item \textit{Distribution}: \texttt{ubuntu}
 			\item \textit{Release}: \texttt{focal}
@@ -2362,8 +2202,6 @@ lxc.id_map = g 0 100000 65536
 			\end{center}
 		\end{figure}
 	
-		%\pagebreak
-	
 		\item Por último, en otra terminal, procedemos a obtener el \texttt{PID} asociado a dicho contenedor. Para ello, podemos hacer uso del siguiente comando:
 		\begin{verbatim}
 			$ sudo lxc-info -p -n <NombreContenedor>
@@ -2386,7 +2224,7 @@ lxc.id_map = g 0 100000 65536
 	
 	\section{Contenedores \texttt{Docker}}
 	\label{sec: docker}
-	\noindent En este apartado vamos a profundizar en la herramienta \texttt{Docker}. Al igual que en el caso de \texttt{LXC}, \texttt{Docker} permite la creación y la gestiones de aplicaciones aisladas entre sí, utilizando virtualización ligera; es decir, nos permite gestionar facilmente un entorno de contenedores. \\
+	\noindent En este apartado vamos a profundizar en la herramienta \texttt{Docker}. Al igual que en el caso de \texttt{LXC}, \texttt{Docker} permite la creación y la gestiones de aplicaciones aisladas entre sí, utilizando virtualización ligera; es decir, nos permite gestionar fácilmente un entorno de contenedores. \\
 	
 	\noindent Tal y como lo definen sus creadores [\ref{bib: docker info}], \texttt{Docker} es una plataforma de desarrollo, despliegue y ejecución de aplicaciones. \texttt{Docker} permite separar entre aplicaciones de la infraestructura, permitiendo desplegar el software mucho más rápido. Uno de los objetivos que persigue esta plataforma es el de minimizar el tiempo entre programar y tener ejecutando la aplicación en producción. Algunas de las ventajas que nos aporta esta plataforma son:
 	\begin{itemize}
@@ -2475,19 +2313,19 @@ $ docker run hello-world
 	\noindent Una vez estamos familiarizados con el concepto de imagen, podemos proceder a comentar los pasos realizados por Docker para mostrarnos el mensaje de la figura \ref{img: docker hello world}. Dichos pasos serían los siguientes:
 	\begin{enumerate}
 		\item El cliente de docker contacta con el ``daemon'' de docker.
-		\item El ``daemon'' descarga la imagen  ``hello-world'' del respositorio público de imagenes de docker (Docker Hub).
+		\item El ``daemon'' descarga la imagen  ``hello-world'' del repositorio público de imagenes de docker (Docker Hub).
 		\item El ``daemon'' crea un nuevo contenedor a partir de esa imagen, que correrá un ejecutable que producen la salida que hemos obtenido.
-		\item El ``daemon'' envia la información de salida del contendor al cliente de docker, permitiendo al usuario ver la salida en su terminal.
+		\item El ``daemon'' envia la información de salida del contenedor al cliente de docker, permitiendo al usuario ver la salida en su terminal.
 	\end{enumerate}
 
-	\noindent Por otro lado, en esa misma ejecutión del contendor ``hello-world'', se nos invita a ejecutar lo siguiente:
+	\noindent Por otro lado, en esa misma ejecución del contenedor ``hello-world'', se nos invita a ejecutar lo siguiente:
 	\begin{verbatim}
 $ docker run -it ubuntu bash
 	\end{verbatim}
 
 	\noindent Si analizamos la sintaxis del comando anterior, podemos diferenciar entre cinco elementos diferentes:
 	\begin{itemize}
-		\item \texttt{docker}. Binario de la máquina linux, corresponde con el cliente de docker.
+		\item \texttt{docker}. Binario de la máquina Linux, corresponde con el cliente de docker.
 		\item \texttt{run}. Argumento del cliente de docker, permite crear y ejecutar un contenedor.
 		\item \texttt{-it}. Opciones del argumento \texttt{run}. En este caso, tenemos configurado que sea de tipo interactivo (\texttt{-i}), es decir que nos muestre por consola la salida del comando; y además, hemos seleccionado que configure el terminal como un terminal dentro del contenedor que vamos a crear (\texttt{-t}).
 		\item \texttt{ubuntu}. Imagen que hemos elegido para nuestro contenedor. Primero la buscará localmente, y si no la encuentra, comprobará en el repositorio público de imágenes (Docker Hub).
@@ -2507,7 +2345,7 @@ $ docker run -it ubuntu bash
 	\end{figure}
 
 
-	\noindent Para comprobar que estamos en una distribución ubuntu, y además ver la versión que el docker ``daemon'' ha descargado, ejecutamos el comando siguiente. Como podemos comprobar, el contenedor está utilizando la última versión LTS (Long Term Support, versiones más estables y probadas que tendrán soporte durante un largo periodo de tiempo) disponible hasta la fecha.
+	\noindent Para comprobar que estamos en una distribución Ubuntu, y además ver la versión que el docker ``daemon'' ha descargado, ejecutamos el comando siguiente. Como podemos comprobar, el contenedor está utilizando la última versión LTS (Long Term Support, versiones más estables y probadas que tendrán soporte durante un largo periodo de tiempo) disponible hasta la fecha.
 	
 	\begin{figure}[h]
 		\begin{center}
@@ -2521,7 +2359,6 @@ $ docker run -it ubuntu bash
 
 	\pagebreak
 
-	%\vspace{10px}
 	\noindent \textbf{\large Concepto de \texttt{Dockerfile}. Primer contenedor}\\
 	
 	\noindent En este apartado, a modo de ejemplo, vamos a crear nuestro propio contenedor en el que correremos una aplicación de Python muy sencilla [\ref{bib: docker dockerfile}]. Para ello, primero vamos a crear una carpeta en nuestro ordenador, en ella crearemos dos archivos:
@@ -2535,7 +2372,7 @@ $ docker run -it ubuntu bash
 	\begin{figure}[h]
 		\begin{center}
 			\includegraphics[width=0.7\textwidth]{img/dockerfile_folder.png}
-			\caption{Comprobación de la versión de ubuntu del contenedor desplegado}
+			\caption{Comprobación de la versión de Ubuntu del contenedor desplegado}
 			\label{img: docker file folder}
 		\end{center}
 	\end{figure}
@@ -2564,22 +2401,22 @@ print("Saludos desde tu contendor!!")
 	
 	\noindent El primer resultado que obtenemos es el de una imagen de contenedor que nos permite ejecutar código Python. Además, podemos ver como es muy apoyada por la comunidad (dato importante de cara a la estabilidad y seguridad de nuestro contenedor). Por lo tanto, usaremos la imagen \texttt{python} para utilizarla como base de nuestro contenedor. Ahora, procedemos a editar el archivo \texttt{Dockerfile}:
 	\begin{lstlisting}[language=bash, caption={Contenido del archivo Dockerfile para crear contenedor con código Python}]
-		# Un Dockerfile siempre necesita importar una imagen como base
-		# Para ello utilizamos 'FROM'
-		# Elegimos 'python' para la imagen y 'latest' como version de esa imagen
-		FROM python:latest
+# Un Dockerfile siempre necesita importar una imagen como base
+# Para ello utilizamos 'FROM'
+# Elegimos 'python' para la imagen y 'latest' como version de esa imagen
+FROM python:latest
 		
-		# Para ejecutar nuestro codigo Python, lo copiamos dentro del contenedor
-		# Para ello utilizamos 'COPY'
-		# El primer parametro 'main.py' es la ruta origen del archivo en el host
-		# El segundo parametro '/' es la ruta destino del archivo dentro del contenedor
-		# En este caso, ponemos el archivo en el root del sistema
-		COPY main.py /
+# Para ejecutar nuestro codigo Python, lo copiamos dentro del contenedor
+# Para ello utilizamos 'COPY'
+# El primer parametro 'main.py' es la ruta origen del archivo en el host
+# El segundo parametro '/' es la ruta destino del archivo dentro del contenedor
+# En este caso, ponemos el archivo en el root del sistema
+COPY main.py /
 		
-		# Definimos el comando a ejecutar cuando iniciemos el contenedor
-		# Para ello utilizamos 'CMD'
-		# Para ejecutar la aplicacion utilizariamos "python ./main.py".
-		CMD [ "python", "./main.py" ]
+# Definimos el comando a ejecutar cuando iniciemos el contenedor
+# Para ello utilizamos 'CMD'
+# Para ejecutar la aplicacion utilizariamos "python ./main.py".
+CMD [ "python", "./main.py" ]
 	\end{lstlisting}
 	
 	\pagebreak
@@ -2632,7 +2469,7 @@ $ docker ps | grep alpine
 
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.9\textwidth]{img/docker_ns1.png}
+			\includegraphics[width=0.95\textwidth]{img/docker_ns1.png}
 			\caption{Ejecución contenedor Docker para ver sus namespaces asociados.}
 		\end{center}
 	\end{figure}
@@ -2641,7 +2478,7 @@ $ docker ps | grep alpine
 	
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.9\textwidth]{img/docker_ns2.png}
+			\includegraphics[width=0.95\textwidth]{img/docker_ns2.png}
 			\caption{Resultado de comando \texttt{ip netns list} con contenedores Docker.}
 			\end{center}
 	\end{figure}
@@ -2676,7 +2513,7 @@ $ docker exec -it docker-ns sh
 / ip address
 	\end{verbatim}
 
-	\noindent Tal y como podemos ver en la figura \ref{img: comprobacion ns docker}, ambos comandos dan el mismo resultado, por lo que quedaría comprobado que Docker utiliza network namespaces para dar conectividad a sus contenedores. Además, es interesante como ``esconde'' los identificadores de los namespaces que crea para dichos contenedores. Una vez conocemos el identificador, podríamos generar arquitecturas de red mucho más complejas, como por ejemplo añadir un ethernet virtual para hacer port mirroring al tráfico del contenedor, este ejemplo se ve más detallado en el siguiente recurso \href{https://arthurchiao.art/blog/traffic-mirror-with-ovs/}{Traffic mirror with OVS and Docker}
+	\noindent Tal y como podemos ver en la figura \ref{img: comprobacion ns docker}, ambos comandos dan el mismo resultado, por lo que quedaría comprobado que Docker utiliza network namespaces para dar conectividad a sus contenedores. Además, es interesante como ``esconde'' los identificadores de los namespaces que crea para dichos contenedores. Una vez conocemos el identificador, podríamos generar arquitecturas de red mucho más complejas, como por ejemplo añadir un ethernet virtual para hacer \textit{port mirroring} al tráfico del contenedor, este ejemplo se ve más detallado en el siguiente recurso \href{https://arthurchiao.art/blog/traffic-mirror-with-ovs/}{Traffic mirror with OVS and Docker}
 
 	\pagebreak
 
@@ -2697,7 +2534,6 @@ $ docker exec -it docker-ns sh
 	
 	\pagebreak
 
-	%\section{Caso práctico: Virtualización para simulación de redes}
 	\chapter{Caso práctico: Virtualización para la simulación de redes}
 	
 	\noindent En este apartado vamos a detallar los conceptos de virtualización de topologías de red para la evaluación y/o simulación de situaciones concretas de nuestras redes. Para ello, podemos modelar nuestros nodos de la red utilizando contenedores, siguiendo de esta manera el concepto de ``\textit{Virtual Network Function}'' que introdujimos en el segundo apartado de este documento. [\ref{sec: nfv}] \\
@@ -2706,13 +2542,12 @@ $ docker exec -it docker-ns sh
 	
 	\begin{itemize}
 		\item Crear un \textit{shell script} para desplegar los namespaces necesarios de nuestra topología, utilizando los comandos \texttt{nsenter} y \texttt{unshare}.
-		\item Desplegar e interconectar contendores LXC, en el que cada contenedor cumpla una función dentro de nuestra topología (host, switch, controller...)
+		\item Desplegar e interconectar contenedores LXC, en el que cada contenedor cumpla una función dentro de nuestra topología (host, switch, controller...)
 		\item Utilizar un simulador de red basado en ``namespaces'', dicho simulador se llama Mininet [\ref{bib: mininet home page}] y está creado en el lenguaje Python. El objetivo de este programa es el de crear una red virtual realista, utilizando un mismo kernel para todos los nodos de la red. Además, aporta las herramientas necesarias para interactuar con dicha topología.
 	\end{itemize}
 	
 	\vspace{10px}
 	
-	%\noindent \textbf{\large Mininet}\\
 	\section{\texttt{Mininet}: Simulador de redes}
 	
 	\noindent Profundizando en la última solución aportada, \texttt{mininet} [\ref{bib: mininet home page}], destacamos sus ventajas en la customización de topologías, además de la facilidad de compartir y desplegar dichas topologías en un hardware de uso general utilizando un único comando. Es por esto por lo que \texttt{mininet} es una herramienta muy útil para el desarrollo, la enseñanza y la investigación, siendo una herramienta muy determinante para la experimentación en el campo del \textit{Software Defined Networking} (SDN) ya que permite utilizar controladores basados en OpenFlow.
@@ -2725,8 +2560,6 @@ $ docker exec -it docker-ns sh
 		\item Instalación directamente del código fuente
 		\item Instalación utilizando paquetes de una distribución.
 	\end{itemize}
-
-	%\pagebreak
 
 	\noindent La opción de utilizar una máquina virtual preconfigurada es mucho más rápida, ya que solo tendremos que descargar la última versión del enlace que encontramos en la web oficial del proyecto \href{https://github.com/mininet/mininet/releases/}{Github: mininet releases}. Una vez descargada, importamos dicha imagen en nuestro hipervisor, por ejemplo: \textit{VirtualBox}. Ejecutamos la máquina virtual recién importada y accedemos al sistema con el usuario: \texttt{mininet}/\texttt{mininet}. \\
 	
@@ -2764,7 +2597,6 @@ $ docker exec -it docker-ns sh
 	
 	\pagebreak
 	
-	%\subsubsection{Implementación topología simple}
 	\subsection{Ejemplos}
 	
 	\noindent \textbf{Topología simple}\\
@@ -2780,7 +2612,7 @@ $ docker exec -it docker-ns sh
 	
 	\noindent \textbf{\large Ejemplo: topología simple sin usar \texttt{mininet}}\\
 	
-	\noindent Primero, accedemos a nuestra máquina Host, en la que desplegaremos los namespaces asociados a la topología. Una vez estamos dentro de la cuenta \texttt{root}, procedemos a crear los \texttt{network namespaces} de cada host. 
+	\noindent Primero, accedemos a nuestra máquina host, en la que desplegaremos los namespaces asociados a la topología. Una vez estamos dentro de la cuenta \texttt{root}, procedemos a crear los \texttt{network namespaces} de cada host. 
 	
 	\begin{verbatim}
 $ ip netns add host-1
@@ -2865,7 +2697,6 @@ $ ip netns exec host-1 ping 10.0.0.2
 	\end{figure}
 	
 	\vspace{10px}
-	%\pagebreak
 	
 	\noindent \textbf{\large Ejemplo: topología simple utilizando \texttt{mininet}}\\
 	
@@ -2897,8 +2728,6 @@ mininet> h1 ping h2
 			\label{img: ping mn simple}
 		\end{center}
 	\end{figure}
-
-	%\pagebreak
 	
 	\noindent Mientras tenemos activa la topología de mininet, podemos comprobar qué namespaces ha creado para dicha topología. 
 	
@@ -2920,7 +2749,7 @@ mininet> h1 ping h2
 	
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.8\textwidth]{img/mn_single_4.png}
+			\includegraphics[width=0.85\textwidth]{img/mn_single_4.png}
 			\caption{Ejecución de \texttt{iperf} sobre topología simple en \texttt{mininet}.}
 			\label{img: iperf mn simple}	
 		\end{center}
@@ -3067,7 +2896,7 @@ topology.gui_topology
 	
 	\noindent Por otro lado, existen otras implementaciones de simuladores que extienden la funcionalidad de \texttt{mininet}, permitiendo abarcar muchas más situaciones a simular. A modo de ejemplo, destacamos \texttt{containernet} [\ref{bib: containernet github}], siendo un simulador de red basado en \texttt{mininet} que permite utilizar contenedores de \texttt{Docker} como hosts en una red emulada. Esta funcionalidad permite construir entornos de simulación para redes de tipo \textit{cloud}. \\
 	
-	\noindent Además, es un proyecto muy activo por la comunidad investigadora, ya que permite evaluar topologias de \textit{cloud computing}, \textit{network function virtualization} (NFV) o \textit{multi-access edge computing} (MEC). Un ejemplo de esto es el emulador \href{https://github.com/containernet/vim-emu}{vim-emu: A NFV multi-PoP emulation Platform}, desarrollado por \href{https://www.sonata-nfv.eu/}{SONATA project}, y que está basado en \texttt{containernet}.
+	\noindent Además, es un proyecto muy activo por la comunidad investigadora, ya que permite evaluar topologías de \textit{cloud computing}, \textit{network function virtualization} (NFV) o \textit{multi-access edge computing} (MEC). Un ejemplo de esto es el emulador \href{https://github.com/containernet/vim-emu}{vim-emu: A NFV multi-PoP emulation Platform}, desarrollado por \href{https://www.sonata-nfv.eu/}{SONATA project}, y que está basado en \texttt{containernet}.
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -3084,11 +2913,11 @@ topology.gui_topology
 	\noindent Algunas de las características más importantes que nos aporta \texttt{containernet}, son las siguientes:
 	
 	\begin{itemize}
-		\item Añadir y eliminar contenedores \texttt{Docker} a topologias de \texttt{mininet}. Interconectar dichos contenedores con la topología.
+		\item Añadir y eliminar contenedores \texttt{Docker} a topologías de \texttt{mininet}. Interconectar dichos contenedores con la topología.
 		
 		\item Ejecutar comandos dentro de los contenedores, utilizando \texttt{mininet CLI}.
 		
-		\item Cambios dinámicos en las topologías. Permite añadir o eliminar contenedores a topologias que estén en ejecución.
+		\item Cambios dinámicos en las topologías. Permite añadir o eliminar contenedores a topologías que estén en ejecución.
 		
 		\item Limitar recursos de los contenedores \texttt{Docker}, de forma individual.
 		
@@ -3100,9 +2929,9 @@ topology.gui_topology
 	\subsection{Primeros pasos}
 	\noindent Lo primero que tenemos que hacer para trabajar con este simulador es proceder a su instalación. Para ello, nos vamos a guiar por los pasos que están detallados en la documentación del proyecto en \href{https://containernet.github.io/#installation}{Github: containernet}. Lo primero que podemos comprobar es que se nos aportan dos opciones de instalación:
 	\begin{itemize}
-		\item ``Bare-metal installation''. Hace referencia a una instalación sobre la distribución Ubuntu 20.04 LTS con Python3.
+		\item ``Bare-metal installation''. Hace referencia a una instalación sobre la distribución Ubuntu 20.04 LTS con Python 3.
 		
-		\item ``Nested Docker deployment''. Utiliza un contenedor Docker con privilegios para desplegar en su interior otro entorno Docker en el que ejecutar las topologias de \texttt{containernet}. Esta opción tiene deshabilitado la característica de limitación de recursos.
+		\item ``Nested Docker deployment''. Utiliza un contenedor Docker con privilegios para desplegar en su interior otro entorno Docker en el que ejecutar las topologías de \texttt{containernet}. Esta opción tiene deshabilitado la característica de limitación de recursos.
 	\end{itemize}
 
 	\noindent Para nuestro entorno de pruebas, hemos elegido instalar \texttt{containernet} en una máquina virtual en \textit{VirtualBox}, utilizando Ubuntu 20.04 LTS, tal y como leemos en su documentación. Para ello, seguimos las instrucciones tal que:
@@ -3126,7 +2955,7 @@ ansible/install.yml
 	
 		\begin{figure}[h!]
 			\begin{center}
-				\includegraphics[width=0.75\textwidth]{img/cn_install1.png}
+				\includegraphics[width=0.9\textwidth]{img/cn_install1.png}
 				\caption{Instalación \texttt{containernet} en Ubuntu 20.04 LTS (1/2)}	
 			\end{center}
 		\end{figure}
@@ -3136,7 +2965,7 @@ ansible/install.yml
 	
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.75\textwidth]{img/cn_install2.png}
+			\includegraphics[width=0.9\textwidth]{img/cn_install2.png}
 			\caption{Instalación \texttt{containernet} en Ubuntu 20.04 LTS (2/2)}
 			\label{img: containernet install}
 		\end{center}
@@ -3184,17 +3013,17 @@ containernet> d1 ifconfig
 
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.55\textwidth]{img/cn_example2.png}
+			\includegraphics[width=0.65\textwidth]{img/cn_example2.png}
 			\caption{Ejecución de topología simple en \texttt{containernet} (2/5)}
 			\label{img: cn simple 2}
 		\end{center}
 	\end{figure}
 
-	\noindent Por otro lado, mientras tenemos la topología ejecutandose, podemos comprobar como aparecen los contendores Docker en nuestro sistema. Además, también podemos acceder a una \textit{shell} de uno de los contendores (hosts de \texttt{containernet}) y comprobar que efectivamente el resultado es el mismo que si accedemos desde la \texttt{CLI} de \texttt{containernet}. Para ello, hemos comprobado la configuración de red del mismo host que vimos en la figura \ref{img: cn simple 2}, esto lo podemos ver en la figura \ref{img: cn simple 3}
+	\noindent Por otro lado, mientras tenemos la topología ejecutándose, podemos comprobar como aparecen los contenedores Docker en nuestro sistema. Además, también podemos acceder a una \textit{shell} de uno de los contenedores (hosts de \texttt{containernet}) y comprobar que efectivamente el resultado es el mismo que si accedemos desde la \texttt{CLI} de \texttt{containernet}. Para ello, hemos comprobado la configuración de red del mismo host que vimos en la figura \ref{img: cn simple 2}, esto lo podemos ver en la figura \ref{img: cn simple 3}
 
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.85\textwidth]{img/cn_example3.png}
+			\includegraphics[width=0.92\textwidth]{img/cn_example3.png}
 			\caption{Ejecución de topología simple en \texttt{containernet} (3/5)}
 			\label{img: cn simple 3}
 		\end{center}
@@ -3219,8 +3048,6 @@ containernet> d1 ping -c4 d2
 
 	\noindent Por último, si ya no queremos seguir ejecutando la topología, tendremos que ejecutar el comando \texttt{exit}. Este comando nos permitirá revertir la configuración asociada a la topología, además de apagar y eliminar los contenedores Docker que estaban ejerciendo como hosts. El resultado de la ejecución de este comando lo podemos ver en la figura \ref{img: cn simple 5}.
 
-	%\pagebreak
-
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=0.5\textwidth]{img/cn_example5.png}
@@ -3229,31 +3056,24 @@ containernet> d1 ping -c4 d2
 		\end{center}
 	\end{figure}
 	
-	%\subsection{Interconexión física de diferentes red virtuales}
-	%\subsection{Evaluación de prestaciones}
-	
 	\pagebreak
 	
-	%\section{Conclusiones y propuestas futuras}
 	\chapter{Conclusiones y propuestas futuras}
 	
 	\noindent En este capítulo vamos a comentar las conclusiones obtenidas al realizar el presente trabajo. \\
 	
-	\noindent En primer lugar, hemos presentado la problemática actual de la escalabilidad de las redes y como se está trabajando para un futuro basado en el software y en la descentralización. Esto supone una búsqueda para poder alejarnos de hardware específico/embebido, para acércanos a un hardware de carácter general en el que podamos desplegar nuestros servicios, todo esto, potenciado con la virtualización de los sistemas. A raíz de esto, hemos definido \texttt{NFV} y los conceptos más importantes para entender que és y por qué es un desarrollo muy importante para las telecomunicaciones. Además, lo hemos ``diferenciado'' respecto al concepto de \texttt{SDN}, y comprobado como ambas son tecnologías que van a ir de la mano, ya que una depende de la otra. \\
+	\noindent En primer lugar, hemos presentado la problemática actual de la escalabilidad de las redes y como se está trabajando para un futuro basado en el software y en la descentralización. Esto supone una búsqueda para poder alejarnos de hardware específico/embebido, para acércanos a un hardware de carácter general en el que podamos desplegar nuestros servicios, todo esto, potenciado con la virtualización de los sistemas. A raíz de esto, hemos definido \texttt{NFV} y los conceptos más importantes para entender que és y por qué es un desarrollo muy importante para las telecomunicaciones. Además, lo hemos ``diferenciado'' respecto al concepto de \texttt{SDN}, y comprobado como ambas son tecnologías que van a ir de la mano, ya que una se apoya en la otra. \\
 	
-	\noindent Por otro lado, se ha explicado las diferentes interfaces de red virtuales de Linux, ya que son realmente importantes para las soluciones de virtualización. Para completar la explicación, se ha seguido una metodología basada en ejemplos, por lo que hemos podido comprobar la funcionalidad y el objetivo de cada una de las interfaces expuestas. Hemos comprobado la importancia de interfaces como pueden ser los pares ethernet o bien los tup/tap, aunque sobre todo tap. \\
+	\noindent Por otro lado, se ha explicado las diferentes interfaces de red virtuales de Linux, ya que son realmente importantes para las soluciones de virtualización. Para completar la explicación, se ha seguido una metodología basada en ejemplos, por lo que hemos podido comprobar la funcionalidad y el objetivo de cada una de las interfaces expuestas. Hemos comprobado la importancia de interfaces como pueden ser los pares ethernet o bien los tup/tap. \\
 	
-	\noindent En el sentido de \texttt{namespaces}, se han definido los namespaces presentes dentro del Kernel de Linux. Se ha verificado el potencial que posee esta tecnología, y como está muy presente en diferentes tecnologías que están fuertemente arraigadas por la comunidad, por ejemplo \texttt{LXC} o \texttt{Docker}. Gracias a los ejemplos, se ha podido comprender fácilmente el funcionamiento de cada uno de los namespaces. \\
+	\noindent En relación a los \texttt{namespaces}, se han definido los namespaces presentes dentro del Kernel de Linux. Se ha verificado el potencial que posee esta tecnología, y como está muy presente en diferentes tecnologías que están fuertemente arraigadas por la comunidad, por ejemplo \texttt{LXC} o \texttt{Docker}. Gracias a los ejemplos, se ha podido comprender fácilmente el funcionamiento de cada uno de los namespaces. \\
 	
-	\noindent En el punto de virtualización ligera, hemos aprendido que implementaciones software tenemos disponibles para realizar virtualización ligera. Además, hemos recreado un contenedor paso a paso, de modo que hemos podido comprobar la importancia de los namespaces. Por otro lado, con las definiciones de \texttt{LXC} y de \texttt{Docker}, hemos iniciado al uso de ambas herramientas, facilitando su posterior uso. \\
+	\noindent En el punto de virtualización ligera, hemos resumido las opciones disponibles para realizar virtualización ligera. Además, hemos recreado un contenedor paso a paso, de modo que hemos podido comprobar la importancia de los namespaces. Por otro lado, con las definiciones de \texttt{LXC} y de \texttt{Docker}, hemos iniciado al uso de ambas herramientas, facilitando su posterior uso. \\
 	
-	\noindent Por último, se han propuesto ciertas herramientas que utilizan la virtualización ligera para simular redes de comunicaciones. En este caso hemos hablado de \texttt{mininet}, como una implementación basada totalmente en namespaces, y de \texttt{containernet} como un ``fork'' de \texttt{mininet} que está extendido para trabajar con hosts de Docker. Ambas herramientas son muy importantes ya que permiten crear entornos de desarrollo e investigación para el área de \texttt{SDN}. Nos permite realizar pruebas con topologías de gran tamaño de manera sencilla y rápida. \\
+	\noindent Por último, se han propuesto ciertas herramientas que utilizan la virtualización ligera para simular redes de comunicaciones. En este caso hemos hablado de \texttt{mininet}, como una implementación basada totalmente en namespaces, y de \texttt{containernet} como un ``fork'' de \texttt{mininet} que está extendido para trabajar con hosts de Docker. Ambas herramientas son muy importantes ya que permiten crear entornos de desarrollo e investigación para el área de \texttt{SDN}. Además, nos permite realizar pruebas con topologías de gran tamaño de manera sencilla y rápida. \\
 	
 	\noindent En resumen, podemos concluir que el presente trabajo ha cumplido todos los objetivos propuestos, ya que se ha profundizado sobre la virtualización ligera, y se ha ido construyendo una ``guía'' a base de explicaciones y ejemplos, que nos permite comprender los entresijos de simuladores de redes basados en dicha virtualización, como puede ser \texttt{mininet}. \\
 	
-	%\pagebreak
-	
-	%\subsection{Propuestas futuras}
 	\noindent \textbf{\large Propuestas futuras}\\
 	
 	\noindent Algunas de las líneas de investigación que pueden resultar interesantes para continuar este proyecto, son las siguientes:
@@ -3262,11 +3082,10 @@ containernet> d1 ping -c4 d2
 		
 		\item Investigar sobre modificaciones del protocolo \texttt{OpenFlow}, como puede ser \url{https://github.com/Orange-OpenSource/oko}, que nos permite aplicar programas con los que filtrar paquetes de la red utilizando \texttt{BPF} (\textit{Berkley Packet Filter}). Por otro lado, sería realmente importante investigar la tecnología \texttt{DPDK}, ya que nos permite acceder directamente a la información de nuestras interfaces de red, además de mejorar considerablemente el \textit{throughput} en comparación de si utilizamos un \textit{Linux bridge}.
 		
-		\item Estudiar el lenguaje de programación \texttt{P4} (\url{https://p4.org/}), ya que ahora mismo esta siendo muy importante para el desarrollo de soluciones software en routers y switches. Se esta observando gran aceptación por la comunidad investigadora, y hay un creciente interés para su implantación. El objetivo de este lenguaje de programación es el de controlar el flujo de los paquetes de datos entre los diferentes planos de información que maneja el dispositivo. A diferencia de otros lenguajes de programación, como C o C++, \texttt{P4} está definido teniendo en mente que tiene que ser específico para las redes, por lo que presenta ciertas construcciones específicas para optimizar el flujo de la información.
+		\item Estudiar el lenguaje de programación \texttt{P4} (\url{https://p4.org/}), ya que ahora mismo esta siendo muy importante para el desarrollo de soluciones software en routers y switches. Se esta observando gran aceptación por la comunidad investigadora, y hay un creciente interés para su implantación. El objetivo de este lenguaje de programación es el de controlar el flujo de los paquetes de datos entre los diferentes planos de información que maneja el dispositivo. \texttt{P4} está definido teniendo en mente que tiene que ser específico para las redes, por lo que presenta ciertas construcciones específicas para optimizar el flujo de la información.
 	\end{itemize}
 
 	%%% Bibliography
-	\pagebreak
 	%\section{Bibliografía}
 	\chapter{Bibliografía}
 	%\addcontentsline{toc}{section}{Bibliografía}
@@ -3275,412 +3094,314 @@ containernet> d1 ping -c4 d2
 	\addcontentsline{toc}{section}{Enlaces y referencias consultadas}
 	%%\hyperref[bib:link1]{\emph{Reference of bibliography}}
 	\begin{enumerate}
-		%1
-		\item 
-		\label{bib:ns overview} \href{https://lwn.net/Articles/531114/}{\textit{Namespaces}}
-		
-		%2
-		\item 
-		\label{bib:ns tutorial1} \href{https://laurel.datsi.fi.upm.es/~ssoo/SOA/namespaces.html}{Tutorial: Espacio de nombres en Linux}
-		
-		%3
-		\item 
-		\label{bib:time ns} \href{https://www.phoronix.com/scan.php?page=news_item&px=Linux-Time-Namespace-Coming}{\textit{Time namespaces coming to linux}}
-		
-		%4
-		\item 
-		\label{bib:container is a lie} \href{https://platform.sh/blog/2020/the-container-is-a-lie/}{\textit{Container is a lie. Namespaces}}
-		
-		%5
-		\item 
-		\label{bib:link5} \href{https://locurastecnicas.blogspot.com/2020/09/linux-namespaces-y-cgroups.html}{\textit{Namespaces.} Uso de \textit{cgroups}.}
-		
-		%6
-		%\item 
-		%\label{bib:link6} \href{https://www.youtube.com/watch?v=_WgUwUf1d34}{\textit{Introduction to Network Namespaces}}
-		
-		
-		%7
-		\item
-		\label{bib: mount namespace redhat} \href{https://www.redhat.com/sysadmin/mount-namespaces}{\textit{Build a container by hand: the mount namespace}}
-		
-		
-		%8
-		\item
-		\label{bib:pid wikipedia}
-		\href{https://en.wikipedia.org/wiki/Process_identifier}{Indentificador de procesos (\textit{process id})}
-		
-		
-		%9
-		\item
-		\label{bib:link9}
-		\href{https://www.redhat.com/sysadmin/linux-pid-namespaces}{\textit{Linux PID namespaces work with containers}}
-		
-		%10
-		%\item
-		%\label{bib:link10}
-		%\href{https://blogs.igalia.com/dpino/2016/04/10/network-namespaces/}{\textit{Network Namespaces}}
-		
-		%11
-		\item
-		\label{bib:virtual interface list}
-		\href{https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#veth}{\textit{Introduction to Linux interfaces for virtual networking}}
-		
-		
-		%12
-		%\item
-		%\label{bib:link12}
-		%\href{https://elpuig.xeill.net/Members/vcarceler/articulos/introduccion-a-los-grupos-de-control-cgroups-de-linux}{\textit{Introducción a los grupos de control (cgroups) de Linux}}
-		
-		%13
-		\item
-		\label{bib:time ns kernel}
-		\href{https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=timers/core&id=769071ac9f20b6a447410c7eaa55d1a5233ef40c}{\textit{Time namespaces}}
-		
-		%14
-		\item
-		\label{bib:example netns veth}
-		\href{https://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/}{\textit{Network namespaces. Assign and configure}}
-		
-		
-		%15
-		%\item
-		%\label{bib:configure host-only}
-		%\href{https://www.tecmint.com/network-between-guest-vm-and-host-virtualbox/}{How to configure Network Between Guest VM and Host in Virtualbox}
-		
-		
-		%16
-		%\item
-		%\label{bib:install ansible}
-		%\href{https://www.cyberciti.biz/faq/how-to-install-ansible-on-fedora-for-it-and-server-automation/}{How to install ansible on fedora for it and server automation}
-		
-		%17
-		%\item
-		%\label{bib: herramientas virtualizacion}
-		%\href{https://www.uv.es/sto/charlas/2010_CIM/hvl-cim-2010.html/index.html}{\textit{Herramientas de virtualización libres para sistemas GNU/Linux}}
-		
-		%18
-		\item
-		\label{bib: what is nfv}
-		\href{https://www.ciena.com/insights/articles/What-is-NFV-prx.html}{W\textit{hat is Network Function Virtualization(NFV)?}}
-		
-		%19
+		% 1
 		\item
 		\label{paper nfv 2012}
 		\href{https://portal.etsi.org/nfv/nfv_white_paper.pdf}{NFV white paper}
 		
-		%20
-		%\item
-		%\label{youtube: nfv y sdn cristina}
-		%\href{https://www.youtube.com/watch?v=3JEAK66wujg}{Youtube: NFV y SDN: las redes del futuro y del presente - Cristina Santana | T3chFest 2018}
-		
-		%21
-		%\item
-		%\label{servers running linux}
-		%\href{https://hostingtribunal.com/blog/linux-statistics/}{Percentage of server that run in Linux}
-		
-		%22
+		% 2
 		\item
-		\label{bib: vmware sdn}
-		\href{https://www.vmware.com/es/topics/glossary/content/software-defined-networking.html}{¿Qué son las redes definidas por software (SDN)?}
+		\label{bib: what is nfv}
+		\href{https://www.ciena.com/insights/articles/What-is-NFV-prx.html}{W\textit{hat is Network Function Virtualization (NFV)?}}
 		
-		%23
-		\item
-		\label{bib: vmware nfv}
-		\href{https://www.vmware.com/es/topics/glossary/content/virtual-networking.html}{¿Qué son las redes virtuales?}
-		
-		%24
-		\item
-		\label{bib: udev archwiki}
-		\href{https://wiki.archlinux.org/title/Udev}{\textit{Arch Linux Wiki: udev}}
-		
-		%25
-		\item
-		\label{bib: systemd networkd v197}
-		\href{https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/}{Predictable Network Interface Names}
-		
-		%26
-		\item
-		\label{bib: open vswitch}
-		\href{https://www.openvswitch.org/}{Open vSwitch}
-		
-		%27
-		\item
-		\label{bib: veth netns ovs}
-		\href{https://matthewarcus.wordpress.com/2018/02/04/veth-devices-network-namespaces-and-open-vswitch/}{Veth Devices, Network Namespaces and Open vSwitch}
-		
-		%28
-		\item
-		\label{bib: 802.1ad}
-		\href{http://www.microhowto.info/tags/802.1ad.html}{IEEE 802.1ad}
-		
-		%29
-		\item
-		\label{bib: FS QinQ}
-		\href{https://img-en.fs.com/file/user_manual/s3800-series-qinq-operation.pdf}{FS.COM QinQ Operation}
-		
-		%30
-		\item
-		\label{bib: openwrt virtual network interfaces}
-		\href{https://openwrt.org/docs/guide-developer/networking/network.interfaces}{OpenWrt: Linux Network Interfaces}
-		
-		%31
-		\item
-		\label{bib: sdn y nfv}
-		\href{https://comparacloud.com/servicios-clouds/sdn-y-nfv/}{SDN \& NFV}
-		
-		%32
-		\item
-		\label{bib: tun vs tap}
-		\href{https://www.gabriel.urdhr.fr/2021/05/08/tuntap/}{TUN/TAP interface (on Linux)}
-		
-		%33
-		\item
-		\label{bib: tunctl + ip}
-		\href{https://developpaper.com/creating-tap-tun-devices-with-ip-tuntap-and-tunctl-as-detailed-in-linux-network-tools/}{Creating tap/tun devices with IP tuntap and tunctl as detailed in Linux network tools}
-		
-		%34
-		\item
-		\label{bib: code tuntap.c}
-		\href{https://programmerclick.com/article/45831226469/}{Principio de diseño del controlador TUN/TAP de la tarjeta virtual}
-		
-		%35
-		\item
-		\label{bib: cgroups}
-		\href{https://www.nginx.com/blog/what-are-namespaces-cgroups-how-do-they-work/}{What are namespaces cgroups how do they work}
-		
-		%36
+		% 3
 		\item
 		\label{bib: virt ligera}
 		\href{https://upcommons.upc.edu/handle/2117/78028?show=full}{TFG. Evaluación de prestaciones mediante NVF}
 		
-		%37
+		% 4
+		\item
+		\label{bib:virtual interface list}
+		\href{https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#veth}{\textit{Introduction to Linux interfaces for virtual networking}}
+		
+		% 5
+		\item
+		\label{bib: udev archwiki}
+		\href{https://wiki.archlinux.org/title/Udev}{\textit{Arch Linux Wiki: udev}}
+		
+		% 6
+		\item
+		\label{bib: systemd networkd v197}
+		\href{https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/}{Predictable Network Interface Names}
+		
+		% 7
+		\item
+		\label{bib: 802.1ad}
+		\href{http://www.microhowto.info/tags/802.1ad.html}{IEEE 802.1ad}
+		
+		% 8
+		\item
+		\label{bib: FS QinQ}
+		\href{https://img-en.fs.com/file/user_manual/s3800-series-qinq-operation.pdf}{FS.COM QinQ Operation}
+		
+		% 9
+		\item
+		\label{bib: openwrt virtual network interfaces}
+		\href{https://openwrt.org/docs/guide-developer/networking/network.interfaces}{OpenWrt: Linux Network Interfaces}
+		
+		% 10
+		\item
+		\label{bib:example netns veth}
+		\href{https://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/}{\textit{Network namespaces. Assign and configure}}
+		
+		% 11
+		\item
+		\label{bib: open vswitch}
+		\href{https://www.openvswitch.org/}{Open vSwitch}
+		
+		% 12
+		\item
+		\label{bib: veth netns ovs}
+		\href{https://matthewarcus.wordpress.com/2018/02/04/veth-devices-network-namespaces-and-open-vswitch/}{Veth Devices, Network Namespaces and Open vSwitch}
+		
+		% 13
+		\item
+		\label{bib: tun vs tap}
+		\href{https://www.gabriel.urdhr.fr/2021/05/08/tuntap/}{TUN/TAP interface (on Linux)}
+		
+		% 14
+		\item
+		\label{bib: tunctl + ip}
+		\href{https://developpaper.com/creating-tap-tun-devices-with-ip-tuntap-and-tunctl-as-detailed-in-linux-network-tools/}{Creating tap/tun devices with IP tuntap and tunctl as detailed in Linux network tools}
+		
+		% 15
+		\item
+		\label{bib: code tuntap.c}
+		\href{https://programmerclick.com/article/45831226469/}{Principio de diseño del controlador TUN/TAP de la tarjeta virtual}
+		
+		% 16
 		\item
 		\label{bib: sock}
 		\href{http://www.icir.org/christian/sock.html}{Aplicación sock}
 		
-		%38
-		\item
-		\label{bib: chroot jail}
-		\href{https://phoenixnap.com/kb/chroot-jail}{What is chroot jail and How to Use it?}
+		% 17
+		\item 
+		\label{bib:ns overview} \href{https://lwn.net/Articles/531114/}{\textit{Namespaces}}
 		
-		%39
-		\item
-		\label{bib: LXC arch}
-		\href{https://wiki.archlinux.org/title/Linux_Containers}{ArchLinux Wiki: Linux Containers}
+		% 18
+		\item 
+		\label{bib:link5} \href{https://locurastecnicas.blogspot.com/2020/09/linux-namespaces-y-cgroups.html}{\textit{Namespaces.} Uso de \textit{cgroups}.}
 		
-		%40
-		\item
-		\label{bib: crear LXC}
-		\href{https://ubuntu.com/server/docs/containers-lxc}{Ubuntu LXC}
+		% 19
+		\item 
+		\label{bib:ns tutorial1} \href{https://laurel.datsi.fi.upm.es/~ssoo/SOA/namespaces.html}{Tutorial: Espacio de nombres en Linux}
 		
-		%41
-		\item
-		\label{bib: xorg arch wiki}
-		\href{https://wiki.archlinux.org/title/xorg}{ArchLinux Wiki: Xorg}
-		
-		%42
-		\item
-		\label{bib: unprivileged LXC}
-		\href{https://www.cyberciti.biz/faq/how-to-create-unprivileged-linux-containers-on-ubuntu-linux/}{How to create unprivileged LXC container}
-		
-		
-		%43
-		\item
-		\label{bib: docker info}
-		\href{https://docs.docker.com/get-started/overview/}{Docker overview}
-		
-		%44
-		\item
-		\label{bib: docker dockerfile}
-		\href{https://www.freecodecamp.org/news/a-beginners-guide-to-docker-how-to-create-your-first-docker-application-cc03de9b639f/}{A beginner's guide to Docker - how to create your first Docker application}
-		
-		%45
+		% 20
 		\item
 		\label{bib: mount namespace info 1}
 		\href{https://www.schutzwerk.com/en/43/posts/namespaces_02_mnt/}{Linux containers primitives: mount namespaces and information leaks}
 		
-		%46
+		% 21
 		\item
 		\label{bib: mount namespace info 2}
 		\href{https://lwn.net/Articles/689856/}{Mount namespaces and shared subtrees}
 		
+		% 22
 		\item
-		\label{bib: mount bind}
-		\href{https://www.baeldung.com/linux/bind-mounts}{Understanding Bind Mounts}
+		\label{bib: mount namespace redhat} \href{https://www.redhat.com/sysadmin/mount-namespaces}{\textit{Build a container by hand: the mount namespace}}
 		
-		%47
-		\item
-		\label{bib: tmpfs arch linux}
-		\href{https://wiki.archlinux.org/title/Tmpfs}{Arch Linux Wiki: Tmpfs}
-		
-		%49
-		\item
-		\label{bib: mount namespaces containerlabs}
-		\href{https://www.containerlabs.kubedaily.com/LXC/Linux%20Containers/Mount-namespaces.html}{CloudNativeLab: Mount namespaces}
-		
-		%50
-		\item
-		\label{bib: mount namespaces shared subtree}
-		\href{https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt}{Kernel.org: shared subtrees}
-		
-		%51
-		\item
-		\label{bib: mount namespaces shared subtree 2}
-		\href{https://man7.org/linux/man-pages/man8/mount.8.html}{Linux manual page: mount}
-		
-		%52
-		\item
-		\label{bib: mininet home page}
-		\href{http://mininet.org/}{Mininet: An Instant Virtual Network on your Laptop (or other PC)}
-		
-		%53
-		\item
-		\label{bib: oci}
-		\href{https://opencontainers.org/}{Open Container Initiative (OCI)}
-		
-		%54
-		\item
-		\label{bib: containerd}
-		\href{https://containerd.io/}{containerd}
-		
-		%55
-		\item
-		\label{bib: union mount}
-		\href{https://en.wikipedia.org/wiki/Union_mount}{Wikipedia: Union Mount}
-		
-		%56
-		\item
-		\label{bib: overlayfs}
-		\href{https://en.wikipedia.org/wiki/OverlayFS}{Wikipedia: Overlayfs}
-		
-		%57
-		\item
-		\label{bib: docker y namespaces}
-		\href{https://arthurchiao.art/blog/play-with-container-network-if/}{Play with Container Network Interface}
-		
-		%58
-		\item 
-		\label{bib: containernet github}
-		\href{https://github.com/containernet/containernet}{Github: containernet}
-		
-		%60
+		% 23
 		\item 
 		\label{bib: what is bind}
 		\href{https://unix.stackexchange.com/questions/198590/what-is-a-bind-mount}{Stackexchange: what is a bind mount?}
 		
-		%61
+		% 24
+		\item
+		\label{bib: mount bind}
+		\href{https://www.baeldung.com/linux/bind-mounts}{Understanding Bind Mounts}
+		
+		% 25
+		\item
+		\label{bib: tmpfs arch linux}
+		\href{https://wiki.archlinux.org/title/Tmpfs}{Arch Linux Wiki: Tmpfs}
+		
+		% 26
+		\item
+		\label{bib: mount namespaces containerlabs}
+		\href{https://www.containerlabs.kubedaily.com/LXC/Linux%20Containers/Mount-namespaces.html}{CloudNativeLab: Mount namespaces}
+		
+		% 27
+		\item
+		\label{bib: mount namespaces shared subtree}
+		\href{https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt}{Kernel.org: shared subtrees}
+		
+		% 28
+		\item
+		\label{bib: mount namespaces shared subtree 2}
+		\href{https://man7.org/linux/man-pages/man8/mount.8.html}{Linux manual page: mount}
+		
+		% 29
+		\item
+		\label{bib:pid wikipedia}
+		\href{https://en.wikipedia.org/wiki/Process_identifier}{Indentificador de procesos (\textit{process id})}
+		
+		% 30
+		\item
+		\label{bib:link9}
+		\href{https://www.redhat.com/sysadmin/linux-pid-namespaces}{\textit{Linux PID namespaces work with containers}}
+		
+		% 31
+		\item
+		\label{bib: cgroups}
+		\href{https://www.nginx.com/blog/what-are-namespaces-cgroups-how-do-they-work/}{What are namespaces cgroups how do they work}
+		
+		% 32
+		\item 
+		\label{bib:time ns} \href{https://www.phoronix.com/scan.php?page=news_item&px=Linux-Time-Namespace-Coming}{\textit{Time namespaces coming to linux}}
+		
+		% 33
+		\item
+		\label{bib:time ns kernel}
+		\href{https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=timers/core&id=769071ac9f20b6a447410c7eaa55d1a5233ef40c}{\textit{Time namespaces}}
+		
+		% 34
+		\item 
+		\label{bib:container is a lie} \href{https://platform.sh/blog/2020/the-container-is-a-lie/}{\textit{Container is a lie. Namespaces}}
+		
+		% 35
+		\item
+		\label{bib: chroot jail}
+		\href{https://phoenixnap.com/kb/chroot-jail}{What is chroot jail and How to Use it?}
+		
+		% 36
+		\item
+		\label{bib: oci}
+		\href{https://opencontainers.org/}{Open Container Initiative (OCI)}
+		
+		% 37
+		\item
+		\label{bib: LXC arch}
+		\href{https://wiki.archlinux.org/title/Linux_Containers}{ArchLinux Wiki: Linux Containers}
+		
+		% 38
+		\item
+		\label{bib: containerd}
+		\href{https://containerd.io/}{containerd}
+		
+		% 39
+		\item
+		\label{bib: union mount}
+		\href{https://en.wikipedia.org/wiki/Union_mount}{Wikipedia: Union Mount}
+		
+		% 40
+		\item
+		\label{bib: overlayfs}
+		\href{https://en.wikipedia.org/wiki/OverlayFS}{Wikipedia: Overlayfs}
+		
+		% 41
+		\item
+		\label{bib: crear LXC}
+		\href{https://ubuntu.com/server/docs/containers-lxc}{Ubuntu LXC}
+		
+		% 42
+		\item
+		\label{bib: xorg arch wiki}
+		\href{https://wiki.archlinux.org/title/xorg}{ArchLinux Wiki: Xorg}
+		
+		% 43
+		\item
+		\label{bib: unprivileged LXC}
+		\href{https://www.cyberciti.biz/faq/how-to-create-unprivileged-linux-containers-on-ubuntu-linux/}{How to create unprivileged LXC container}
+		
+		% 44
+		\item
+		\label{bib: docker info}
+		\href{https://docs.docker.com/get-started/overview/}{Docker overview}
+		
+		% 45
+		\item
+		\label{bib: docker dockerfile}
+		\href{https://www.freecodecamp.org/news/a-beginners-guide-to-docker-how-to-create-your-first-docker-application-cc03de9b639f/}{A beginner's guide to Docker - how to create your first Docker application}
+		
+		% 46
+		\item
+		\label{bib: docker y namespaces}
+		\href{https://arthurchiao.art/blog/play-with-container-network-if/}{Play with Container Network Interface}
+		
+		% 47
+		\item
+		\label{bib: mininet home page}
+		\href{http://mininet.org/}{Mininet: An Instant Virtual Network on your Laptop (or other PC)}
+		
+		% 48
 		\item 
 		\label{bib: opendaylight}
 		\href{https://www.opendaylight.org/}{OpenDaylight (ODL)}
 		
-		%62
+		% 49
 		\item 
 		\label{bib: pox}
 		\href{https://github.com/noxrepo/pox}{Github: POX}
 		
-		%63
+		% 50
 		\item 
 		\label{bib: nox}
 		\href{https://github.com/noxrepo/nox}{Github: NOX}
 		
-		%64
+		% 51
 		\item 
 		\label{bib: ryu}
 		\href{https://github.com/faucetsdn/ryu}{Github: Ryu}
 		
-		%65
+		% 52
 		\item 
 		\label{bib: onos}
 		\href{https://opennetworking.org/onos/}{Open Networking Operating System (ONOS)}
 		
-		%66
+		% 53
 		\item
 		\label{bib: ryu gui}
 		\href{https://ryu.readthedocs.io/en/latest/gui.html}{Ryu Doc: Topology Viewer}
 		
-		% X
-		%\item
-		%\label{bib: docker works namespaces}
-		%\href{https://www.youtube.com/watch?v=-YnMr1lj4Z8}{Youtube LiveOverflow: How Docker Works - Intro to Namespaces}
-		
-		
-		% X
-		%\item
-		%\label{bib:link20}
-		%\href{https://jsitech1.gitbooks.io/meet-docker/content/fundamentos_de_docker.html}{Fundamentos de Docker}
-		
+		% 54
+		\item 
+		\label{bib: containernet github}
+		\href{https://github.com/containernet/containernet}{Github: containernet}
 	\end{enumerate}
 
-	%\pagebreak
 	\vspace{20px}
 
 	\subsection*{Imágenes}
 	\addcontentsline{toc}{section}{Imagenes}
 	\begin{itemize}
-		%1
 		\item Figura \ref{imagen comparativa classic network nfv}:
 		\label{img: nfv vs classic}
 		\href{https://portal.etsi.org/nfv/nfv_white_paper.pdf}{NFV white paper}
 		
-		%2
-		%\item
-		%\label{img: nfv vs classic 2}
-		%\href{https://www.ciena.com/insights/articles/What-is-NFV-prx.html}{W\textit{hat is Network Function Virtualization(NFV)?}}
-		
-		%3
 		\item Figura \ref{img: sdn + nfv}:
 		\label{img: sdn vs nfv osi}
-		\href{https://comparacloud.com/servicios-clouds/sdn-y-nfv/}{SDN \& NFV}
+		\href{https://networkstatic.net/the-northbound-api-2/}{The Northbound API- A Big Little Problem}
 		
 		\item Figura \ref{img: virtualization comparative}: 
 		\label{img: vm vs container}
 		\href{https://github.com/mgarzago/CodeAndNotes/wiki/Introducci%C3%B3n-a-Contenedores%2C-Kubernetes-y-Openshift}{Introducción a contendores Kubernetes y Openshift}
 		
-		%4
 		\item Figura \ref{ethernet 802.1ad}:
 		\label{img: frame ethernet 802.1ad}
 		\href{https://img-en.fs.com/file/user_manual/s3800-series-qinq-operation.pdf}{FS.COM QinQ Operation}
 		
-		%5
 		\item Figura \ref{img: tun vs tap}: 
 		\label{bib_img: tun tap}
 		\href{https://en.wikipedia.org/wiki/TUN/TAP}{Wikipedia: TUN/TAP}
 		
-		%4
 		\item Figura \ref{img: linux namespaces api}:
 		\label{bib:img1}\href{https://8gwifi.org/docs/linux-namespace.jsp}{Namespaces y API de acceso.}
 		
-		
-		%6
-		%\item
-		%\label{bib_img: comparativa virt}
-		%\href{https://www.slideshare.net/janghoonsim/docker-container-and-lightweight-virtualization}{Docker - container and lightweight virtualization}
-		
-		%7
 		\item Figura \ref{img: LXC}:
 		\label{bib_img: lxc logo}
 		\href{https://linuxcontainers.org/}{Linux Containers Logotipo (LXC)}
 		
-		%8
 		\item Figura \ref{img: docker arch}:
 		\label{bib_img: docker arch}
 		\href{https://docs.docker.com/get-started/overview/}{Imagen Docker Architecture}
 		
-		%9
 		\item Figura \ref{img: docker logo}:
 		\label{bib_img: docker logo}
 		\href{https://commons.wikimedia.org/wiki/File:Docker_(container_engine)_logo.png}{Logotipo \texttt{Docker}}
 		
-		%10
 		\item Figura \ref{img: containernet logo}:
 		\label{bib_img: containernet logo}
 		\href{https://github.com/containernet/containernet}{Logotipo \texttt{containernet}}
-		
-		%\item 
-		%\label{bib:img2}\href{https://twitter.com/b0rk/status/1240364585766576128}{How containers work.}
-		
-		
 	\end{itemize}
 
 	\pagebreak
@@ -3691,28 +3412,26 @@ containernet> d1 ping -c4 d2
 	\chapter{Anexos}
 	%\addcontentsline{toc}{section}{Anexos}
 	
-	
-	
 	\section{Código asociado a topologías de red}
 	%\subsection*{Anexo 4. Código asociado a topologías de red}
 	\label{sec: anexo 4}
 	%\addcontentsline{toc}{subsection}{Anexo 4. Topologías de \texttt{mininet}}
 	
 	\vspace{10px}
-	\noindent \textbf{\large Topología simple}\\
+	\noindent \textbf{\large Topología simple en \texttt{mininet}}\\
 	
-	\begin{lstlisting}[language=Python, caption={Implementación topología simple utilizando \texttt{mininet} (\texttt{basic.py})}, label={lst: topo simple}]
+	\begin{lstlisting}[language=Python, caption={Código topología simple utilizando \texttt{mininet} (\texttt{basic.py})}, label={lst: topo simple}]
 from mininet.net import Mininet
 from mininet.topo import Topo
 
-topo = Topo()				# Empty topology
-topo.addSwitch("s1")		# Adding switch
-topo.addHost("h1")			# Add Host
-topo.addHost("h2")			# Add Host
+topo = Topo()							# Empty topology
+topo.addSwitch("s1")			# Adding switch
+topo.addHost("h1")				# Add Host
+topo.addHost("h2")				# Add Host
 topo.addLink("h1", "s1")	# Link host to switch
 topo.addLink("h2", "s1")
 
-net = Mininet(topo)			# Start Mininet
+net = Mininet(topo)				# Start Mininet
 net.start()
 net.pingAll()
 net.iperf()
@@ -3756,7 +3475,7 @@ limit_perfTest()
 
 	\vspace{20px}
 	\noindent \textbf{\large Topología simple en \texttt{containernet}}\\
-		\begin{lstlisting}[language=Python, caption={Código topologia simple en \texttt{containernet} (\texttt{containernet\_example.py})}, label={lst: topo simple containernet}]
+		\begin{lstlisting}[language=Python, caption={Código topología simple en \texttt{containernet} (\texttt{containernet\_example.py})}, label={lst: topo simple containernet}]
 #!/usr/bin/python
 """
 This is the most simple example to showcase Containernet.
@@ -3790,6 +3509,5 @@ CLI(net)
 info('*** Stopping network')
 net.stop()
 	\end{lstlisting}
-	
-	
+
 \end{document}
