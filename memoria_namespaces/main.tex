@@ -1,4 +1,5 @@
 \documentclass[a4paper, oneside, 12pt]{book}
+%\documentclass[12pt]{article}
 \usepackage[spanish, english, es-tabla]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[left = 2cm, right = 2cm, bottom = 2cm, top = 3cm]{geometry}
@@ -17,9 +18,9 @@
 \renewcommand{\lstlistlistingname}{Listado de ejemplos}
 
 % https://tex.stackexchange.com/questions/60209/how-to-add-an-extra-level-of-sections-with-headings-below-subsubsection
-\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
-\setcounter{secnumdepth}{4}
-\setcounter{tocdepth}{4}
+%\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+%\setcounter{secnumdepth}{4}
+%\setcounter{tocdepth}{4}
 
 % Configuracion PDF metadata
 \hypersetup{
@@ -103,7 +104,7 @@
 		\vspace{0.5cm}
 		\hspace{1.65cm} Grado en Ingeniería Telemática \\
 		\vspace{0.5cm}
-		\textbf{Autor:}\author{ Enrique Fernández Sánchez} \\
+		\textbf{Autor:} \author{Enrique Fernández Sánchez} \\
 		\textbf{Tutor:} José María Malgosa Sanahuja
 	\end{minipage}}
 
@@ -165,13 +166,14 @@
 	
 	\noindent Por otro lado, me gustaría agradecer a mi familia, en especial a mis padres, Encarnación y Miguel Ángel, y a mi hermano y a mi cuñada, Miguel y Yolanda; ellos han supuesto un pilar fundamental en este camino que ha sido para mi la ingeniería, ellos han sido mi principal apoyo, y sin él, no hubiera llegado hasta donde estoy hoy. También agradecer a mis padrinos, Ana y Anastasio, ya que siempre han tenido palabras de ánimo para mi, incluso en este último año, en el que han sabido transmitir esa fortaleza, tan propia de ellos. Especial mención a mis abuelos, estoy seguro que estarían muy orgullosos de mi camino y de cómo su nieto es ahora ingeniero. Agradecer también a mis suegros, María Dolores y Francisco, ya que suponen otra fuente importante de apoyo y confianza. \\
 	
-	\noindent Especial mención a Lucía Francoso Fernández, compañera del grado en sistemas de telecomunicación, con la cual he tenido la suerte de emprender codo con codo muchos de los proyectos que he llevado entre manos estos años. Fuente de apoyo incondicional, una mina de creatividad y una brillante ingeniera. Sin ella, mi paso por la universidad no hubiera el mismo. \\
+	\noindent Especial mención a Lucía Francoso Fernández, compañera del grado en sistemas de telecomunicación, con la cual he tenido la suerte de emprender codo con codo muchos de los proyectos que he llevado entre manos estos años. Fuente de apoyo incondicional, una mina de creatividad y una brillante ingeniera. Sin ella, mi paso por la universidad no hubiera sido el mismo. \\
 	
 	\noindent Por último, agradecer a mis compañeros del \textit{Free Open Source Club} (\url{https://fosc.space}), ya que gracias a ellos he puesto en valor el movimiento \textit{Open Source}. Me han servido de trampolín para entrar a un mundo muy bonito que es el conocimiento libre y poder vivir experiencias únicas. Con ellos, he pasado muchas horas de trastear y aprender sobre cualquier cosa que se nos ocurría, lo que nosotros amistosamente llamamos ``\textit{hackear}''. 
 		
 	\pagebreak
 	
 	\chapter{Introducción}
+	%\section{Introducción}
 	
 	\noindent Con el fin de concluir los estudios de grado en ingeniería telemática, es necesaria la investigación y el posterior desarrollo del \textit{Trabajo Fin de Estudios} (TFE). Dicho trabajo, tiene como objetivo enfrentar al alumno a un proceso de investigación en el que pueda aplicar muchos de los conceptos que ha ido aprendiendo durante su paso por el grado, pudiendo añadir puntos de innovación, y aportar soluciones nuevas a un proyecto específico. \\
 	
@@ -182,7 +184,7 @@
 	\section{Contexto del trabajo}
 	\noindent Este proyecto nace con el objetivo de profundizar en conceptos novedosos para el ámbito de la ingeniería telemática, como virtualización de hardware físico de red y los contenedores, con el fin de solucionar problemas de escalabilidad y de optimización.\\
 	
-	 \noindent Por otra parte, muchas de las herramientas de evaluación y simulación de redes de comunicaciones son costosas en términos de medios a utilizar (tanto hardware como software), lo que limita seriamente su escalabilidad a la hora de evaluar redes de cierta envergadura. La virtualización de redes (en especial la virtualización ligera) nos permitirá desarrollar simuladores de redes más complejas sin consumir excesivos <<recursos>> computacionales. Por ello, en este proyecto  particularizaremos estas tecnologías y las acercamos al campo de conocimiento de la telemática para utilizarlas con el fin de evaluar y simular redes de conmutación de tipo IP. \\
+	 \noindent Por otra parte, muchas de las herramientas de evaluación y simulación de redes de comunicaciones son costosas en términos de medios a utilizar (tanto hardware como software), lo que limita seriamente su escalabilidad a la hora de evaluar redes de cierta envergadura. La virtualización de redes (en especial la virtualización ligera) nos permitirá desarrollar simuladores de redes más complejas sin consumir excesivos recursos computacionales. Por ello, en este proyecto  particularizaremos estas tecnologías y las acercamos al campo de conocimiento de la telemática para utilizarlas con el fin de evaluar y simular redes de conmutación de tipo IP. \\
 	
 	\section{Objetivos}
 	
@@ -219,6 +221,7 @@
 	\pagebreak
 	
 	\chapter{Virtualización de Funciones de Red}
+	%\section{Virtualización de Funciones de Red}
 	\label{sec: nfv}
 	
 	\noindent El punto de partida de la ``virtualización de funciones de red'' (\texttt{NFV}) surge a partir de las necesidades de las operadoras de red para solucionar los problemas de escalado de la red, generando una red poco flexible. Estos problemas se pueden resumir en los siguientes:
@@ -236,13 +239,13 @@
 		\item \texttt{VNF} (\textit{Virtual Network Function}). Aplicaciones software que ofrecen ciertas funciones (enrutadores, firewall, etc) y que se implementan como máquinas virtuales, y que no necesitan un sistema hardware específico. 
 		
 		% https://www.sdxcentral.com/networking/nfv/definitions/nfv-infrastructure-nfvi-definition/
-		\item \texttt{NFVi} (\textit{NFV infraestructure}). Se trata de la infraestructura disponible para una arquitectura basada en NFV. Supone la infraestructura donde se desplegarán los \texttt{VNF}, que incluye <<recursos>> de computo, almacenamiento y de red. 
+		\item \texttt{NFVi} (\textit{NFV infraestructure}). Se trata de la infraestructura disponible para una arquitectura basada en NFV. Supone la infraestructura donde se desplegarán los \texttt{VNF}, que incluye recursos de computo, almacenamiento y de red. 
 		
 		% https://www.sdxcentral.com/networking/nfv/definitions/virtualized-infrastructure-manager-vim-definition/
-		\item \texttt{VIM} (\textit{Virtualized Infraestructure Manager}). Es el elemento responsable de controlar y gestionar la infraestructura \texttt{NFV} (\texttt{NFVi}). Se encarga de mantener el inventario de <<recursos>> y de ir ``colocando'' las diferentes funciones de red en los <<recursos>> disponibles de la red. Esto nos permite realizar tareas de orquestación.
+		\item \texttt{VIM} (\textit{Virtualized Infraestructure Manager}). Es el elemento responsable de controlar y gestionar la infraestructura \texttt{NFV} (\texttt{NFVi}). Se encarga de mantener el inventario de recursos y de ir ``colocando'' las diferentes funciones de red en los recursos disponibles de la red. Esto nos permite realizar tareas de orquestación.
 		
 		% https://www.adva.com/en/products/technology/what-is-nfv-mano
-		\item \texttt{MANO} (\textit{Management and orchestration}). Elemento clave para la implementación de NFV. Es el encargado de coordinar los <<recursos>> de la red y gestionar las funcionalidades de red. Esta compuesto por los elementos: orquestador NFV (\texttt{NFVO}), gestor de VNF (\texttt{VNFM}) y gestor de infraestructura virtualizada (\texttt{VIM}), con los que se comunicará para coordinar los <<recursos>> de una arquitectura NFV.
+		\item \texttt{MANO} (\textit{Management and orchestration}). Elemento clave para la implementación de NFV. Es el encargado de coordinar los recursos de la red y gestionar las funcionalidades de red. Esta compuesto por los elementos: orquestador NFV (\texttt{NFVO}), gestor de VNF (\texttt{VNFM}) y gestor de infraestructura virtualizada (\texttt{VIM}), con los que se comunicará para coordinar los recursos de una arquitectura NFV.
 	\end{itemize}
 	
 	\pagebreak
@@ -257,7 +260,7 @@
 		\end{center}
 	\end{figure}
 	
-	\noindent En el enfoque clásico, las funciones de red están basadas en tener un software y hardware específico para cada dispositivo. Sin embargo, \texttt{NFV} nos permite desplegar esos mismos <<recursos>> software y hardware en servidores físicos de propósito general, dando lugar a una mejor gestión de los <<recursos>> y un mayor aprovechamiento. Por lo tanto, un mismo nodo físico, puede ser DHCP, router o Firewall. [\ref{bib: what is nfv}]\\
+	\noindent En el enfoque clásico, las funciones de red están basadas en tener un software y hardware específico para cada dispositivo. Sin embargo, \texttt{NFV} nos permite desplegar esos mismos recursos software y hardware en servidores físicos de propósito general, dando lugar a una mejor gestión de los recursos y un mayor aprovechamiento. Por lo tanto, un mismo nodo físico, puede ser DHCP, router o Firewall. [\ref{bib: what is nfv}]\\
 
 	\noindent La virtualización de funciones de red supone una oportunidad para reducir costes y acelerar el desarrollo de servicios para los operadores de red. \\ 
 	
@@ -288,7 +291,7 @@
 	\section{Virtualización ligera}
 	\label{sect: virt ligera}
 	
-	\noindent Entendemos la virtualización ligera (también conocida como \textit{containers}) como la virtualización de los <<recursos>> propios de un sistema operativo, tales como memoria, CPU, interfaces de red, etc. Dicha virtualización la hace el propio \textit{kernel} del sistema operativo, proporcionando diferentes espacios de usuarios aislados entre sí. En la virtualización ligera todos los sistemas virtualizados dependen del \texttt{kernel} de la máquina host, mientras que en el caso de una máquina virtual (virtualización dura), cada instancia tendría su propio \texttt{kernel} (ver Figura \ref{img: virtualization comparative}). [\ref{bib: virt ligera}]\\
+	\noindent Entendemos la virtualización ligera (también conocida como \textit{containers}) como la virtualización de los recursos propios de un sistema operativo, tales como memoria, CPU, interfaces de red, etc. Dicha virtualización la hace el propio \textit{kernel} del sistema operativo, proporcionando diferentes espacios de usuarios aislados entre sí. En la virtualización ligera todos los sistemas virtualizados dependen del \texttt{kernel} de la máquina host, mientras que en el caso de una máquina virtual (virtualización dura), cada instancia tendría su propio \texttt{kernel} (ver Figura \ref{img: virtualization comparative}). [\ref{bib: virt ligera}]\\
 	
 	\noindent Por lo tanto, las ventajas destacables sobre la virtualización ligera frente a la virtualización ``dura'' serían:
 	\begin{itemize}
@@ -307,11 +310,12 @@
 	\end{figure}
 	
 	% Introducción a los siguientes capítulos
-	\noindent A consecuencia de tener que utilizar un mismo \texttt{kernel} para todas las instancias, tenemos que profundizar sobre los conceptos de interfaces de red virtuales [\ref{sect: interfaces virtuales}] y espacios de nombres [\ref{sect: espacio nombres}], ya que serán piezas clave para tener nuestras instancias aisladas entre sí, pero a su vez conectadas con los diferentes <<recursos>> en red que nosotros definamos.
+	\noindent A consecuencia de tener que utilizar un mismo \texttt{kernel} para todas las instancias, tenemos que profundizar sobre los conceptos de interfaces de red virtuales [\ref{sect: interfaces virtuales}] y espacios de nombres [\ref{sect: espacio nombres}], ya que serán piezas clave para tener nuestras instancias aisladas entre sí, pero a su vez conectadas con los diferentes recursos en red que nosotros definamos.
 	
 	\pagebreak
 	
 	\chapter{Interfaces de red virtuales en Linux}
+	%\section{Interfaces de red virtuales en Linux}
 	\label{sect: interfaces virtuales}
 	
 	\noindent En este capítulo, vamos a profundizar en el concepto de interfaces de red virtuales, específicas al sistema operativo basados en el kernel de Linux. \\
@@ -427,7 +431,7 @@ $ ip link add link eth0.1000 eth0.1000.1000 type vlan proto
 		\end{center}
 	\end{figure}
 
-	\noindent Las interfaces virtuales ethernet se inventaron con el fin de comunicar diferentes \textit{network namespaces}. Aunque profundizaremos en ello más adelante, los \texttt{namespace} de Linux permiten encapsular <<recursos>> globales del sistema de forma aislada, evitando que puedan interferir con procesos que estén fuera del \texttt{namespace}.\\
+	\noindent Las interfaces virtuales ethernet se inventaron con el fin de comunicar diferentes \textit{network namespaces}. Aunque profundizaremos en ello más adelante, los \texttt{namespace} de Linux permiten encapsular recursos globales del sistema de forma aislada, evitando que puedan interferir con procesos que estén fuera del \texttt{namespace}.\\
 	
 	\noindent La configuración necesaria para implementar el ejemplo de la figura \ref{ej1 veth} sería el siguiente [\ref{bib:example netns veth}]:
 	
@@ -768,12 +772,13 @@ sock 192.168.3.1 1026       # Terminal 4 (cliente)
 	\pagebreak
 	
 	\chapter{Espacios de nombres en Linux}
+	%\section{Espacios de nombres en Linux}
 	\label{sect: espacio nombres}
 	
-	\section{¿Qué es un \textit{espacio de nombres}?}
-	\noindent Los espacios de nombres, o también llamados, namespaces, son una característica del kernel de Linux que permite gestionar los <<recursos>> del kernel, pudiendo limitarlos a uno (o varios) procesos. Constituyen la base tecnológica en la que se asientan las técnicas de virtualización más modernas (como puede ser Docker, Kubernetes, etc) y de ahí la importancia de conocer en profundidad su funcionamiento. A un nivel alto, permiten aislar procesos respecto al resto del kernel. \\
+	\section{¿Qué es un espacio de nombres?}
+	\noindent Los espacios de nombres, o también llamados, namespaces, son una característica del kernel de Linux que permite gestionar los recursos del kernel, pudiendo limitarlos a uno (o varios) procesos. Constituyen la base tecnológica en la que se asientan las técnicas de virtualización más modernas (como puede ser Docker, Kubernetes, etc) y de ahí la importancia de conocer en profundidad su funcionamiento. A un nivel alto, permiten aislar procesos respecto al resto del kernel. \\
 	
-	\par \noindent El objetivo de cada \textit{namespaces} es adquirir una característica global del sistema como una abstracción que haga parecer a los procesos de dentro del \textit{namespace} que tienen su propia instancia aislada del <<recurso>> global.
+	\par \noindent El objetivo de cada \textit{namespaces} es adquirir una característica global del sistema como una abstracción que haga parecer a los procesos de dentro del \textit{namespace} que tienen su propia instancia aislada del recurso global.
 	
 	\section{¿Cuantos namespaces hay?}
 	\par\noindent El kernel ha estado en contaste evolución desde que 1991, cuando Linus Torvalds comenzó el proyecto, actualmente sigue muy activo y se siguen añadiendo nuevas características. El origen de los namespaces se remonta a la versión del kernel 2.4.19, lanzada en 2002. Conforme fueron pasando los años, más tipos diferentes de namespaces se fueron añadiendo a Linux. El concepto de \textit{User namespaces}, se consideró terminado con la versión 3.9. [\ref{bib:ns overview}]. Actualmente, tenemos 8 tipos diferentes de namespaces, siendo el último añadido en la versión 5.8 (lanzada el 2 de Agosto de 2020) [\ref{bib:link5}]. 
@@ -1348,7 +1353,7 @@ $ ip netns exec ns1 /bin/bash
 	
 	\par \noindent Si por ejemplo queremos ver el UID del usuario que estamos usando en este momento, podemos ejecutar: \texttt{echo \$UID}, el cual nos devolverá el número asociado a nuestro usuario. \\
 	
-	\par \noindent Además de diferenciar entre los IDs de usuarios (UID), también se nos permite separar entre IDs de grupos (GID). En Linux, un grupo sirve para agrupar usuarios de modo que un grupo puede tener asociado un privilegio que le permite usar un <<recurso>> o programas.\\
+	\par \noindent Además de diferenciar entre los IDs de usuarios (UID), también se nos permite separar entre IDs de grupos (GID). En Linux, un grupo sirve para agrupar usuarios de modo que un grupo puede tener asociado un privilegio que le permite usar un recurso o programas.\\
 	
 	\par \noindent Por lo tanto, el namespace de UID, lo que nos permite es tener un UID y GID diferente al del host. 
 	
@@ -1376,11 +1381,11 @@ $ exit
 	\pagebreak
 	
 	\section{Control groups namespace}
-	\par \noindent Los grupos de control, o \texttt{cgroups}, de Linux suponen un mecanismo para controlar los diferentes <<recursos>> de nuestro sistema. Cuando un \texttt{cgroup} está activo, puede controlar la cantidad de CPU, RAM, acceso I/O, o cualquier faceta que un proceso puede consumir. Además, permiten definir jerarquías en las que se agrupan, de manera en la que el administrador del sistema puede definir como se asignan los <<recursos>> o llevar la contabilidad de los mismos. Cgroups permite las siguientes funcionalidades [\ref{bib: cgroups}]: 
+	\par \noindent Los grupos de control, o \texttt{cgroups}, de Linux suponen un mecanismo para controlar los diferentes recursos de nuestro sistema. Cuando un \texttt{cgroup} está activo, puede controlar la cantidad de CPU, RAM, acceso I/O, o cualquier faceta que un proceso puede consumir. Además, permiten definir jerarquías en las que se agrupan, de manera en la que el administrador del sistema puede definir como se asignan los recursos o llevar la contabilidad de los mismos. Cgroups permite las siguientes funcionalidades [\ref{bib: cgroups}]: 
 	\begin{itemize}
-		\item \textbf{Limitar <<recursos>>}. Podemos configurar un grupo para limitar un <<recurso>> (o varios de ellos) para cada proceso que asignemos.
-		\item \textbf{Priorizar tareas}. Podemos controlar cuantos <<recursos>> utiliza un proceso, comparándolo con otro proceso en un grupo diferente.
-		\item \textbf{Monitorización}. Los límites establecidos para los <<recursos>> son monitorizados y son reportados al usuario.
+		\item \textbf{Limitar recursos}. Podemos configurar un grupo para limitar un recurso (o varios de ellos) para cada proceso que asignemos.
+		\item \textbf{Priorizar tareas}. Podemos controlar cuantos recursos utiliza un proceso, comparándolo con otro proceso en un grupo diferente.
+		\item \textbf{Monitorización}. Los límites establecidos para los recursos son monitorizados y son reportados al usuario.
 		\item \textbf{Control}. Podemos controlar el estado de los procesos asociados a un grupo con un solo comando, pudiendo elegir entre ``congelado'', ``parado'' o ``reiniciado''.
 	\end{itemize}
 	
@@ -1391,7 +1396,7 @@ $ exit
 $ mkdir /sys/fs/cgroup/memory/<NombreGrupo>
 	\end{verbatim}
 
-	\noindent De esta manera, ya tendríamos un nuevo grupo creado, asociado al \texttt{cgroup} de \texttt{memory}. Si ejecutamos el comando ls en el directorio que acabamos de crear, podemos comprobar como se han generado una serie de <<recursos>>: 
+	\noindent De esta manera, ya tendríamos un nuevo grupo creado, asociado al \texttt{cgroup} de \texttt{memory}. Si ejecutamos el comando ls en el directorio que acabamos de crear, podemos comprobar como se han generado una serie de recursos: 
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -1470,14 +1475,14 @@ $ while : ; do : ; done &
 $ echo <PID> > /sys/fs/cgroup/cpu/<NombreGrupo>/tasks
 	\end{verbatim}
 
-	\noindent Una vez ejecutado, si volvemos a ejecutar \texttt{top} o \texttt{htop}, podemos ver como el tiempo asignado al <<recurso>> será mucho mejor, y estrictamente igual o inferior al límite que establecimos en la creación de la regla para nuestro cgroup.	\\
+	\noindent Una vez ejecutado, si volvemos a ejecutar \texttt{top} o \texttt{htop}, podemos ver como el tiempo asignado al recurso será mucho mejor, y estrictamente igual o inferior al límite que establecimos en la creación de la regla para nuestro cgroup.	\\
 	
 	\vspace{10px}
-	\noindent \textbf{\large Ejemplo: monitorización de un <<recurso>>}\\
+	\noindent \textbf{\large Ejemplo: monitorización de un recurso}\\
 	
-	\noindent A modo de comentario, otra de las tareas importante que desempeña cgroups es la monitorización del consumo de <<recursos>> de ciertas aplicaciones. Por ejemplo, para el caso del \textit{runtime} de Docker (hablaremos más en profundidad en [\ref{sec: docker}]) para ejecutar contenedores basados en namespaces, utiliza cgroups para asignar el consumo (CPU, RAM, uso de disco, red...) que tiene un contenedor en concreto. De este modo, podemos discernir y aplicar limitaciones a un contenedor en específico, sin tener que afectar a otros contenedores que estén funcionando en ese momento en el host. \\
+	\noindent A modo de comentario, otra de las tareas importante que desempeña cgroups es la monitorización del consumo de recursos de ciertas aplicaciones. Por ejemplo, para el caso del \textit{runtime} de Docker (hablaremos más en profundidad en [\ref{sec: docker}]) para ejecutar contenedores basados en namespaces, utiliza cgroups para asignar el consumo (CPU, RAM, uso de disco, red...) que tiene un contenedor en concreto. De este modo, podemos discernir y aplicar limitaciones a un contenedor en específico, sin tener que afectar a otros contenedores que estén funcionando en ese momento en el host. \\
 	
-	\noindent Para estas tareas, limitación y monitorización de <<recursos>> en contenedores de Docker, éste nos facilita una serie de comandos para facilitar la creación y asignación de contenedores a un cgroup en específico, facilitando en consecuencia el uso de cgroups para limitar los <<recursos>> de los contenedores que estemos utilizando.
+	\noindent Para estas tareas, limitación y monitorización de recursos en contenedores de Docker, éste nos facilita una serie de comandos para facilitar la creación y asignación de contenedores a un cgroup en específico, facilitando en consecuencia el uso de cgroups para limitar los recursos de los contenedores que estemos utilizando.
 	
 	\section{Time namespace}
 	\par \noindent Por último, nos queda el namespaces asociado al tiempo. Este namespace fue propuesto para que se incorporara al kernel de Linux en 2018 y en enero de 2020 fue añadido a la versión mainline de Linux. Apareció en la release 5.6 del kernel de Linux. [\ref{bib:time ns}] \\
@@ -1615,13 +1620,14 @@ $ umount /var/uts-h1
 	\pagebreak
 	
 	\chapter{Virtualización ligera y contenedores}
+	%\section{Virtualización ligera y contenedores}
 	\label{sec: virt ligera y contenedores}
 	
 	\noindent En este capítulo vamos a trabajar el concepto de virtualización ligera, que ya introdujimos en el apartado \ref{sect: virt ligera}, pero esta vez aplicando los conceptos de \texttt{namespaces} del apartado anterior. Además, presentaremos el concepto de \textit{contenedor}, y cómo supone una de las piezas más importantes para la virtualización tal y como hoy en día la conocemos. \\
 	
-	\noindent Recuperando la definición de virtualización ligera, entendemos este tipo de virtualización como aquella que se realiza a nivel de sistema operativo, permitiendo la coexistencia de diferentes espacios aislados entre sí. En dichos espacios, podremos ejecutar de manera aislada nuestras aplicaciones. Como punto en común, todos los espacios aislados que creemos, utilizarán como base el mismo \texttt{kernel}. La tecnología clave para realizar esta virtualización serán los diferentes \texttt{namespaces}, comentados en el capítulo \ref{sect: espacio nombres}, que podremos combinar a nuestro gusto con el fin de crear un espacio aislado con todos los <<recursos>> necesarios para satisfacer las necesidades de nuestra aplicación. \\
+	\noindent Recuperando la definición de virtualización ligera, entendemos este tipo de virtualización como aquella que se realiza a nivel de sistema operativo, permitiendo la coexistencia de diferentes espacios aislados entre sí. En dichos espacios, podremos ejecutar de manera aislada nuestras aplicaciones. Como punto en común, todos los espacios aislados que creemos, utilizarán como base el mismo \texttt{kernel}. La tecnología clave para realizar esta virtualización serán los diferentes \texttt{namespaces}, comentados en el capítulo \ref{sect: espacio nombres}, que podremos combinar a nuestro gusto con el fin de crear un espacio aislado con todos los recursos necesarios para satisfacer las necesidades de nuestra aplicación. \\
 	
-	\noindent La principal ventaja que encontramos al utilizar \texttt{namespaces}, respecto a otro tipo de virtualizaciones como podrían ser las máquinas virtuales, es el aprovechamiento de los <<recursos>> de la máquina host. Al tener todos el mismo kernel, evitamos tener por duplicados los kernels para cada una de las instancias a realizar, ahorrando ciclos de CPU, como espacio en RAM.\\
+	\noindent La principal ventaja que encontramos al utilizar \texttt{namespaces}, respecto a otro tipo de virtualizaciones como podrían ser las máquinas virtuales, es el aprovechamiento de los recursos de la máquina host. Al tener todos el mismo kernel, evitamos tener por duplicados los kernels para cada una de las instancias a realizar, ahorrando ciclos de CPU, como espacio en RAM.\\
 	
 	\noindent Por otro lado, tenemos el concepto de contenedor. Entendemos contenedor, en el ámbito de la virtualización, como una abstracción a alto nivel de un sistema aislado creado utilizando \texttt{namespaces} y \texttt{cgroups}. Por lo tanto, si el kernel nos da la posibilidad de trabajar a bajo nivel utilizando dichos \texttt{namespaces}, en este caso, buscamos ir más allá y encapsular dicho espacio aislado en unas APIs de alto nivel, que sean mucho más fáciles de entender y de implementar. Tenemos muchos ejemplos de sistemas que trabajan con contenedores, y muchos de ellos implementados en una amplia variedad de lenguajes [\ref{bib:container is a lie}]. Algunos de los más importantes son:
 	\begin{itemize}
@@ -1726,9 +1732,9 @@ echo "ServerName localhost" >> layers/2/etc/apache2/httpd.conf
 	\begin{enumerate}
 		\item Network. Utilizado para dotar de acceso a internet y acceso al host al contenedor. 
 		\item PID. Asignar un nuevo PID y GID al contenedor.
-		\item IPC. Aislar ciertos <<recursos>> del host al contenedor.
+		\item IPC. Aislar ciertos recursos del host al contenedor.
 		\item UTS. Utilizado para asignar un hostname específico al contenedor
-		\item cgroups. Utilizado para la gestión de límites de <<recursos>> y monitorizar el contenedor.
+		\item cgroups. Utilizado para la gestión de límites de recursos y monitorizar el contenedor.
 		\item mount. Sistema de archivos del contenedor.
 	\end{enumerate}
 
@@ -1886,7 +1892,7 @@ unshare --pid --ipc --uts --cgroup --mount --root=rootfs --mount-proc --fork "$@
 		\item Creamos una pareja de ethernets virtuales, uno será asignado al host y la otra al contenedor.
 		\item Se crea el network namespace utilizando el comando \texttt{ip netns add}, se le asigna el ethernet virtual y se le da una dirección IP. Además, configura la ruta \textit{default} de los paquetes IP.
 		\item Se realiza el montaje del sistema de archivos, diferenciando en dos capas. Una capa, llamada capa inferior, en la que se almacena todo lo necesario de la distribución a ejecutar y que será inmutable para la aplicación a encapsular, y otra capa en la que encontramos los directorios que si tendrá acceso dicha aplicación. En este caso, se utiliza un montaje de tipo \texttt{overlay}, a modo de ejemplo de los montajes de unión.
-		\item Se realiza un montaje de tipo \texttt{bind} para todos los <<recursos>> del sistema, que se encuentran en el directorio \texttt{/sys}.
+		\item Se realiza un montaje de tipo \texttt{bind} para todos los recursos del sistema, que se encuentran en el directorio \texttt{/sys}.
 		\item Se define una función para revertir todos los cambios realizados al sistema.
 		\item Por último, se ejecuta el contenedor con el comando \texttt{unshare} y especificando los namespaces que vamos a utilizar, además le ponemos como punto de entrada al \texttt{unshare} la aplicación que el usuario haya especificado (por ejemplo: \texttt{sh} o \texttt{httpd}).
 	\end{enumerate}
@@ -2535,6 +2541,7 @@ $ docker exec -it docker-ns sh
 	\pagebreak
 
 	\chapter{Caso práctico: Virtualización para la simulación de redes}
+	%\section{Caso práctico: Virtualización para la simulación de redes}
 	
 	\noindent En este apartado vamos a detallar los conceptos de virtualización de topologías de red para la evaluación y/o simulación de situaciones concretas de nuestras redes. Para ello, podemos modelar nuestros nodos de la red utilizando contenedores, siguiendo de esta manera el concepto de ``\textit{Virtual Network Function}'' que introdujimos en el segundo apartado de este documento. [\ref{sec: nfv}] \\
 	
@@ -2741,7 +2748,7 @@ mininet> h1 ping h2
 
 	\noindent Como bien podemos ver en la imagen (\ref{img: lsns mininet 1}), \texttt{mininet} solo está utilizando los namespaces \texttt{mount} y \texttt{network} para el despliegue de la topología. \\
 	
-	\noindent Si quisiéramos implementar esta topología simple utilizando la API Python que está incluida en \texttt{mininet}, podemos ejecutar el código del Anexo 4 [\ref{sec: anexo 4}] (ver código \ref{lst: topo simple})
+	\noindent Si quisiéramos implementar esta topología simple utilizando la API Python que está incluida en \texttt{mininet}, tendríamos que ejecutar el script: \href{https://github.com/Raniita/lightweight-virtualization-nfv/blob/master/code/mininet-containernet-topologies/basic.py}{basic.py}
 	
 	\pagebreak
 	
@@ -2756,17 +2763,17 @@ mininet> h1 ping h2
 	\end{figure}
 	
 	
-	\noindent \textbf{\large Ejemplo: limitación de <<recursos>> usando \texttt{mininet}}\\
+	\noindent \textbf{\large Ejemplo: limitación de recursos usando \texttt{mininet}}\\
 	
-	\noindent En este ejemplo, vamos a profundizar sobre como aplicar limitaciones de <<recursos>> a una topología desplegada con \texttt{mininet}. Algunos de los <<recursos>> más importantes a tener en cuenta son los siguientes:
+	\noindent En este ejemplo, vamos a profundizar sobre como aplicar limitaciones de recursos a una topología desplegada con \texttt{mininet}. Algunos de los recursos más importantes a tener en cuenta son los siguientes:
 	
 	\begin{itemize}
-		\item \textit{CPU}. Nos permite asignar el máximo uso de CPU de un dispositivo. Esto nos permitirá ajustar nuestra simulación a un entorno más real, además de permitirnos gestionar más los <<recursos>> disponibles.
-		\item \textit{Latencia}. Permite establecer una latencia máxima a un enlace entre dispositivos.
-		\item \textit{Ancho de banda}. Permite establecer un máximo de ancho de banda para un enlace entre dispositivos.
+		\item \textbf{CPU}. Nos permite asignar el máximo uso de CPU de un dispositivo. Esto nos permitirá ajustar nuestra simulación a un entorno más real, además de permitirnos gestionar más los recursos disponibles.
+		\item \textbf{Latencia}. Permite establecer una latencia máxima a un enlace entre dispositivos.
+		\item \textbf{Ancho de banda}. Permite establecer un máximo de ancho de banda para un enlace entre dispositivos.
 	\end{itemize}
 	
-	\noindent Por lo tanto, a modo de ejemplo, vamos a utilizar la topología anterior, pero aplicando una limitación de ancho de banda, latencia y CPU a uno de los enlaces que conectan un host con el switch. El código utilizado para este ejemplo lo podemos encontrar en el Anexo 4 [\ref{sec: anexo 4}] (ver código \ref{lst: topo simple cpu mn}).
+	\noindent Por lo tanto, a modo de ejemplo, vamos a utilizar la topología anterior, pero aplicando una limitación de ancho de banda, latencia y CPU a uno de los enlaces que conectan un host con el switch. El código utilizado para este ejemplo lo podemos encontrar en \href{https://github.com/Raniita/lightweight-virtualization-nfv/blob/master/code/mininet-containernet-topologies/limit.py}{limit.py}. \\
 	
 	\noindent Para ejecutar la topología, utilizamos el siguiente comando:
 	\begin{verbatim}
@@ -2919,7 +2926,7 @@ topology.gui_topology
 		
 		\item Cambios dinámicos en las topologías. Permite añadir o eliminar contenedores a topologías que estén en ejecución.
 		
-		\item Limitar <<recursos>> de los contenedores \texttt{Docker}, de forma individual.
+		\item Limitar recursos de los contenedores \texttt{Docker}, de forma individual.
 		
 		\item Permite configurar los enlaces en base a: \textit{delay}, \textit{bandwidth}, \textit{loss} o \textit{jitter}.
 	\end{itemize}
@@ -2931,7 +2938,7 @@ topology.gui_topology
 	\begin{itemize}
 		\item \textbf{Bare-metal installation}. Se refiere a una instalación sobre la distribución Ubuntu 20.04 LTS con Python 3.
 		
-		\item \textbf{Nested Docker deployment}. Utiliza un contenedor Docker con privilegios para desplegar en su interior otro entorno Docker en el que ejecutar las topologías de \texttt{containernet}. Esta opción tiene deshabilitado la característica de limitación de <<recursos>>.
+		\item \textbf{Nested Docker deployment}. Utiliza un contenedor Docker con privilegios para desplegar en su interior otro entorno Docker en el que ejecutar las topologías de \texttt{containernet}. Esta opción tiene deshabilitado la característica de limitación de recursos.
 	\end{itemize}
 
 	\noindent Para nuestro entorno de pruebas, hemos elegido instalar \texttt{containernet} en una máquina virtual en \textit{VirtualBox}, utilizando Ubuntu 20.04 LTS, tal y como leemos en su documentación. Para ello, seguimos las instrucciones tal que:
@@ -2985,7 +2992,7 @@ ansible/install.yml
 
 	\pagebreak
 	
-	\noindent Esta topología que podemos ver en el diagrama, está ubicada en la carpeta de \texttt{examples} dentro de \texttt{containernet}. Con esta topología podemos ver las bases del simulador, y comprobar como puede trabajar con las características de \texttt{mininet}, a la vez de implementar los hosts como contenedores Docker. El código Python utilizado para ejecutar el ejemplo lo encontramos en el Anexo 4 [\ref{sec: anexo 4}] (ver código \ref{lst: topo simple containernet}). \\
+	\noindent Esta topología que podemos ver en el diagrama, está ubicada en la carpeta de \texttt{examples} dentro de \texttt{containernet}. Con esta topología podemos ver las bases del simulador, y comprobar como puede trabajar con las características de \texttt{mininet}, a la vez de implementar los hosts como contenedores Docker. El código Python utilizado para ejecutar el ejemplo lo encontramos en el siguiente enlace: \href{https://github.com/containernet/containernet/blob/master/examples/containernet_example.py}{containernet\_example.py} \\
 	
 	\noindent Para ejecutar el ejemplo, tendremos que lanzar el siguiente comando:
 	\begin{verbatim}
@@ -3059,6 +3066,7 @@ containernet> d1 ping -c4 d2
 	\pagebreak
 	
 	\chapter{Conclusiones y propuestas futuras}
+	%\section{Conclusiones y propuestas futuras}
 	
 	\noindent En este capítulo vamos a comentar las conclusiones obtenidas al realizar el presente trabajo. \\
 	
@@ -3085,9 +3093,14 @@ containernet> d1 ping -c4 d2
 		\item Estudiar el lenguaje de programación \texttt{P4} (\url{https://p4.org/}), ya que ahora mismo esta siendo muy importante para el desarrollo de soluciones software en routers y switches. Se esta observando gran aceptación por la comunidad investigadora, y hay un creciente interés para su implantación. El objetivo de este lenguaje de programación es el de controlar el flujo de los paquetes de datos entre los diferentes planos de información que maneja el dispositivo. \texttt{P4} está definido teniendo en mente que tiene que ser específico para las redes, por lo que presenta ciertas construcciones específicas para optimizar el flujo de la información.
 	\end{itemize}
 
+	%%% Anexos
+	%\appendix
+	
+
+
 	%%% Bibliography
-	%\section{Bibliografía}
 	\chapter{Bibliografía}
+	%\section{Bibliografía}
 	%\addcontentsline{toc}{section}{Bibliografía}
 	
 	\subsection*{Enlaces y referencias}
@@ -3361,7 +3374,7 @@ containernet> d1 ping -c4 d2
 
 	\vspace{20px}
 
-	\subsection*{Imágenes}
+	\subsection*{Figuras}
 	\addcontentsline{toc}{section}{Imagenes}
 	\begin{itemize}
 		\item Figura \ref{imagen comparativa classic network nfv}:
@@ -3403,111 +3416,5 @@ containernet> d1 ping -c4 d2
 		\label{bib_img: containernet logo}
 		\href{https://github.com/containernet/containernet}{Logotipo \texttt{containernet}}
 	\end{itemize}
-
-	\pagebreak
-	
-	\appendix
-	
-	%\section{Anexos}
-	\chapter{Anexos}
-	%\addcontentsline{toc}{section}{Anexos}
-	
-	\section{Código asociado a topologías de red}
-	%\subsection*{Anexo 4. Código asociado a topologías de red}
-	\label{sec: anexo 4}
-	%\addcontentsline{toc}{subsection}{Anexo 4. Topologías de \texttt{mininet}}
-	
-	\vspace{10px}
-	\noindent \textbf{\large Topología simple en \texttt{mininet}}\\
-	
-	\begin{lstlisting}[language=Python, caption={Código topología simple utilizando \texttt{mininet} (\texttt{basic.py})}, label={lst: topo simple}]
-from mininet.net import Mininet
-from mininet.topo import Topo
-
-topo = Topo()							# Empty topology
-topo.addSwitch("s1")			# Adding switch
-topo.addHost("h1")				# Add Host
-topo.addHost("h2")				# Add Host
-topo.addLink("h1", "s1")	# Link host to switch
-topo.addLink("h2", "s1")
-
-net = Mininet(topo)				# Start Mininet
-net.start()
-net.pingAll()
-net.iperf()
-net.stop()
-	\end{lstlisting}
-
-	\vspace{20px}
-	\noindent \textbf{\large Topología simple con limitación de <<recursos>> en \texttt{mininet}}\\
-	\begin{lstlisting}[language=Python, caption={Código topología simple con limitación de <<recursos>> en \texttt{mininet} (\texttt{limit.py})}, label={lst: topo simple cpu mn}]
-from mininet.net import Mininet
-from mininet.log import setLogLevel
-from mininet.cli import CLI
-from mininet.node import CPULimitedHost
-from mininet.link import TCLink
-
-def limit_perfTest():
-net = Mininet()
-
-# Host 1: CPU at 10%
-h1 = net.addHost('h1', cls=CPULimitedHost, cpu=0.1)		
-h2 = net.addHost('h2')
-
-s1 = net.addSwitch('s1')
-c0 = net.addController('c0')
-
-# Link h1<->s1: BW 5mbps & delay 80ms
-net.addLink(h1,s1, cls=TCLink, bw=5, delay='80ms')
-net.addLink(h2,s1)
-
-net.start()
-net.pingAll()
-net.iperf()
-CLI(net)
-net.stop()
-
-if __name__ == '__main__':
-setLogLevel('info')
-limit_perfTest()
-	\end{lstlisting}
-
-
-	\vspace{20px}
-	\noindent \textbf{\large Topología simple en \texttt{containernet}}\\
-		\begin{lstlisting}[language=Python, caption={Código topología simple en \texttt{containernet} (\texttt{containernet\_example.py})}, label={lst: topo simple containernet}]
-#!/usr/bin/python
-"""
-This is the most simple example to showcase Containernet.
-"""
-from mininet.net import Containernet
-from mininet.node import Controller
-from mininet.cli import CLI
-from mininet.link import TCLink
-from mininet.log import info, setLogLevel
-setLogLevel('info')
-		
-net = Containernet(controller=Controller)
-info('*** Adding controller\n')
-net.addController('c0')
-info('*** Adding docker containers\n')
-d1 = net.addDocker('d1', ip='10.0.0.251', dimage="ubuntu:trusty")
-d2 = net.addDocker('d2', ip='10.0.0.252', dimage="ubuntu:trusty")
-info('*** Adding switches\n')
-s1 = net.addSwitch('s1')
-s2 = net.addSwitch('s2')
-info('*** Creating links\n')
-net.addLink(d1, s1)
-net.addLink(s1, s2, cls=TCLink, delay='100ms', bw=1)
-net.addLink(s2, d2)
-info('*** Starting network\n')
-net.start()
-info('*** Testing connectivity\n')
-net.ping([d1, d2])
-info('*** Running CLI\n')
-CLI(net)
-info('*** Stopping network')
-net.stop()
-	\end{lstlisting}
 
 \end{document}
