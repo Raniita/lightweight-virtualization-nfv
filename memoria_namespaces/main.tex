@@ -142,7 +142,7 @@
 	
 	\noindent{\large \textbf{UID}} (\textit{User identifier}). Encontrado normalmente como un número o palabra, supone un identificador de usuario dentro del sistema Linux.\\
 	
-	\noindent{\large \textbf{GID}} (\textit{Group Identifier}). Al igual que sucede con el UID, suele aparecer como un número o palabra y hace referencia al identificador de grupo dentro del sistema de Linux.\\
+	\noindent{\large \textbf{GID}} (\textit{Group Identifier}). Al igual que sucede con el UID, suele aparecer como un número o palabra y se refiere al identificador de grupo dentro del sistema de Linux.\\
 		 
 	\noindent{\large \textbf{root}}. Cuenta superusuario del sistema operativo Linux.\\
 	
@@ -182,7 +182,7 @@
 	\section{Contexto del trabajo}
 	\noindent Este proyecto nace con el objetivo de profundizar en conceptos novedosos para el ámbito de la ingeniería telemática, como virtualización de hardware físico de red y los contenedores, con el fin de solucionar problemas de escalabilidad y de optimización.\\
 	
-	 \noindent Por otra parte, muchas de las herramientas de evaluación y simulación de redes de comunicaciones son costosas en términos de recursos a utilizar (tanto hardware como software), lo que limita seriamente su escalabilidad a la hora de evaluar redes de cierta envergadura. La virtualización de redes (en especial la virtualización ligera) nos permitirá desarrollar simuladores de redes más complejas sin consumir excesivos recursos computacionales. Por ello, en este proyecto  particularizaremos estas tecnologías y las acercamos al campo de conocimiento de la telemática para utilizarlas con el fin de evaluar y simular redes de conmutación de tipo IP. \\
+	 \noindent Por otra parte, muchas de las herramientas de evaluación y simulación de redes de comunicaciones son costosas en términos de medios a utilizar (tanto hardware como software), lo que limita seriamente su escalabilidad a la hora de evaluar redes de cierta envergadura. La virtualización de redes (en especial la virtualización ligera) nos permitirá desarrollar simuladores de redes más complejas sin consumir excesivos <<recursos>> computacionales. Por ello, en este proyecto  particularizaremos estas tecnologías y las acercamos al campo de conocimiento de la telemática para utilizarlas con el fin de evaluar y simular redes de conmutación de tipo IP. \\
 	
 	\section{Objetivos}
 	
@@ -236,13 +236,13 @@
 		\item \texttt{VNF} (\textit{Virtual Network Function}). Aplicaciones software que ofrecen ciertas funciones (enrutadores, firewall, etc) y que se implementan como máquinas virtuales, y que no necesitan un sistema hardware específico. 
 		
 		% https://www.sdxcentral.com/networking/nfv/definitions/nfv-infrastructure-nfvi-definition/
-		\item \texttt{NFVi} (\textit{NFV infraestructure}). Se trata de la infraestructura disponible para una arquitectura basada en NFV. Supone la infraestructura donde se desplegarán los \texttt{VNF}, que incluye recursos de computo, almacenamiento y de red. 
+		\item \texttt{NFVi} (\textit{NFV infraestructure}). Se trata de la infraestructura disponible para una arquitectura basada en NFV. Supone la infraestructura donde se desplegarán los \texttt{VNF}, que incluye <<recursos>> de computo, almacenamiento y de red. 
 		
 		% https://www.sdxcentral.com/networking/nfv/definitions/virtualized-infrastructure-manager-vim-definition/
-		\item \texttt{VIM} (\textit{Virtualized Infraestructure Manager}). Es el elemento responsable de controlar y gestionar la infraestructura \texttt{NFV} (\texttt{NFVi}). Se encarga de mantener el inventario de recursos y de ir ``colocando'' las diferentes funciones de red en los recursos disponibles de la red. Esto nos permite realizar tareas de orquestación.
+		\item \texttt{VIM} (\textit{Virtualized Infraestructure Manager}). Es el elemento responsable de controlar y gestionar la infraestructura \texttt{NFV} (\texttt{NFVi}). Se encarga de mantener el inventario de <<recursos>> y de ir ``colocando'' las diferentes funciones de red en los <<recursos>> disponibles de la red. Esto nos permite realizar tareas de orquestación.
 		
 		% https://www.adva.com/en/products/technology/what-is-nfv-mano
-		\item \texttt{MANO} (\textit{Management and orchestration}). Elemento clave para la implementación de NFV. Es el encargado de coordinar los recursos de la red y gestionar las funcionalidades de red. Esta compuesto por los elementos: orquestador NFV (\texttt{NFVO}), gestor de VNF (\texttt{VNFM}) y gestor de infraestructura virtualizada (\texttt{VIM}), con los que se comunicará para coordinar los recursos de una arquitectura NFV.
+		\item \texttt{MANO} (\textit{Management and orchestration}). Elemento clave para la implementación de NFV. Es el encargado de coordinar los <<recursos>> de la red y gestionar las funcionalidades de red. Esta compuesto por los elementos: orquestador NFV (\texttt{NFVO}), gestor de VNF (\texttt{VNFM}) y gestor de infraestructura virtualizada (\texttt{VIM}), con los que se comunicará para coordinar los <<recursos>> de una arquitectura NFV.
 	\end{itemize}
 	
 	\pagebreak
@@ -257,7 +257,7 @@
 		\end{center}
 	\end{figure}
 	
-	\noindent En el enfoque clásico, las funciones de red están basadas en tener un software y hardware específico para cada dispositivo. Sin embargo, \texttt{NFV} nos permite desplegar esos mismos recursos software y hardware en servidores físicos de propósito general, dando lugar a una mejor gestión de los recursos y un mayor aprovechamiento. Por lo tanto, un mismo nodo físico, puede ser DHCP, router o Firewall. [\ref{bib: what is nfv}]\\
+	\noindent En el enfoque clásico, las funciones de red están basadas en tener un software y hardware específico para cada dispositivo. Sin embargo, \texttt{NFV} nos permite desplegar esos mismos <<recursos>> software y hardware en servidores físicos de propósito general, dando lugar a una mejor gestión de los <<recursos>> y un mayor aprovechamiento. Por lo tanto, un mismo nodo físico, puede ser DHCP, router o Firewall. [\ref{bib: what is nfv}]\\
 
 	\noindent La virtualización de funciones de red supone una oportunidad para reducir costes y acelerar el desarrollo de servicios para los operadores de red. \\ 
 	
@@ -288,7 +288,7 @@
 	\section{Virtualización ligera}
 	\label{sect: virt ligera}
 	
-	\noindent Entendemos la virtualización ligera (también conocida como \textit{containers}) como la virtualización de los recursos propios de un sistema operativo, tales como memoria, CPU, interfaces de red, etc. Dicha virtualización la hace el propio \textit{kernel} del sistema operativo, proporcionando diferentes espacios de usuarios aislados entre sí. En la virtualización ligera todos los sistemas virtualizados dependen del \texttt{kernel} de la máquina host, mientras que en el caso de una máquina virtual (virtualización dura), cada instancia tendría su propio \texttt{kernel} (ver Figura \ref{img: virtualization comparative}). [\ref{bib: virt ligera}]\\
+	\noindent Entendemos la virtualización ligera (también conocida como \textit{containers}) como la virtualización de los <<recursos>> propios de un sistema operativo, tales como memoria, CPU, interfaces de red, etc. Dicha virtualización la hace el propio \textit{kernel} del sistema operativo, proporcionando diferentes espacios de usuarios aislados entre sí. En la virtualización ligera todos los sistemas virtualizados dependen del \texttt{kernel} de la máquina host, mientras que en el caso de una máquina virtual (virtualización dura), cada instancia tendría su propio \texttt{kernel} (ver Figura \ref{img: virtualization comparative}). [\ref{bib: virt ligera}]\\
 	
 	\noindent Por lo tanto, las ventajas destacables sobre la virtualización ligera frente a la virtualización ``dura'' serían:
 	\begin{itemize}
@@ -307,7 +307,7 @@
 	\end{figure}
 	
 	% Introducción a los siguientes capítulos
-	\noindent A consecuencia de tener que utilizar un mismo \texttt{kernel} para todas las instancias, tenemos que profundizar sobre los conceptos de interfaces de red virtuales [\ref{sect: interfaces virtuales}] y espacios de nombres [\ref{sect: espacio nombres}], ya que serán piezas clave para tener nuestras instancias aisladas entre sí, pero a su vez conectadas con los diferentes recursos en red que nosotros definamos.
+	\noindent A consecuencia de tener que utilizar un mismo \texttt{kernel} para todas las instancias, tenemos que profundizar sobre los conceptos de interfaces de red virtuales [\ref{sect: interfaces virtuales}] y espacios de nombres [\ref{sect: espacio nombres}], ya que serán piezas clave para tener nuestras instancias aisladas entre sí, pero a su vez conectadas con los diferentes <<recursos>> en red que nosotros definamos.
 	
 	\pagebreak
 	
@@ -427,7 +427,7 @@ $ ip link add link eth0.1000 eth0.1000.1000 type vlan proto
 		\end{center}
 	\end{figure}
 
-	\noindent Las interfaces virtuales ethernet se inventaron con el fin de comunicar diferentes \textit{network namespaces}. Aunque profundizaremos en ello más adelante, los \texttt{namespace} de Linux permiten encapsular recursos globales del sistema de forma aislada, evitando que puedan interferir con procesos que estén fuera del \texttt{namespace}.\\
+	\noindent Las interfaces virtuales ethernet se inventaron con el fin de comunicar diferentes \textit{network namespaces}. Aunque profundizaremos en ello más adelante, los \texttt{namespace} de Linux permiten encapsular <<recursos>> globales del sistema de forma aislada, evitando que puedan interferir con procesos que estén fuera del \texttt{namespace}.\\
 	
 	\noindent La configuración necesaria para implementar el ejemplo de la figura \ref{ej1 veth} sería el siguiente [\ref{bib:example netns veth}]:
 	
@@ -771,9 +771,9 @@ sock 192.168.3.1 1026       # Terminal 4 (cliente)
 	\label{sect: espacio nombres}
 	
 	\section{¿Qué es un \textit{espacio de nombres}?}
-	\noindent Los espacios de nombres, o también llamados, namespaces, son una característica del kernel de Linux que permite gestionar los recursos del kernel, pudiendo limitarlos a uno (o varios) procesos. Constituyen la base tecnológica en la que se asientan las técnicas de virtualización más modernas (como puede ser Docker, Kubernetes, etc) y de ahí la importancia de conocer en profundidad su funcionamiento. A un nivel alto, permiten aislar procesos respecto al resto del kernel. \\
+	\noindent Los espacios de nombres, o también llamados, namespaces, son una característica del kernel de Linux que permite gestionar los <<recursos>> del kernel, pudiendo limitarlos a uno (o varios) procesos. Constituyen la base tecnológica en la que se asientan las técnicas de virtualización más modernas (como puede ser Docker, Kubernetes, etc) y de ahí la importancia de conocer en profundidad su funcionamiento. A un nivel alto, permiten aislar procesos respecto al resto del kernel. \\
 	
-	\par \noindent El objetivo de cada \textit{namespaces} es adquirir una característica global del sistema como una abstracción que haga parecer a los procesos de dentro del \textit{namespace} que tienen su propia instancia aislada del recurso global.
+	\par \noindent El objetivo de cada \textit{namespaces} es adquirir una característica global del sistema como una abstracción que haga parecer a los procesos de dentro del \textit{namespace} que tienen su propia instancia aislada del <<recurso>> global.
 	
 	\section{¿Cuantos namespaces hay?}
 	\par\noindent El kernel ha estado en contaste evolución desde que 1991, cuando Linus Torvalds comenzó el proyecto, actualmente sigue muy activo y se siguen añadiendo nuevas características. El origen de los namespaces se remonta a la versión del kernel 2.4.19, lanzada en 2002. Conforme fueron pasando los años, más tipos diferentes de namespaces se fueron añadiendo a Linux. El concepto de \textit{User namespaces}, se consideró terminado con la versión 3.9. [\ref{bib:ns overview}]. Actualmente, tenemos 8 tipos diferentes de namespaces, siendo el último añadido en la versión 5.8 (lanzada el 2 de Agosto de 2020) [\ref{bib:link5}]. 
@@ -1197,7 +1197,7 @@ $ mount --bind /mnt /tmp
 	\pagebreak
 	
 	\section{Process ID namespace}
-	\par \noindent Para entender en que consiste este namespace, primero tenemos que conocer la definición de \textit{process id} dentro del Kernel. En este caso, \textit{process id} hace referencia a un número entero que utiliza el Kernel para identificar los procesos de manera unívoca. [\ref{bib:pid wikipedia}] \\
+	\par \noindent Para entender en que consiste este namespace, primero tenemos que conocer la definición de \textit{process id} dentro del Kernel. En este caso, \textit{process id} representa a un número entero que utiliza el Kernel para identificar los procesos de manera unívoca. [\ref{bib:pid wikipedia}] \\
 	
 	\par \noindent Concretando, aísla el namespace de la ID del proceso asignado, dando lugar a que, por ejemplo, otros namespaces puedan tener el mismo PID. Esto nos lleva a la situación de que un proceso dentro de un \textit{PID namespace} piense que tiene asignado el ID "1", mientras que en la realidad (en la máquina host) tiene otro ID asignado. [\ref{bib:link9}]
 	
@@ -1348,7 +1348,7 @@ $ ip netns exec ns1 /bin/bash
 	
 	\par \noindent Si por ejemplo queremos ver el UID del usuario que estamos usando en este momento, podemos ejecutar: \texttt{echo \$UID}, el cual nos devolverá el número asociado a nuestro usuario. \\
 	
-	\par \noindent Además de diferenciar entre los IDs de usuarios (UID), también se nos permite separar entre IDs de grupos (GID). En Linux, un grupo sirve para agrupar usuarios de modo que un grupo puede tener asociado un privilegio que le permite usar un recurso o programas.\\
+	\par \noindent Además de diferenciar entre los IDs de usuarios (UID), también se nos permite separar entre IDs de grupos (GID). En Linux, un grupo sirve para agrupar usuarios de modo que un grupo puede tener asociado un privilegio que le permite usar un <<recurso>> o programas.\\
 	
 	\par \noindent Por lo tanto, el namespace de UID, lo que nos permite es tener un UID y GID diferente al del host. 
 	
@@ -1376,11 +1376,11 @@ $ exit
 	\pagebreak
 	
 	\section{Control groups namespace}
-	\par \noindent Los grupos de control, o \texttt{cgroups}, de Linux suponen un mecanismo para controlar los diferentes recursos de nuestro sistema. Cuando un \texttt{cgroup} está activo, puede controlar la cantidad de CPU, RAM, acceso I/O, o cualquier faceta que un proceso puede consumir. Además, permiten definir jerarquías en las que se agrupan, de manera en la que el administrador del sistema puede definir como se asignan los recursos o llevar la contabilidad de los mismos. Cgroups permite las siguientes funcionalidades [\ref{bib: cgroups}]: 
+	\par \noindent Los grupos de control, o \texttt{cgroups}, de Linux suponen un mecanismo para controlar los diferentes <<recursos>> de nuestro sistema. Cuando un \texttt{cgroup} está activo, puede controlar la cantidad de CPU, RAM, acceso I/O, o cualquier faceta que un proceso puede consumir. Además, permiten definir jerarquías en las que se agrupan, de manera en la que el administrador del sistema puede definir como se asignan los <<recursos>> o llevar la contabilidad de los mismos. Cgroups permite las siguientes funcionalidades [\ref{bib: cgroups}]: 
 	\begin{itemize}
-		\item \textbf{Limitar recursos}. Podemos configurar un grupo para limitar un recurso (o varios de ellos) para cada proceso que asignemos.
-		\item \textbf{Priorizar tareas}. Podemos controlar cuantos recursos utiliza un proceso, comparándolo con otro proceso en un grupo diferente.
-		\item \textbf{Monitorización}. Los límites establecidos para los recursos son monitorizados y son reportados al usuario.
+		\item \textbf{Limitar <<recursos>>}. Podemos configurar un grupo para limitar un <<recurso>> (o varios de ellos) para cada proceso que asignemos.
+		\item \textbf{Priorizar tareas}. Podemos controlar cuantos <<recursos>> utiliza un proceso, comparándolo con otro proceso en un grupo diferente.
+		\item \textbf{Monitorización}. Los límites establecidos para los <<recursos>> son monitorizados y son reportados al usuario.
 		\item \textbf{Control}. Podemos controlar el estado de los procesos asociados a un grupo con un solo comando, pudiendo elegir entre ``congelado'', ``parado'' o ``reiniciado''.
 	\end{itemize}
 	
@@ -1391,7 +1391,7 @@ $ exit
 $ mkdir /sys/fs/cgroup/memory/<NombreGrupo>
 	\end{verbatim}
 
-	\noindent De esta manera, ya tendríamos un nuevo grupo creado, asociado al \texttt{cgroup} de \texttt{memory}. Si ejecutamos el comando ls en el directorio que acabamos de crear, podemos comprobar como se han generado una serie de recursos: 
+	\noindent De esta manera, ya tendríamos un nuevo grupo creado, asociado al \texttt{cgroup} de \texttt{memory}. Si ejecutamos el comando ls en el directorio que acabamos de crear, podemos comprobar como se han generado una serie de <<recursos>>: 
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -1452,7 +1452,7 @@ $ echo 62482 > /sys/fs/cgroup/memory/<NombreGrupo>/cgroup.procs
 	\vspace{10px}
 	\noindent \textbf{\large Ejemplo: limitar uso de CPU}\\
 	
-	\noindent Por otro lado, si quisiéramos limitar el uso de CPU de un programa, tendríamos que escribir en los archivos \texttt{cpu.cfs\_quota\_us} o \texttt{cpu.cfs\_period\_us}, dentro de la rama de \texttt{cpu}. Estos parámetros hacen referencia al tiempo de ejecución asociado a un proceso. En este ejemplo, vamos a limitar el proceso a 1 ms (1000 us), esto sería tal que:
+	\noindent Por otro lado, si quisiéramos limitar el uso de CPU de un programa, tendríamos que escribir en los archivos \texttt{cpu.cfs\_quota\_us} o \texttt{cpu.cfs\_period\_us}, dentro de la rama de \texttt{cpu}. Estos parámetros representan el tiempo de ejecución asociado a un proceso. En este ejemplo, vamos a limitar el proceso a 1 ms (1000 us), esto sería tal que:
 	
 	\begin{verbatim}
 $ echo 1000 > /sys/fs/cgroup/cpu/<NombreGrupo>/cpu.cfs_quota_us
@@ -1470,14 +1470,14 @@ $ while : ; do : ; done &
 $ echo <PID> > /sys/fs/cgroup/cpu/<NombreGrupo>/tasks
 	\end{verbatim}
 
-	\noindent Una vez ejecutado, si volvemos a ejecutar \texttt{top} o \texttt{htop}, podemos ver como el tiempo asignado al recurso será mucho mejor, y estrictamente igual o inferior al límite que establecimos en la creación de la regla para nuestro cgroup.	\\
+	\noindent Una vez ejecutado, si volvemos a ejecutar \texttt{top} o \texttt{htop}, podemos ver como el tiempo asignado al <<recurso>> será mucho mejor, y estrictamente igual o inferior al límite que establecimos en la creación de la regla para nuestro cgroup.	\\
 	
 	\vspace{10px}
-	\noindent \textbf{\large Ejemplo: monitorización de un recurso}\\
+	\noindent \textbf{\large Ejemplo: monitorización de un <<recurso>>}\\
 	
-	\noindent A modo de comentario, otra de las tareas importante que desempeña cgroups es la monitorización del consumo de recursos de ciertas aplicaciones. Por ejemplo, para el caso del \textit{runtime} de Docker (hablaremos más en profundidad en [\ref{sec: docker}]) para ejecutar contenedores basados en namespaces, utiliza cgroups para asignar el consumo (CPU, RAM, uso de disco, red...) que tiene un contenedor en concreto. De este modo, podemos discernir y aplicar limitaciones a un contenedor en específico, sin tener que afectar a otros contenedores que estén funcionando en ese momento en el host. \\
+	\noindent A modo de comentario, otra de las tareas importante que desempeña cgroups es la monitorización del consumo de <<recursos>> de ciertas aplicaciones. Por ejemplo, para el caso del \textit{runtime} de Docker (hablaremos más en profundidad en [\ref{sec: docker}]) para ejecutar contenedores basados en namespaces, utiliza cgroups para asignar el consumo (CPU, RAM, uso de disco, red...) que tiene un contenedor en concreto. De este modo, podemos discernir y aplicar limitaciones a un contenedor en específico, sin tener que afectar a otros contenedores que estén funcionando en ese momento en el host. \\
 	
-	\noindent Para estas tareas, limitación y monitorización de recursos en contenedores de Docker, éste nos facilita una serie de comandos para facilitar la creación y asignación de contenedores a un cgroup en específico, facilitando en consecuencia el uso de cgroups para limitar los recursos de los contenedores que estemos utilizando.
+	\noindent Para estas tareas, limitación y monitorización de <<recursos>> en contenedores de Docker, éste nos facilita una serie de comandos para facilitar la creación y asignación de contenedores a un cgroup en específico, facilitando en consecuencia el uso de cgroups para limitar los <<recursos>> de los contenedores que estemos utilizando.
 	
 	\section{Time namespace}
 	\par \noindent Por último, nos queda el namespaces asociado al tiempo. Este namespace fue propuesto para que se incorporara al kernel de Linux en 2018 y en enero de 2020 fue añadido a la versión mainline de Linux. Apareció en la release 5.6 del kernel de Linux. [\ref{bib:time ns}] \\
@@ -1619,9 +1619,9 @@ $ umount /var/uts-h1
 	
 	\noindent En este capítulo vamos a trabajar el concepto de virtualización ligera, que ya introdujimos en el apartado \ref{sect: virt ligera}, pero esta vez aplicando los conceptos de \texttt{namespaces} del apartado anterior. Además, presentaremos el concepto de \textit{contenedor}, y cómo supone una de las piezas más importantes para la virtualización tal y como hoy en día la conocemos. \\
 	
-	\noindent Recuperando la definición de virtualización ligera, entendemos este tipo de virtualización como aquella que se realiza a nivel de sistema operativo, permitiendo la coexistencia de diferentes espacios aislados entre sí. En dichos espacios, podremos ejecutar de manera aislada nuestras aplicaciones. Como punto en común, todos los espacios aislados que creemos, utilizarán como base el mismo \texttt{kernel}. La tecnología clave para realizar esta virtualización serán los diferentes \texttt{namespaces}, comentados en el capítulo \ref{sect: espacio nombres}, que podremos combinar a nuestro gusto con el fin de crear un espacio aislado con todos los recursos necesarios para satisfacer las necesidades de nuestra aplicación. \\
+	\noindent Recuperando la definición de virtualización ligera, entendemos este tipo de virtualización como aquella que se realiza a nivel de sistema operativo, permitiendo la coexistencia de diferentes espacios aislados entre sí. En dichos espacios, podremos ejecutar de manera aislada nuestras aplicaciones. Como punto en común, todos los espacios aislados que creemos, utilizarán como base el mismo \texttt{kernel}. La tecnología clave para realizar esta virtualización serán los diferentes \texttt{namespaces}, comentados en el capítulo \ref{sect: espacio nombres}, que podremos combinar a nuestro gusto con el fin de crear un espacio aislado con todos los <<recursos>> necesarios para satisfacer las necesidades de nuestra aplicación. \\
 	
-	\noindent La principal ventaja que encontramos al utilizar \texttt{namespaces}, respecto a otro tipo de virtualizaciones como podrían ser las máquinas virtuales, es el aprovechamiento de los recursos de la máquina host. Al tener todos el mismo kernel, evitamos tener por duplicados los kernels para cada una de las instancias a realizar, ahorrando ciclos de CPU, como espacio en RAM.\\
+	\noindent La principal ventaja que encontramos al utilizar \texttt{namespaces}, respecto a otro tipo de virtualizaciones como podrían ser las máquinas virtuales, es el aprovechamiento de los <<recursos>> de la máquina host. Al tener todos el mismo kernel, evitamos tener por duplicados los kernels para cada una de las instancias a realizar, ahorrando ciclos de CPU, como espacio en RAM.\\
 	
 	\noindent Por otro lado, tenemos el concepto de contenedor. Entendemos contenedor, en el ámbito de la virtualización, como una abstracción a alto nivel de un sistema aislado creado utilizando \texttt{namespaces} y \texttt{cgroups}. Por lo tanto, si el kernel nos da la posibilidad de trabajar a bajo nivel utilizando dichos \texttt{namespaces}, en este caso, buscamos ir más allá y encapsular dicho espacio aislado en unas APIs de alto nivel, que sean mucho más fáciles de entender y de implementar. Tenemos muchos ejemplos de sistemas que trabajan con contenedores, y muchos de ellos implementados en una amplia variedad de lenguajes [\ref{bib:container is a lie}]. Algunos de los más importantes son:
 	\begin{itemize}
@@ -2929,9 +2929,9 @@ topology.gui_topology
 	\subsection{Primeros pasos}
 	\noindent Lo primero que tenemos que hacer para trabajar con este simulador es proceder a su instalación. Para ello, nos vamos a guiar por los pasos que están detallados en la documentación del proyecto en \href{https://containernet.github.io/#installation}{Github: containernet}. Lo primero que podemos comprobar es que se nos aportan dos opciones de instalación:
 	\begin{itemize}
-		\item ``Bare-metal installation''. Hace referencia a una instalación sobre la distribución Ubuntu 20.04 LTS con Python 3.
+		\item \textbf{Bare-metal installation}. Se refiere a una instalación sobre la distribución Ubuntu 20.04 LTS con Python 3.
 		
-		\item ``Nested Docker deployment''. Utiliza un contenedor Docker con privilegios para desplegar en su interior otro entorno Docker en el que ejecutar las topologías de \texttt{containernet}. Esta opción tiene deshabilitado la característica de limitación de recursos.
+		\item \textbf{Nested Docker deployment}. Utiliza un contenedor Docker con privilegios para desplegar en su interior otro entorno Docker en el que ejecutar las topologías de \texttt{containernet}. Esta opción tiene deshabilitado la característica de limitación de recursos.
 	\end{itemize}
 
 	\noindent Para nuestro entorno de pruebas, hemos elegido instalar \texttt{containernet} en una máquina virtual en \textit{VirtualBox}, utilizando Ubuntu 20.04 LTS, tal y como leemos en su documentación. Para ello, seguimos las instrucciones tal que:
@@ -3090,8 +3090,8 @@ containernet> d1 ping -c4 d2
 	\chapter{Bibliografía}
 	%\addcontentsline{toc}{section}{Bibliografía}
 	
-	\subsection*{Enlaces y referencias consultadas}
-	\addcontentsline{toc}{section}{Enlaces y referencias consultadas}
+	\subsection*{Enlaces y referencias}
+	\addcontentsline{toc}{section}{Enlaces y referencias}
 	%%\hyperref[bib:link1]{\emph{Reference of bibliography}}
 	\begin{enumerate}
 		% 1
