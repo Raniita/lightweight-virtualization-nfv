@@ -1726,9 +1726,9 @@ echo "ServerName localhost" >> layers/2/etc/apache2/httpd.conf
 	\begin{enumerate}
 		\item Network. Utilizado para dotar de acceso a internet y acceso al host al contenedor. 
 		\item PID. Asignar un nuevo PID y GID al contenedor.
-		\item IPC. Aislar ciertos recursos del host al contenedor.
+		\item IPC. Aislar ciertos <<recursos>> del host al contenedor.
 		\item UTS. Utilizado para asignar un hostname específico al contenedor
-		\item cgroups. Utilizado para la gestión de límites de recursos y monitorizar el contenedor.
+		\item cgroups. Utilizado para la gestión de límites de <<recursos>> y monitorizar el contenedor.
 		\item mount. Sistema de archivos del contenedor.
 	\end{enumerate}
 
@@ -1886,7 +1886,7 @@ unshare --pid --ipc --uts --cgroup --mount --root=rootfs --mount-proc --fork "$@
 		\item Creamos una pareja de ethernets virtuales, uno será asignado al host y la otra al contenedor.
 		\item Se crea el network namespace utilizando el comando \texttt{ip netns add}, se le asigna el ethernet virtual y se le da una dirección IP. Además, configura la ruta \textit{default} de los paquetes IP.
 		\item Se realiza el montaje del sistema de archivos, diferenciando en dos capas. Una capa, llamada capa inferior, en la que se almacena todo lo necesario de la distribución a ejecutar y que será inmutable para la aplicación a encapsular, y otra capa en la que encontramos los directorios que si tendrá acceso dicha aplicación. En este caso, se utiliza un montaje de tipo \texttt{overlay}, a modo de ejemplo de los montajes de unión.
-		\item Se realiza un montaje de tipo \texttt{bind} para todos los recursos del sistema, que se encuentran en el directorio \texttt{/sys}.
+		\item Se realiza un montaje de tipo \texttt{bind} para todos los <<recursos>> del sistema, que se encuentran en el directorio \texttt{/sys}.
 		\item Se define una función para revertir todos los cambios realizados al sistema.
 		\item Por último, se ejecuta el contenedor con el comando \texttt{unshare} y especificando los namespaces que vamos a utilizar, además le ponemos como punto de entrada al \texttt{unshare} la aplicación que el usuario haya especificado (por ejemplo: \texttt{sh} o \texttt{httpd}).
 	\end{enumerate}
@@ -2513,7 +2513,7 @@ $ docker exec -it docker-ns sh
 / ip address
 	\end{verbatim}
 
-	\noindent Tal y como podemos ver en la figura \ref{img: comprobacion ns docker}, ambos comandos dan el mismo resultado, por lo que quedaría comprobado que Docker utiliza network namespaces para dar conectividad a sus contenedores. Además, es interesante como ``esconde'' los identificadores de los namespaces que crea para dichos contenedores. Una vez conocemos el identificador, podríamos generar arquitecturas de red mucho más complejas, como por ejemplo añadir un ethernet virtual para hacer \textit{port mirroring} al tráfico del contenedor, este ejemplo se ve más detallado en el siguiente recurso \href{https://arthurchiao.art/blog/traffic-mirror-with-ovs/}{Traffic mirror with OVS and Docker}
+	\noindent Tal y como podemos ver en la figura \ref{img: comprobacion ns docker}, ambos comandos dan el mismo resultado, por lo que quedaría comprobado que Docker utiliza network namespaces para dar conectividad a sus contenedores. Además, es interesante como ``esconde'' los identificadores de los namespaces que crea para dichos contenedores. Una vez conocemos el identificador, podríamos generar arquitecturas de red mucho más complejas, como por ejemplo añadir un ethernet virtual para hacer \textit{port mirroring} al tráfico del contenedor, este ejemplo se ve más detallado en el siguiente enlace \href{https://arthurchiao.art/blog/traffic-mirror-with-ovs/}{Traffic mirror with OVS and Docker}
 
 	\pagebreak
 
@@ -2756,12 +2756,12 @@ mininet> h1 ping h2
 	\end{figure}
 	
 	
-	\noindent \textbf{\large Ejemplo: limitación de recursos usando \texttt{mininet}}\\
+	\noindent \textbf{\large Ejemplo: limitación de <<recursos>> usando \texttt{mininet}}\\
 	
-	\noindent En este ejemplo, vamos a profundizar sobre como aplicar limitaciones de recursos a una topología desplegada con \texttt{mininet}. Algunos de los recursos más importantes a tener en cuenta son los siguientes:
+	\noindent En este ejemplo, vamos a profundizar sobre como aplicar limitaciones de <<recursos>> a una topología desplegada con \texttt{mininet}. Algunos de los <<recursos>> más importantes a tener en cuenta son los siguientes:
 	
 	\begin{itemize}
-		\item \textit{CPU}. Nos permite asignar el máximo uso de CPU de un dispositivo. Esto nos permitirá ajustar nuestra simulación a un entorno más real, además de permitirnos gestionar más los recursos disponibles.
+		\item \textit{CPU}. Nos permite asignar el máximo uso de CPU de un dispositivo. Esto nos permitirá ajustar nuestra simulación a un entorno más real, además de permitirnos gestionar más los <<recursos>> disponibles.
 		\item \textit{Latencia}. Permite establecer una latencia máxima a un enlace entre dispositivos.
 		\item \textit{Ancho de banda}. Permite establecer un máximo de ancho de banda para un enlace entre dispositivos.
 	\end{itemize}
@@ -2919,7 +2919,7 @@ topology.gui_topology
 		
 		\item Cambios dinámicos en las topologías. Permite añadir o eliminar contenedores a topologías que estén en ejecución.
 		
-		\item Limitar recursos de los contenedores \texttt{Docker}, de forma individual.
+		\item Limitar <<recursos>> de los contenedores \texttt{Docker}, de forma individual.
 		
 		\item Permite configurar los enlaces en base a: \textit{delay}, \textit{bandwidth}, \textit{loss} o \textit{jitter}.
 	\end{itemize}
@@ -2931,7 +2931,7 @@ topology.gui_topology
 	\begin{itemize}
 		\item \textbf{Bare-metal installation}. Se refiere a una instalación sobre la distribución Ubuntu 20.04 LTS con Python 3.
 		
-		\item \textbf{Nested Docker deployment}. Utiliza un contenedor Docker con privilegios para desplegar en su interior otro entorno Docker en el que ejecutar las topologías de \texttt{containernet}. Esta opción tiene deshabilitado la característica de limitación de recursos.
+		\item \textbf{Nested Docker deployment}. Utiliza un contenedor Docker con privilegios para desplegar en su interior otro entorno Docker en el que ejecutar las topologías de \texttt{containernet}. Esta opción tiene deshabilitado la característica de limitación de <<recursos>>.
 	\end{itemize}
 
 	\noindent Para nuestro entorno de pruebas, hemos elegido instalar \texttt{containernet} en una máquina virtual en \textit{VirtualBox}, utilizando Ubuntu 20.04 LTS, tal y como leemos en su documentación. Para ello, seguimos las instrucciones tal que:
@@ -3439,8 +3439,8 @@ net.stop()
 	\end{lstlisting}
 
 	\vspace{20px}
-	\noindent \textbf{\large Topología simple con limitación de recursos en \texttt{mininet}}\\
-	\begin{lstlisting}[language=Python, caption={Código topología simple con limitación de recursos en \texttt{mininet} (\texttt{limit.py})}, label={lst: topo simple cpu mn}]
+	\noindent \textbf{\large Topología simple con limitación de <<recursos>> en \texttt{mininet}}\\
+	\begin{lstlisting}[language=Python, caption={Código topología simple con limitación de <<recursos>> en \texttt{mininet} (\texttt{limit.py})}, label={lst: topo simple cpu mn}]
 from mininet.net import Mininet
 from mininet.log import setLogLevel
 from mininet.cli import CLI
