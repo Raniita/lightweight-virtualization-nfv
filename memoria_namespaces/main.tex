@@ -1230,7 +1230,7 @@ $ exit
 	\par \noindent Este namespaces nos permite aislar la parte de red de una aplicación o proceso que nosotros elijamos. Con esto conseguimos que el \textit{stack} de red de la máquina host sea diferente al que tenemos en nuestro namespace. Debido a esto, el namespace crea una interfaz virtual para conformar un stack de red completo (tabla de enrutamiento, tabla ARP, etc...).\\
 	
 	\par \noindent Para crear un \textit{namespace} de tipo \textit{network}, y que este sea persistente, utilizamos la \textit{tool} ip (del \textit{package} iproute2).
-	\begin{lstlisting}[language=bash, caption=Creation persistent network namespace]
+	\begin{lstlisting}[language=bash, caption=Creación de network namespace persistente]
 $ ip netns add ns1
 	\end{lstlisting}
 
