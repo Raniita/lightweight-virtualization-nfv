@@ -30,7 +30,7 @@ Trabajo final de estudios para finalizar mi titulación 'Grado en Ingeniería Te
 ## Documentación
 Toda la documentación del proyecto la podemos encontrar en la carpeta: `memoria_namespaces`. Todo el código utilizado se encuentra en la carpeta `code`.
 
-*El documento definitivo todavia no está disponible.*
+Memoria del proyecto: `memoria_namespaces/memoria_definitiva.pdf`
 
   
 ## Autor
