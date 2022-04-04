@@ -4,7 +4,7 @@
 Trabajo final de estudios para finalizar mi titulación 'Grado en Ingeniería Telemática', en la Universidad Politécnica de Cartagena. 
 * Nombre del trabajo: `Aplicación de técnicas de virtualización ligera para la evaluación de redes de comunicaciones`
 * Promoción: `2021-2022`
-* Estado: _EN PROCESO_
+* Estado: _COMPLETADO_
 
 
 ## Objetivos
