@@ -14,13 +14,13 @@
 \title{\large Aplicación de técnicas de virtualización ligera para la evaluación de redes de comunicaciones}
 
 \author{\small \textit{Autor}: Enrique Fernández Sánchez \\
-\textit{Tutor}: Jose María Malgosa Sanahuja}
+\textit{Tutor}: José María Malgosa Sanahuja}
 
 \institute[UPCT]{\\ Universidad Politécnica de Cartagena (UPCT) \\ \vspace{5px}
 	\includegraphics[scale=0.2]{img/escudo_upct.png}
 }
 
-\date{\today}
+\date{4 de abril de 2022}
 
 \usepackage{tikz}
 \logo{ 
@@ -81,31 +81,32 @@
 	
 	\begin{frame}{Virtualización de funciones de red}
 		\begin{itemize}
-		    \item Contextualización sobre la importancia de la virtualización en las redes.
+		    %\item Contextualización sobre la importancia de la virtualización en las redes.
+		    \item \textit{Nacimiento de NFV}: \textit{white paper} en octubre de 2012 (WG de la ITU, 13 operadoras)
+		    \item NFV como \textbf{solución para los problemas de las operadoras de red}
 		\end{itemize}
 		
 		\begin{alertblock}{Problemas actuales de las operadoras de red}
 		    \begin{itemize}
 		        \item Saturación general en la red.
-		        \item Dispositivos de red que requieren una instalación manual o intervención manual.
+		        \item Dispositivos de red que requieren una instalación o intervención manual.
 		        \item Problemas de gestión de las operadoras de red (ej: reducción de costes).
 		    \end{itemize}
 		\end{alertblock}
-		
-		\begin{itemize}
-	        \item Nacimiento de NFV: \textit{white paper} en octubre de 2012 (WG de la ITU, 13 operadoras)
-	        \item NFV como solución para los problemas de las operadoras de red.
-	    \end{itemize}
 	\end{frame}
 	
 	\begin{frame}{Virtualización de funciones de red}
+	    \begin{itemize}
+	        \item Comparación entre redes clásicas y redes virtualizadas: 
+	    \end{itemize}
+	
 	    \begin{columns}
 	        % Columna 1
 	        \begin{column}{0.5\textwidth}
 	        \begin{exampleblock}{\textit{Classic networks}}
 	            \begin{itemize}
 	                \item Hardware embebido.
-	                \item Cada dispositivo de red asociado a una única función de red (firewall, balanceador de carga, router...)
+	                \item Cada \textbf{dispositivo} de red asociado a una \textbf{única función} de red (firewall, balanceador de carga, router...)
 	                \item Software dependiente del ``vendor'' (cisco, jupyter...)
 	                \item Gestión de recursos software/hardware limitada.
 	            \end{itemize}
@@ -117,7 +118,7 @@
 	        \begin{exampleblock}{\textit{Network Functions Virtualization} (\texttt{NFV})}
 	            \begin{itemize}
 	                \item Hardware de carácter general.
-	                \item Un mismo hardware puede tener asociadas más de una función de red.
+	                \item Un \textbf{mismo hardware} puede tener asociadas \textbf{más de una función} de red.
 	                \item Independencia del ``vendor''.
 	                \item Gestión de recursos software/hardware total.
 	            \end{itemize}
@@ -141,9 +142,9 @@
 	\begin{column}{0.4\textwidth}
 	\begin{alertblock}{Ventajas de NFV}
 	    \begin{itemize}
-	        \item Reducción de costes.
+	        \item \textbf{Desacoplar funciones de red} de hardware específico.
 	        \item Acelerar desarrollo de servicios para los operadores de red.
-	        \item Desacoplar funciones de red de hardware específico.
+	        \item Reducción de costes.
 	    \end{itemize}
 	\end{alertblock}
 	\end{column}
@@ -158,8 +159,8 @@
             \begin{itemize}
                 \item NFV depende de SDN, y viceversa.
                 \item SDN desacopla el plano de control y el plano de datos de hardware de red. 
-                \item El controlador SDN es el encargado de programar los dispositivos vía software.
-                \item El router solo sabe encaminar paquetes de la forma que el controlador SDN le ha programado.
+                \item El \textbf{controlador SDN} es el encargado de gestionar el plano de control de los dispositivos.
+                \item Un router solo sabe encaminar paquetes de la forma que el controlador SDN le ha programado.
             \end{itemize}
             \end{alertblock}
             
@@ -186,9 +187,9 @@
 	\begin{column}{0.4\textwidth}
 	    \begin{block}{\textit{Lightweight virtualization}}
 	        \begin{itemize}
-	            \item Conocida como \texttt{containers}.
 	            \item El propio \texttt{kernel} del SO realiza la virtualización.
-	            \item Espacios de usuarios aislados entre sí.
+	            \item \textbf{Espacios} de usuarios \textbf{aislados} entre sí.
+	            \item Conocida como \texttt{containers}.
 	        \end{itemize}
 	    \end{block}
 	    
@@ -204,7 +205,7 @@
 	\begin{column}{0.6\textwidth}
 	    \begin{figure}
             \includegraphics[width=1\textwidth]{img/virtualization_comparative_2.png}
-            \caption{Comparative entre virt. dura y virt. ligera}
+            \caption{Comparativa entre virt. dura (izq.) y virt. ligera (der.)}
        \end{figure}
 	\end{column}
 	
@@ -217,15 +218,15 @@
 	
 	\begin{frame}{Interfaces de red virtuales en Linux}
 		\begin{itemize}
-		    \item Linux permite una amplia selección de interfaces virtuales de red. Algunas de ellas son realmente interesantes para la implementación de virtualización ligera, ya que permiten comunicar las instancias aisladas.
+		    \item Linux permite una amplia \textbf{selección de interfaces virtuales de red}. Algunas de ellas son realmente interesantes \textbf{para la implementación de virtualización ligera}, ya que permiten comunicar las instancias aisladas.
 		\end{itemize}
 		
 		\begin{alertblock}{Selección de interfaces de red virtuales en Linux}
 		    \begin{itemize}
-		        \item \textbf{Bridge}
-		        \item \textbf{MAC compartida}
-		        \item \textbf{VLAN 802.1q}
-		        \item \textbf{VLAN 802.1ad}
+		        \item Bridge
+		        \item MAC compartida
+		        \item VLAN 802.1q
+		        \item VLAN 802.1ad
 		        \item \textbf{Pares ethernet virtuales}
 		        \item \textbf{TUN/TAP}
 		    \end{itemize}
@@ -244,9 +245,9 @@
 	        \begin{column}{0.5\textwidth}
 	            \begin{block}{Ejemplo: topología usando veth}
 	                \begin{itemize}
-	                    \item Dispositivos virtuales creados a pares.
+	                    \item \textbf{Dispositivos} virtuales \textbf{creados a pares}.
 	                    \item Los paquetes transmitidos en un extremos se reciben automáticamente en el otro extremo.
-	                    \item Útiles para asignar un extremo de la pareja a un namespace.
+	                    \item Útiles para asignar un extremo de la pareja a un \textbf{namespace}.
 	                    \item \texttt{ip link add ... type veth peer ...}
 	                \end{itemize}
 	            \end{block}
@@ -257,12 +258,10 @@
 	\begin{frame}{TUN/TAP}
 	    \begin{columns}
 	        \begin{column}{0.5\textwidth}
+	            Permiten conectar aplicaciones a través de un socket de red.
 	            \begin{itemize}
-	                \item Permiten conectar aplicaciones a través de un socket de red.
-	                \begin{itemize}
-	                    \item TUN. Transporta paquetes IP
-	                    \item TAP. Transporta paquetes Ethernet.
-	                \end{itemize}
+	                \item TUN. Transporta paquetes IP
+	                \item TAP. Transporta \textit{frames} Ethernet.
 	            \end{itemize}
 	            
 	            \begin{exampleblock}{Crear interfaz TUN/TAP}
@@ -283,7 +282,7 @@
 	\end{frame}
 	
 	\begin{frame}{Ejemplos interfaces de red virtuales}
-	    \begin{alertblock}{Ejemplos realizados en esta sección}
+	    \begin{alertblock}{Ejemplos realizados en esta sección de la memoria}
 	        \begin{itemize}
 	            \item Creación de cada una de las interfaces de red virtuales.
 	            \item Aplicación que crea una interfaz TUN/TAP.
@@ -301,10 +300,10 @@
 	    \begin{columns}
 	    \begin{column}{0.6\textwidth}
 	        \begin{block}{Definición namespace}
-	           Característica del kernel de Linux que permite gestionar los recursos, pudiendo limitarlos a uno (o varios) procesos.
+	           \textbf{Característica del kernel} de Linux que permite \textbf{gestionar} los recursos, \textbf{pudiendo limitarlos} a uno (o varios) \textbf{procesos}.
 	           
 	           \begin{itemize}
-	               \item \textit{Objetivo}: adquirir una característica del sistema como una abstracción. Dentro del namespace tienen su propia instancia aislada del recurso global.
+	               \item \textit{Objetivo}: adquirir una característica del sistema como una abstracción. Dentro del namespace tienen su propia \textbf{instancia aislada} del recurso global.
 	           \end{itemize}
 	        \end{block}
 	        
@@ -373,12 +372,12 @@
     
     \begin{frame}{Mount namespace}
         \begin{itemize}
-            \item Primer namespace en aparecer en el kernel
-            \item \textit{Objetivo}: restringir la visualización de la jerarquía global de archivos. Cada namespace tiene su propio ``set'' de puntos de montaje
+            \item Primer namespace en aparecer en el kernel.
+            \item \textit{Objetivo}: \textbf{restringir la visualización} de la jerarquía \textbf{global} de archivos. Cada namespace tiene su \textbf{propio ``set''} de puntos de montaje.
         \end{itemize}
         
         \begin{alertblock}{\textit{Shared subtrees}}
-        Por defecto, los mount namespaces tienen activada la opción de \texttt{shared subtree}. Esta opción determina como se van a propagar los montajes a otros puntos de montaje.
+        Por defecto, los mount namespaces tienen activada la opción de \texttt{shared subtree}. Esta opción determina \textbf{cómo se van a propagar los montajes} a otros puntos de montaje.
         \begin{itemize}
             \item \texttt{shared mount}. Replicado, todas las copias iguales.
             \item \texttt{slave mount}. Montaje tipo esclavo, solo se propagan hacia él.
@@ -399,11 +398,11 @@
         
             \begin{column}{0.5\textwidth}
                 \begin{alertblock}{Montaje tipo bind}
-                    Opción de \texttt{mount} (\texttt{--bind}) que nos permite realizar un montaje de un dispositivo sobre un directorio de nuestro sistema de archivos.
+                    Opción de \texttt{mount} (\texttt{--bind}) que nos permite realizar un \textbf{montaje} de un dispositivo \textbf{sobre un directorio} de nuestro sistema de archivos.
                 \end{alertblock}
                 
-                \begin{alertblock}{tmpfs}
-                    Funcionalidad que permite crear un sistema de archivos temporal dentro de nuestro sistema. El sistema creado se aloja en memoria.
+                \begin{alertblock}{Sistema de archivos temporal (\texttt{tmpfs})}
+                    Funcionalidad que permite crear un \textbf{sistema de archivos temporal} dentro de nuestro sistema. El sistema creado se aloja en memoria.
                 \end{alertblock}
             \end{column}
         \end{columns}
@@ -411,8 +410,8 @@
     
     \begin{frame}{Network namespace}
         \begin{itemize}
-            \item Permite aislar la red de un proceso.
-            \item El namespace crea una interfaz virtual, con un stack de red completo.
+            \item Permite \textbf{aislar la red de un proceso}.
+            \item El namespace crea una interfaz virtual, con un \textbf{stack de red completo}.
         \end{itemize}
         
         \begin{exampleblock}{Creación de network namespace}
@@ -427,9 +426,9 @@
     \begin{frame}{Control groups \& time}
         \begin{columns}
             \begin{column}{0.5\textwidth}
-                \begin{block}{\centering Control groups (cgroups)}
+                \begin{block}{Control groups (\texttt{cgroups})}
                     \begin{itemize}
-                        \item Mecanismos de control para los recursos del sistema.
+                        \item \textbf{Mecanismos de control} para los recursos del sistema.
                         \item Funcionalidades que puede realizar:
                         \begin{itemize}
                             \item Limitar recursos
@@ -437,17 +436,17 @@
                             \item Monitorización
                             \item Control
                         \end{itemize}
-                        \item Configurado utilizando sistema de archivos virtual: \texttt{/sys/fs/cgroup}
+                        \item \textbf{Configurado utilizando sistema de archivos virtual}: \texttt{/sys/fs/cgroup}
                         \item Disponibles dos versiones: cada vez más aceptada la \texttt{v2}
                     \end{itemize}
                 \end{block}
             \end{column}
         
             \begin{column}{0.5\textwidth}
-                \begin{block}{\centering Time}
+                \begin{block}{Time}
                     \begin{itemize}
                         \item Último namespace añadido al kernel
-                        \item Permite crear desfases entre los relojes del sistema.
+                        \item Permite \textbf{crear desfases entre los relojes del sistema}.
                         \item Cambiar la fecha y hora dentro del namespace sin modificar la del host.
                     \end{itemize}
                 \end{block}
@@ -456,7 +455,7 @@
     \end{frame}
 	
 	\begin{frame}{Ejemplos namespaces}
-	    \begin{alertblock}{Ejemplos realizados en esta sección}
+	    \begin{alertblock}{Ejemplos realizados en esta sección de la memoria}
 	        \begin{columns}
 	        \begin{column}{0.5\textwidth}
 	            \begin{itemize}
@@ -493,7 +492,7 @@
 		\end{block}
 		
 		\begin{block}{Definición contenedor}
-		    Abstracción alto nivel de un sistema aislado creado utilizando \texttt{namespaces} y \texttt{cgroups}. Además, proporcionan unas APIs de alto nivel para interactuar con el contenedor. Algunos ejemplos de sistemas de contenedores son:
+		    \textbf{Abstracción alto nivel de un sistema aislado} creado utilizando \texttt{namespaces} y \texttt{cgroups}. Además, proporcionan unas \textbf{APIs de alto nivel} para interactuar con el contenedor. Algunos ejemplos de sistemas de contenedores son:
 		    
 		    \begin{itemize}
 		        \item \texttt{LXC}, LinuX Containers.
@@ -505,15 +504,15 @@
 	
 	\begin{frame}{Contenedor DIY}
 	    \begin{itemize}
+	        \item Fundación \textit{Linux Foundation's Container Initiative} (\texttt{OCI}) recoge las directivas para crear \texttt{images} y \texttt{runtimes}.
 	        \item Diferentes \texttt{runtimes} en función de la solución de contenedores a utilizar.
-	        \item Fundación \textit{Linux Foundation's Container Initiative} (\texttt{OCI}) recoge las directivas para crear \texttt{images} y \texttt{runtimes}
 	        
 	        \begin{columns}
 	                \begin{column}{0.5\textwidth}
 	                \begin{exampleblock}{\texttt{Images}}
 	                    \begin{itemize}
-	                        \item Contiene un sistema de archivos root con las dependencias de la aplicación.
-	                        \item Imágenes diferenciadas en capas, que serán montadas por el \texttt{runtime} usando \textit{montajes de unión}.
+	                        \item Contiene un \textbf{sistema de archivos root} con las dependencias de la aplicación.
+	                        \item Imágenes diferenciadas en capas, que serán montadas por el \texttt{runtime} usando \textit{montajes de unión}. (\texttt{overlayfs})
 	                        \item Capa inferior inmutable y capa superior con todo lo referido a la aplicación.
 	                    \end{itemize}
 	                \end{exampleblock}
@@ -522,7 +521,7 @@
 	                \begin{column}{0.5\textwidth}
 	                \begin{exampleblock}{\texttt{Runtimes}}
 	                    \begin{itemize}
-	                        \item Dada una imagen, \texttt{runtime} la ejecutará.
+	                        \item Dada una imagen, \textbf{\texttt{runtime} la ejecutará}.
 	                        \item Creación y configuración de los namespaces (netns, pid, ipc, uts, etc).
 	                        \item Configuración de cgroups para monitorización y limites de recursos.
 	                        \item Montaje de las ``capas'' del sistema de archivos.
@@ -537,8 +536,8 @@
 	    \begin{columns}
 	        \begin{column}{0.6\textwidth}
 	            \begin{itemize}
-	                \item Contenedores de bajo nivel. Uso de \texttt{mount namespaces} para conseguir una estructura de directorios propia de una distribución de Linux.
-	                \item Virtualización de una distribución completa.
+	                \item Contenedores de \textbf{bajo nivel}. Uso de \texttt{mount namespaces} para conseguir una \textbf{estructura de directorios} propia de una \textbf{distribución de Linux}.
+	                \item Virtualización de una \textbf{distribución completa}.
 	                \item Permite crear contenedores sin privilegios, es decir, no pueden realizar acciones sobre el host.
 	                \item Apto para la ejecución de entornos gráficos.
 	                \item Galería de imágenes: \url{https://uk.lxd.images.canonical.com/}
@@ -562,12 +561,12 @@
 	    
 	    \begin{itemize}
 	        \item Solución muy famosa de contenedores. Escrita en \texttt{Go}. Uso de \texttt{namespaces}.
-	        \item Arquitectura cliente-servidor. Cliente se comunica con ``servicio'' para crear, ejecutar y distribuir los contenedores. 
+	        \item \textbf{Arquitectura cliente-servidor}. Cliente se comunica con ``servicio'' para crear, ejecutar y distribuir los contenedores. 
 	    \end{itemize}
 	\end{frame}
 
     \begin{frame}{Ejemplos virtualización ligera}
-        \begin{alertblock}{Ejemplo realizados sobre contenedores DIY}
+        \begin{alertblock}{Ejemplos realizados sobre contenedores DIY}
             \begin{itemize}
                 \item Análisis de imagen basada en \texttt{alpine}.
                 \item Análisis del \texttt{runtime} para ejecutar aplicación usando imagen basada en \texttt{alpine}.
@@ -576,7 +575,7 @@
         
         \begin{alertblock}{Ejemplos realizados sobre LXC}
 	        \begin{itemize}
-	            \item Comprobar los namespaces de un contendor LXC en Ubuntu
+	            \item \textbf{Comprobar los namespaces de un contendor LXC en Ubuntu}
 	        \end{itemize}
 	    \end{alertblock}
     
@@ -584,7 +583,7 @@
 	        \begin{itemize}
 	            \item Primeros pasos
 	            \item Crear un Dockerfile
-	            \item Comprobar los namespaces asociados a un contenedor Docker
+	            \item \textbf{Comprobar los namespaces asociados a un contenedor Docker}
 	        \end{itemize}
 	    \end{alertblock}
     \end{frame}
@@ -595,7 +594,7 @@
 	
 	\begin{frame}{Virtualización para simulación de redes}
 		\begin{itemize}
-		    \item \textit{Objetivo}: evaluar y/o simular situaciones concretas de nuestras redes. Modelamos los nodos utilizando contenedores.
+		    \item \textit{Objetivo}: evaluar y/o \textbf{simular situaciones} concretas de nuestras \textbf{redes}. Modelamos los nodos utilizando contenedores.
 		\end{itemize}
 		
 		\begin{block}{Opciones para la evaluación y/o simulación de redes}
@@ -604,16 +603,16 @@
 		        
 		        \item Desplegar e interconectar contenedores LXC. Cada contenedor con una función de red asociada.
 		        
-		        \item Utilizar un simulador de redes basado en namespaces. Mininet es un simulador que permite crear una red virtual realista utilizando namespaces. Permite un sencillo uso y un despliegue rápido.
+		        \item Utilizar un \textbf{simulador de redes basado en namespaces}. \textbf{Mininet} es un simulador que permite crear una red virtual realista utilizando namespaces. Permite un \textbf{sencillo uso} y un \textbf{despliegue rápido}.
 		    \end{itemize}
 		\end{block}
 	\end{frame}
 	
 	\begin{frame}{Mininet}
 	    \begin{itemize}
-	        \item Permite customizar y desplegar topologías de red fácilmente.
+	        \item Permite customizar y \textbf{desplegar topologías de red fácilmente}.
 	        \item Python API muy bien documentada.
-	        \item Herramienta muy utilizada en el campo de la investigación, sobre todo en el ámbito de SDN.
+	        \item \textbf{Herramienta muy utilizada} en el campo de la investigación, sobre todo en el ámbito de \textbf{SDN}.
 	        \item Permite la integración de controladores SDN externos.
 	    \end{itemize}
 	
@@ -623,7 +622,7 @@
 	            \item Topología simple sin mininet
 	            \item Topología simple con mininet
 	            \item Limitación de recursos, tanto en nodos como en enlaces
-	            \item Controlador SDN externo: Ryu
+	            \item Controlador SDN externo: \texttt{Ryu}
 	        \end{itemize}
 	    \end{alertblock}
 	\end{frame}
@@ -633,11 +632,11 @@
 	    \begin{columns}
 	        \begin{column}{0.6\textwidth}
 	        \begin{itemize}
-	            \item Fork de \texttt{mininet}
-	            \item Permite añadir a la topología contenedores Docker como hosts
-	            \item Cambios dinámicos a la topología (añadir, conectar y eliminar contenedores)
-	            \item Ejecución de comandos dentro de los contenedores usando Python API
-	            \item Limitar uso de recursos de los contenedores
+	            \item Fork de \texttt{mininet}.
+	            \item Permite añadir a la topología \textbf{contenedores Docker como hosts}.
+	            \item Cambios dinámicos a la topología (añadir, conectar y eliminar contenedores).
+	            \item Ejecución de comandos dentro de los contenedores usando Python API.
+	            \item Limitar uso de recursos de los contenedores.
 	        \end{itemize}
 	        
 	        \begin{alertblock}{Ejemplos realizados con containernet}
@@ -664,16 +663,16 @@
 	\begin{frame}{Conclusiones}
 		\begin{itemize}
 		    \item Alcanzados todos los objetivos propuestos
-		    \item Se han realizado 28 ejemplos sobre técnicas de virt. ligera
+		    \item Se ha profundizado en el \textbf{concepto} de \textbf{contenedor} y \textbf{namespaces}
+		    \item Se han realizado \textbf{28 ejemplos} sobre técnicas de \textbf{virt. ligera}
 		    \item Se han aportado dos soluciones para la evaluación de redes de comunicaciones
-		    \item Se ha profundizado en el concepto de contenedor y namespaces
 		\end{itemize}
 		
 		\begin{exampleblock}{Propuestas futuras}
 		    \begin{itemize}
 		        \item Profundizar en las diferencias de rendimiento entre una virt. ``ligera'' y virt. ``dura''.
-		        \item Investigar sobre modificaciones del protocolo OpenFlow. Además, indagar sobre DPDK sus ventajas.
-		        \item Pruebas de concepto del lenguaje de programación P4.
+		        \item Investigar sobre modificaciones del protocolo OpenFlow. Además, indagar sobre \textbf{DPDK} y sus ventajas.
+		        \item Pruebas de concepto del \textbf{lenguaje de programación P4}.
 		    \end{itemize}
 		\end{exampleblock}
 	\end{frame}
@@ -691,7 +690,7 @@
 	\begin{frame}
 	    \begin{center}
 	        \vspace{30px}
-	        \Large Muchas gracias por su atención \\
+	        \Large \textbf{Muchas gracias por su atención} \\
 	        \vspace{30px}
 	        \large ¿Preguntas? \\
 	        \vspace{60px}
